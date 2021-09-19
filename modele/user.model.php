@@ -1,20 +1,21 @@
 <?php 
    
 
-   function insncrire_utilisateur(array $user):int{
+   function inscrire_utilisateur(array $user):int{
         $pdo=ouvrir_connection_db();
-        extract($user);
-        $sql="  INSERT INTO user (id_user,nom_user,prenom_user,email_user,telephone_user,
-                                fax_user,password_user,id_adresse,id_role) 
-                VALUES (?,?,?,?,?,?,?,?,?); ";
-                if (!est_connect()) {
-                    $id_role=1;
-                }
+        $sql=" INSERT INTO user (nom_user,prenom_user,email_user,telephone_user,
+                                fax_user,password_user,id_adresse,id_role,confirm_password) 
+                VALUES (?,?,?,?,?,?,?,?,?)";
+               /*  if (!est_connect()) {
+                    $id_role=2;
+                } */ //$id_adresse=insert_adresse();
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(NULL,$nom_user,$prenom_user,$email_user,$telephone_user,$fax_user,$password_user,$id_adresse,$id_role));
-        $user = $sth->fetch(PDO::FETCH_ASSOC);
+        $sth->execute($user);
+        $dernier_id = $pdo->lastInsertId();
         fermer_connection_db($pdo);
-        return $user = $sth->rowCount();
+       /*  var_dump($sth);
+            die;  */
+        return $dernier_id;
     }
 
     function login_exist(string $login):array{
@@ -27,6 +28,7 @@
         fermer_connection_db($pdo);
         return $user;
     }
+   
     function find_user_by_login_password($login,$password){
         $pdo=ouvrir_connection_db();
         $sql='select * from user u ,role ro where 
