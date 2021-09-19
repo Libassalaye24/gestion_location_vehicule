@@ -66,8 +66,7 @@
             </div>
 </div>
 <div class="row mt-5">
-        <?php 
-         for($i=0;$i<9;$i++): ?>
+        <?php  foreach ($vehicule_disponible as $key => $vehicule): ?>
         <div class="col-sm-4  mb-4">
           <div class="card" >
             <a href="">
@@ -80,51 +79,18 @@
   <img src="<?=WEB_ROUTE.'img/720.png'?>" />
 </figure> -->
             </a>
-            <style>
-              figure.zoom {
-  background-position: 50% 50%;
-  position: relative;
-  width: 450px;
-  overflow: hidden;
-  cursor: zoom-in;
-  background-repeat: no-repeat;
-  background-size: auto;
-}
-figure.zoom img:hover {
-  opacity: 0;
-}
-figure.zoom img {
-  transition: opacity 0.5s;
-  display: block;
-  width: 85%;
-}
-            </style>
-            <script>
-              function zoom(e) {
-  var zoomer = e.currentTarget;
-  e.offsetX ? (offsetX = e.offsetX) : (offsetX = e.touches[0].pageX);
-  e.offsetY ? (offsetY = e.offsetY) : (offsetX = e.touches[0].pageX);
-  x = (offsetX / zoomer.offsetWidth) * 100;
-  y = (offsetY / zoomer.offsetHeight) * 100;
-  zoomer.style.backgroundPosition = x + "% " + y + "%";
-}
-
-            </script>
-            <div class="card-body  ">
+            <div class="card-body ">
               <h5 class="card-title">
-                  <p class=" text-white"> Luxury
-                    Mercedes Classe S 350	
+                  <p class=" text-white"> 
+                  <?=$vehicule['nom_marque'].' '.$vehicule['nom_modele'].' '.$vehicule['nom_categorie']?>
                  </p>
-               <!--  <span class="badge badge-warning">
-                 </span> -->
-                <span class="badge badge-warning">67890</span>
+                <span class="badge badge-secondary">
+                       <?=$vehicule['nom_etat']?>   
+                 </span> 
+                <span class="badge badge-warning"><?=$vehicule['prix_location_jour'].' '.'FCFA'?></span>
               </h5>
               <hr />
-              <span class="float-left btn btn-sm text-center disabled"
-                ></span
-              >
-           
-              <a href="<?= WEB_ROUTE?>" class="btn btn-sm btn-outline-secondary float-right ml-3">Reserver</a>
+               <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-secondary float-right ml-3">Reserver</a>
           
               <a href="<?= WEB_ROUTE?>" class="btn btn-sm btn-outline-warning float-right"
                 >Details</a
@@ -132,7 +98,7 @@ figure.zoom img {
             </div>
           </div>
         </div>
-        <?php endfor ?>
+        <?php endforeach ?>
         </div> 
       <div class="row text-center">
         <div class="col-sm-4 offset-sm-4 ">
@@ -163,9 +129,7 @@ figure.zoom img {
       </div> 
   
     </div>
-      <footer class="bg-secondary">
-          <a href="http://" target="_blank" rel="noopener noreferrer"> pied de page</a>
-      </footer>
+     
 <style>
     .jjjj{
         margin-top: 20%;
@@ -186,4 +150,35 @@ figure.zoom img {
         background: #000;
     }
 </style>
+<style>
+              figure.zoom {
+  background-position: 50% 50%;
+  position: relative;
+  width: 450px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+figure.zoom img:hover {
+  opacity: 0;
+}
+figure.zoom img {
+  transition: opacity 0.5s;
+  display: block;
+  width: 85%;
+}
+            </style>
+            <script>
+              function zoom(e) {
+  var zoomer = e.currentTarget;
+  e.offsetX ? (offsetX = e.offsetX) : (offsetX = e.touches[0].pageX);
+  e.offsetY ? (offsetY = e.offsetY) : (offsetX = e.touches[0].pageX);
+  x = (offsetX / zoomer.offsetWidth) * 100;
+  y = (offsetY / zoomer.offsetHeight) * 100;
+  zoomer.style.backgroundPosition = x + "% " + y + "%";
+}
+
+            </script>
+         
 <?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
