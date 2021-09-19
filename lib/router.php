@@ -7,7 +7,7 @@
             }elseif ($_REQUEST['controlleurs'] == 'reservation') {
                 require_once(ROUTE_DIR.'controlleurs/reservation.controlleur.php');
             }else{
-                require_once(ROUTE_DIR.'views/security/connexion.html.php');
+               // catalogue();
             
             }
         }else {

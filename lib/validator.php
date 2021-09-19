@@ -11,6 +11,29 @@
             $arrayError[$key]='Champs Obligatoire';
         }
     }
+    function validefield($valeur,string $key,array &$arrayError){
+        if (empty($valeur)) {
+            $arrayError[$key]='Champs Obligatoire';
+        }elseif (est_numeric($valeur)) {
+            $arrayError[$key]='saisir des valeurs';
+        }
+    }
+    function validefield1($valeur,string $key,array &$arrayError){
+        if (empty($valeur)) {
+            $arrayError[$key]='Champs Obligatoire';
+        }elseif (!est_numeric($valeur)) {
+            $arrayError[$key]='saisir des entiers';
+        }
+    }
+    function validefield2($valeur,string $key,array &$arrayError){
+        if (empty($valeur)) {
+            $arrayError[$key]='Champs Obligatoire';
+        }elseif (!est_numeric($valeur)) {
+            $arrayError[$key]='le code postal est invalide';
+        }elseif (!preg_match(VALIDE_POSTAL,$valeur)) {
+            $arrayError[$key]='le code est de 5 chiffres';
+        }
+    }
     function valide_number(string $number,$pattern4):bool{
        /*  $pattern4='#^(\+|00)?(221)?(77|70|75|77|78)[0-9]{7}$#'; */
         if (preg_match($pattern4,$number)) {
@@ -65,6 +88,25 @@
         }
         return false;
     }
+    function genere_reference():int{
+        $chiffre='0123456789';
+      $number="";
+        for ($i=0; $i < 5; $i++) { 
+            $number.=$chiffre[rand(0,strlen($chiffre)-1)];
+        }
+        return $number;
+    }
 
-    
+    function valide_nom_categorie($valeur,string $key,array $arrayError):void{
+        if (empty($valeur)) {
+            $arrayError[$key] = 'Champs obligatoire';
+        }
+    }
+    function valide_prix_categorie($valeur,string $key,array $arrayError):void{
+        if (empty($valeur)) {
+            $arrayError[$key] = 'Champs obligatoire';
+        }elseif (!est_numeric($valeur)) {
+            $arrayError[$key] = 'saisir des entiers';
+        }
+    }
 ?>
