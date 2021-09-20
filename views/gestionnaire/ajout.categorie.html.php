@@ -20,7 +20,7 @@
         </button>
 
         <!-- Modal -->
-        <div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content ">
             <div class="modal-header">
@@ -37,7 +37,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Nom categorie</label>
-                                <input type="text" name="categorie" id="" class="form-control" placeholder="enter le modele" aria-describedby="helpId">
+                                <input type="text" name="categorie" id="" class="form-control" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-muted">
                                     <?=isset($arrayError['categorie']) ? $arrayError['categorie'] : '';?>
                                 </small>
@@ -46,7 +46,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">Caution categorie</label>
-                                <input type="text" name="caution" id="" class="form-control" placeholder="enter le modele" aria-describedby="helpId">
+                                <input type="text" name="caution" id="" class="form-control" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-muted">
                                 <?=isset($arrayError['caution']) ? $arrayError['caution'] : '';?>
                                 </small>
@@ -57,7 +57,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">prix_location_jour</label>
-                                <input type="text" name="prix_jour" id="" class="form-control" placeholder="enter le modele" aria-describedby="helpId">
+                                <input type="text" name="prix_jour" id="" class="form-control" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-muted">
                                 <?=isset($arrayError['prix_jour']) ? $arrayError['prix_jour'] : '';?>
                                 </small>
@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="">prix_location_kilometre</label>
-                                <input type="text" name="prix_kilometre" id="" class="form-control" placeholder="enter le modele" aria-describedby="helpId">
+                                <input type="text" name="prix_kilometre" id="" class="form-control" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-muted">
                                 <?=isset($arrayError['prix_km']) ? $arrayError['prix_km'] : '';?>
                                 </small>
@@ -96,8 +96,8 @@
                 <tr>
                 <td class="text-white"><?=$categorie['nom_categorie']?></td>
                 <td class="text-white">
-                    <a name="" id="" class="btn border-secondary text-secondary " href="#" role="button">Archiver</a>
-                    <a name="" id="" class="btn border-warning text-warning" href="#" role="button">Modifier</a>
+                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver&id_categorie='.$categorie['id_categorie']?>" role="button">Archiver</a>
+                    <a name="" data-toggle="modal" data-target="#exampleModalLong" id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit&id_categorie='.$categorie['id_categorie']?>"  role="button">Modifier</a>
                 </td>
                 </tr>
                 <?php endforeach ?>
@@ -106,19 +106,45 @@
             </table>
     </div>
     
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                 <a class="page-link" href="#" tabindex="-1">Previous</a>
+    <nav aria-label="Page navigation example ">
+        <ul class="pagination justify-content-center ">
+            <li class="page-item  <?=empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie&page='.$precedent; ?>" tabindex="-1">
+                 <span aria-hidden="true" class="tt">&laquo;</span>
+                 <span class="sr-only">Previous</span>
+                </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                 <a class="page-link" href="#">Next</a>
+            <?php for($i=1;$i<=$nbrPage;$i++): ?>
+                 <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie&page='.$i; ?>"><?=$i?></a></li>
+            <?php endfor ?>
+            <li class="page-item  <?=$_GET['page'] > $nbrPage-1 ? 'disabled' : ""?>">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie&page='.$suivant; ?>">
+                      <span aria-hidden="true" class="tt">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                </a>
             </li>
         </ul>
     </nav>
+  
+  <!--   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+   -->  <script>
+$("#.LienModal").click(function(){
+    var Id=$(this).attr("rel");
+        $(".modal-body").fadeIn(1000).html('<div style="text-align:center; margin-right:auto; margin-left:auto">Patientez...</div>');
+        $.ajax({
+            type:"POST",
+            data:{Id : Id},
+            url:"reponse.php",
+            error:function(msg){
+                $(".modal-body").addClass("tableau_msg_erreur").fadeOut(800).fadeIn(800).fadeOut(400).fadeIn(400).html('<div style="margin-right:auto; margin-left:auto; text-align:center">Impossible de charger cette page</div>');
+            },
+            success:function(data){
+                $(".modal-body").fadeIn(1000).html(data);
+            }
+        });
+    });
+    </script>
 </div>
 <style>
      .jjj{
@@ -141,8 +167,57 @@
 .section-title{
     font-size: 20px;
 }
+/* .pagination > li > a
+{
+    background-color: white;
+    color: #5A4181;
+} */
+
+
+
+.pagination a
+{
+    color: #000;
+}
+.tt{
+    color: #000;
+}
+.tt:hover{
+    color: #d2b100;
+    transition: all 0,3s;
+}
+.pagination a:hover:not(.next)
+{
+    background-color: #000 !Important;
+    color: #d2b100;
+     border: solid 1px #000; 
+}
+.next{
+    background-color: #d2b100;
+    color: #000;
+    border: solid 1px #d2b100; 
+}
+.next:hover{
+    background-color: #d2b100;
+    color: #000;
+    border: solid 1px #d2b100; 
+}
 </style>
 <script>
-    
+    function openModal(){
+         $('#exampleModalLong').modal();
+    } 
+    $('button').click(function(){
+        $('#exampleModalLong').modal('show');
+    });
+   
+/*     $(document).ready(function(){
+    $("#submitButton").click(function(){
+        $("#exampleModalLong").modal();
+    });
+}); */
+/* $(document).ready(function(){
+   $("#exampleModalLong").modal();
+}); */
 </script>
 <?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

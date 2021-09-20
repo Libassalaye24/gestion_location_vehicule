@@ -1,100 +1,158 @@
-<?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
+<?php    
+ if (isset($_SESSION['arrayError'])) {
+    $arrayError=$_SESSION['arrayError'];
+    unset($_SESSION['arrayError']);
+  }
+require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
-    <div class="row jjj">
-         <div class="col-md-12">
-            <h3 class="section-title font-weight-light text-white mb-4">
-                <span class="headline">Parametrage Categorie</span>
-            </h3 >
-         </div>
-    </div>
-    <div class="row">
-         <button type="button" class="btn btn-warning ml-auto mr-auto" data-toggle="modal" data-target="#exampleModalLong">
-         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-            </svg> Ajouter categorie
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="" method="post">
-            <div class="modal-body">
-                    <div class="row">
+          <form action="" method="post">
+              <input type="hidden" name="controlleurs" value="vehicule">
+              <input type="hidden" name="action" value="add.conducteur">
+            <div class="card text-left group shadow mb-4">
+                <img class="card-img-top" src="holder.js/100px180/" alt="">
+                <div class="card-body">
+                    <div class="row jjjj">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="">Saisir le modele</label>
-                                <input type="text" name="" id="" class="form-control" placeholder="enter le modele" aria-describedby="helpId">
-                                <small id="helpId" class="text-muted"></small>
-                            </div>
+                            <h3 class="section-title font-weight-light text-white mb-4">
+                                <span class="headline">Ajouter Conducteur</span>
+                            </h3 >
                         </div>
                     </div>
+                    <?php if(isset($arrayError['loginExist'])): ?>
+                       <!--  <div class="alert alert-danger" role="alert">
+                            <?=$arrayError['loginExist']?>
+                        </div> -->
+                    <?php endif ?>
+                    <div class="row">                     
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                    <label for="" class="text-warning">Prenom</label>
+                                    <input type="text"
+                                        class="form-control" name="prenom" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                        <?= isset($arrayError['prenom']) ? $arrayError['prenom'] :"" ?>
+                                    </small>
+                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                    <label for="" class="text-warning">Nom</label>
+                                    <input type="text"
+                                        class="form-control" name="nom" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['nom']) ? $arrayError['nom'] :"" ?>
+                                    </small>
+                             </div>
+                        </div>
+                     </div>
+                     <div class="row">                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                    <label for="" class="text-warning">Telephone</label>
+                                    <input type="text"
+                                        class="form-control" name="telephone" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['numero']) ? $arrayError['numero'] :"" ?>
+                                    </small>
+                             </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="form-group">
+                             <label for="" class="text-warning">Type de Permis</label>
+                             <select class="form-control bg" name="permis" id="">
+                                <?php foreach($permis as $permi): ?>
+                               <option value="<?=$permi['id_permis']?>"><?=$permi['type_permis']?></option>
+                              <?php endforeach ?>
+                             </select>
+                           </div>
+                        </div>
+                        
+                     </div>
+                  
+                     <div class="row">
+                     <div class="col-md-3">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Pays</label>
+                               <input type="text"
+                                 class="form-control" name="pays" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['pays']) ? $arrayError['pays'] :"" ?>
+                               </small>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Ville</label>
+                               <input type="text"
+                                 class="form-control" name="ville" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['ville']) ? $arrayError['ville'] :"" ?>
+                               </small>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Rue</label>
+                               <input type="text"
+                                 class="form-control" name="rue" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['rue']) ? $arrayError['rue'] :"" ?>
+                               </small>
+                             </div>
+                         </div>
+                         
+                         <div class="col-md-3">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Code Postal</label>
+                               <input type="text"
+                                 class="form-control" name="code_postal" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['code_postal']) ? $arrayError['code_postal'] :"" ?>
+                               </small>
+                             </div>
+                         </div>
+                     </div>
+                       <div class="row">
+                         <div class="col-md-6">
+                            <button type="submit" name="add.conducteur" class="btn btn-warning"> S'inscrire</button>
+                         </div>
+                         <div class="col-md-6">
+                           <a name="" id="" class=" text-primary " href="#" >Se connecter en tant que client !!</a>
+                         </div>
+                     </div>
+                </div>
+                
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-warning">Save changes</button>
-            </div>
-            </form>
-            </div>
-        </div>
-        </div>
-    </div>
-    <div class="row mt-5">
-         <table class="table border border-warning">
-            <thead>
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col" class="text-white">First</th>
-                <th scope="col" class="text-white">Last</th>
-                <th scope="col" class="text-white">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td class="text-white">Mark</td>
-                <td class="text-white">Otto</td>
-                <td class="text-white">@mdo</td>
-                </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td class="text-white">Jacob</td>
-                <td class="text-white">Thornton</td>
-                <td class="text-white">@fat</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                <td class="text-white">Larry</td>
-                <td class="text-white">the Bird</td>
-                <td class="text-white">@twitter</td>
-                </tr>
-            </tbody>
-            </table>
-    </div>
+          </form>
 </div>
 <style>
-     .jjj{
-        margin-top: 20%;
+    .group{
+        margin-top: 21%;
+        background-color: #000;
+        box-shadow: #ddd;
+    }
+    input[type=text]{
+        background: grey;
+    }
+    input[type=date]{
+        background: grey;
+    }
+    .bg{
+        background: grey;
+    }
+    .jjj{
+        margin-top: -6%;
     }
     .section-title::after {
     content: ' ';
     position: absolute;
     display: block;
-    width: 40px;
+    width: 70px;
     border: 1px solid #d2b100;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     
-}
-.mt{
-    margin-top: 3%;
 }
 .section-title{
     font-size: 20px;
