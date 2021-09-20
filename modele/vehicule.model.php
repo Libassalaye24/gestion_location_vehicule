@@ -47,13 +47,22 @@
         $sql="select * from option_vehicule";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute();
-        $datas = $sth->fetchAll();
+        $datas = $sth->fetchAll(PDO::FETCH_ASSOC);
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
     function find_all_type_vehicule():array{
         $pdo= ouvrir_connection_db();//ouvertur
         $sql="select * from type_vehicule";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute();
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
+    function find_all_type_permis():array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from permis";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute();
         $datas = $sth->fetchAll();
@@ -73,5 +82,17 @@
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;
     }
+
+    /* function insert_into_permis($permis):int{
+        $pdo= ouvrir_connection_db();
+        $sql="INSERT INTO `permis` (`type_permis`)
+                     VALUES (?)";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($permis));
+        $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;
+    } */
+   
 
 ?>
