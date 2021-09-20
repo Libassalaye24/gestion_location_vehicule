@@ -9,6 +9,6 @@
             define('PASSWORD_DB','Libasse');
             define("DB_CHAINE_CONNECTION","mysql:dbname=gestion_location_vehicule;host=".HOST_DB);
             ///////////////////////////////
-            define("UPLOAD_DIR" , ROUTE_DIR. 'public/img/uploads/user/');
+            define("UPLOAD_DIR" , ROUTE_DIR. 'public/img/uploads/vehicule/');
             
 ?>
