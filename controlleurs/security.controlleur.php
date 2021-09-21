@@ -20,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
            connexion($_POST['login'],$_POST['password']);
         }elseif ($_POST['action']=='inscription') {
              add_user($_POST);
+           
+            // inscription($_POST);
         }
     }
 }
@@ -64,7 +66,8 @@ function connexion(string $login,string $password):void{
 function inscription(array $data):void{
     $arrayError=array();
    /*  $target_dir = UPLOAD_DIR;
-    $target_file = $target_dir . basename($files["image"]["name"]); */       
+    $target_file = $target_dir . basename($files["image"]["name"]); */    
+     
     extract($data);
     valide_field_number((string)$telephone,VALIDE_NUMBER,'numero',$arrayError);
    validation_password($password,$arrayError,'password'); 
@@ -90,9 +93,31 @@ function inscription(array $data):void{
       exit;
    }
    if (form_valid($arrayError)) {
-     //nom_user,prenom_user,email_user,telephone_user,fax_user,password_user,id_adresse,id_role,confirm_password
-   //`rue`, `ville`, `numero_adresse`, `pays`, `code_postal`
-        //add_user($data);
+ 
+       /*  var_dump($data);
+        die();   */
+      $adresse=[
+        (int)$rue,
+        $ville,
+        genere_reference(),
+        $pays,
+        (int)$code_postal
+    ];
+   
+    $last_id = insert_adresse($adresse);
+
+    $user=[
+      $nom,
+      $prenom,
+      $login,
+      $telephone,
+      $fax,
+      $password,
+      $last_id,
+      2,
+      $confirm_passwor
+    ];
+     inscrire_utilisateur($user);
         header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
         exit;
         
@@ -108,12 +133,13 @@ function inscription(array $data):void{
 
 function add_user(array $post):void{
   extract($post);
+  
   $adresse=[
-    $rue,
+    (int)$rue,
     $ville,
-    uniqid(),
+    3,
     $pays,
-    $code_postal
+    (int)$code_postal
 ];
 $last_id = insert_adresse($adresse);
 
@@ -128,11 +154,9 @@ $last_id = insert_adresse($adresse);
     2,
     $confirm_password
  ];
+
+ 
     inscrire_utilisateur($user);
-/*     var_dump(insert_adresse($adresse));
-echo("<br>");
-var_dump(inscrire_utilisateur($user));
-die; */
     header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
     exit;
 }

@@ -8,18 +8,28 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
           catalogue();
       }elseif ($_GET['views']=='ajout.vehicule') {
        show_ajout_vehicule();
-      }elseif ($_GET['views']=='ajout.marque') {
+      }elseif ($_GET['views']=='liste.marque') {
          show_liste_marque();
-      }elseif ($_GET['views']=='ajout.modele') {
+      }elseif ($_GET['views']=='liste.modele') {
          show_liste_modele();
-      }elseif ($_GET['views']=='ajout.categorie') {
+      }elseif ($_GET['views']=='liste.categorie') {
          show_liste_categorie();
-      }elseif ($_GET['views']=='ajout.option') {
+      }elseif ($_GET['views']=='liste.option') {
         show_liste_option(); 
       }elseif ($_GET['views']=='liste.conducteur') {
-        require_once(ROUTE_DIR.'views/gestionnaire/liste.conducteur.html.php');  
+        show_liste_conducteur();
       }elseif ($_GET['views']=='ajout.conducteur') {
         show_ajout_conducteur();
+      }elseif ($_GET['views']=='ajout.marque') {
+        require_once(ROUTE_DIR.'views/gestionnaire/ajout.marque.html.php');
+      }elseif ($_GET['views']=='ajout.modele') {
+        require_once(ROUTE_DIR.'views/gestionnaire/ajout.modele.html.php');
+      }elseif ($_GET['views']=='ajout.option') {
+        require_once(ROUTE_DIR.'views/gestionnaire/ajout.option.html.php');
+      }elseif ($_GET['views']=='ajout.categorie') {
+        require_once(ROUTE_DIR.'views/gestionnaire/ajout.categorie.html.php');
+      }elseif ($_GET['views']=='edit.conducteur') {
+        show_ajout_conducteur($_GET['id_conducteur']);
       }
 
     }else {
@@ -35,9 +45,19 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             
           }
       }elseif ($_POST['action']=='add.categorie') {
+         /* var_dump($_POST);
+        die; */
             add_categorie($_POST);          
       }elseif ($_POST['action']=='add.conducteur') {
             add_conducteur($_POST);
+      }elseif ($_POST['action']=='add.marque') {
+          add_marque($_POST);
+      }elseif ($_POST['action']=='add.modele') {
+        add_modele($_POST);
+      }elseif ($_POST['action']=='add.option') {
+        add_option($_POST);
+      }elseif ($_POST['action']=='edit.conducteur') {
+        add_conducteur($_POST);  
       }
     }
 }
@@ -55,59 +75,32 @@ function show_ajout_vehicule($nbre=1){
   $_SESSION['nbre_image']=$nbre;
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.vehicule.html.php');  
 }
-function show_ajout_conducteur(){
+function show_ajout_conducteur($get=null){
+  $driver=find_conducteur_by_id($get);
+  $_SESSION['drive']=$driver;
   $permis=find_all_type_permis();
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.conducteur.html.php');  
 }
-function show_liste_categorie(){
-  $categories=array();
-  $categoriess=find_all_categorie();
-  $nbrPage=nombrePageTotal($categoriess,4);
-  $categories=pagination((int)$_GET['page'],$categoriess,4);
-  $suivant=2;
-  $suivant=$_GET['page']+1;
-  $precedent=$_GET['page']-1;
-  require_once(ROUTE_DIR.'views/gestionnaire/ajout.categorie.html.php'); 
+function show_liste_categorie(int $nbrElementPage=4,$page=1){
+  $categories=find_all_categorie();
+  require_once(ROUTE_DIR.'views/gestionnaire/liste.categorie.html.php'); 
 }
+
 function show_liste_marque(){
-  $marques=array();
-  $marquess=find_all_marque();
-  $nbrPage=nombrePageTotal($marquess,4);
-  $marques=pagination((int)$_GET['page'],$marquess,4);
-  $suivant=2;
-  $suivant=$_GET['page']+1;
-  $precedent=$_GET['page']-1;
-  require_once(ROUTE_DIR.'views/gestionnaire/ajout.marque.html.php'); 
+  $marques=find_all_marque();
+  require_once(ROUTE_DIR.'views/gestionnaire/liste.marque.html.php'); 
 }
 function show_liste_modele(){
-  $modeles=array();
-  $modeless=find_all_modele();
-  $nbrPage=nombrePageTotal($modeless,4);
-  $modeles=pagination((int)$_GET['page'],$modeless,4);
-  $suivant=2;
-  $suivant=$_GET['page']+1;
-  $precedent=$_GET['page']-1;
-  require_once(ROUTE_DIR.'views/gestionnaire/ajout.modele.html.php'); 
+  $modeles=find_all_modele();
+  require_once(ROUTE_DIR.'views/gestionnaire/liste.modele.html.php'); 
 }
 function show_liste_option(){
-  $options=array();
-  $optionss=find_all_option();
-  $nbrPage=nombrePageTotal($optionss,4);
-  $options=pagination((int)$_GET['page'],$optionss,4);
-  $suivant=2;
-  $suivant=$_GET['page']+1;
-  $precedent=$_GET['page']-1;
-  require_once(ROUTE_DIR.'views/gestionnaire/ajout.option.html.php'); 
+  $options=find_all_option();
+  require_once(ROUTE_DIR.'views/gestionnaire/liste.option.html.php'); 
 }
 function show_liste_conducteur(){
-  $conducteurs=array();
-  $conducteurss=find_all_categorie();
-  $nbrPage=nombrePageTotal($conducteurss,4);
-  $conducteurs=pagination((int)$_GET['page'],$conducteurss,4);
-  $suivant=2;
-  $suivant=$_GET['page']+1;
-  $precedent=$_GET['page']-1;
-  require_once(ROUTE_DIR.'views/gestionnaire/ajout.conducteur.html.php'); 
+  $conducteurs=find_all_conducteur();
+  require_once(ROUTE_DIR.'views/gestionnaire/liste.conducteur.html.php'); 
 }
     function add_categorie(array $data):void{
         $arrayError=array();
@@ -118,11 +111,56 @@ function show_liste_conducteur(){
         valide_prix_categorie($caution,'caution',$arrayError);       
         if (form_valid($arrayError)) {
             insert_categorie($data);
-            header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie');
+            header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie');
+            exit;
         }else {
           $_SESSION['arrayError']=$arrayError;
           header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie');
+          exit;
         }
+    }
+    function add_marque(array $data):void{
+      $arrayError=[];
+      extract($data);
+      valide_nom_marque($marque,'marque',$arrayError);
+      if (form_valid($arrayError)) {
+          insert_marque($marque);
+          header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.marque');
+          exit;
+      }else {
+        $_SESSION['arrayError']=$arrayError;
+        header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque');
+        exit;
+      }
+    }
+    function add_modele(array $data):void{
+      $arrayError=[];
+      extract($data);
+      valide_nom_marque($modele,'modele',$arrayError);
+      if (form_valid($arrayError)) {
+          insert_modele($modele);
+          header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.modele');
+          exit;
+      }else {
+        $_SESSION['arrayError']=$arrayError;
+        header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=ajout.modele');
+        exit;
+      }
+    }
+
+    function add_option(array $data):void{
+      $arrayError=[];
+      extract($data);
+      valide_nom_marque($option,'option',$arrayError);
+      if (form_valid($arrayError)) {
+          insert_option($option);
+          header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.option');
+          exit;
+      }else {
+        $_SESSION['arrayError']=$arrayError;
+        header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=ajout.option');
+        exit;
+      }
     }
 
     function pagination(int $get,array $array,int $nbrElement):array{
@@ -150,34 +188,69 @@ function show_liste_conducteur(){
       extract($data);
       valide_user_name($nom,'nom',$arrayError);
       valide_user_name($nom,'prenom',$arrayError);
-      valide_field_number((string)$telephone,VALIDE_NUMBER,'numero',$arrayError);
+      valide_field_number($telephone,VALIDE_NUMBER,'numero',$arrayError);
       validefield($pays,'pays',$arrayError);
       validefield($ville,'ville',$arrayError);
       validefield1($rue,'rue',$arrayError);
-      validefield2($code_postal,'code_postal',$arrayError);
+     // validefield2($code_postal,'code_postal',$arrayError);
       if (form_valid($arrayError)) {
+       /*  var_dump($data['id']);
+        die; */
+        if (!isset($data['id'])) {
           $adresse=[
-            $rue,
-            $ville,
-            uniqid(),
-            $pays,
-            $code_postal
+            (int)$rue,
+             $ville,
+             genere_reference(),
+             $pays,
+            (int)$code_postal
           ];
+        
           $id_adresse=insert_adresse($adresse);
          
           $conducteurs=[
             $nom,
             $prenom,
-            uniqid(),
+            genere_reference(),
             $telephone,
             $id_adresse,
             $permis
           ];
           insert_conducteur($conducteurs);
           header("location:".'?controlleurs=vehicule&views=liste.conducteur');
+          exit;
+        }elseif (isset($data['id'])) {
+          $adresse=[
+            (int)$rue,
+             $ville,
+             $pays,
+            (int)$code_postal,
+            $driver['id_adresse']
+          ];
+        /*   var_dump( $adresse);
+          die; */
+       $id_adresse= update_adresse($adresse);
+          $conducteurs=[
+            $nom,
+            $prenom,
+            $telephone,
+            $id_adresse,
+            $permis
+          ];
+          update_conducteur($conducteurs);
+        }
+        header("location:".'?controlleurs=vehicule&views=liste.conducteur');
+        exit;
       }else {
-        $_SESSION['arrayError'] = $arrayError;
-        header("location:".'?controlleurs=vehicule&views=ajout.conducteur');
+        if (!isset($data['id'])) {
+             $_SESSION['arrayError'] = $arrayError;
+             header("location:".'?controlleurs=vehicule&views=ajout.conducteur');
+            exit;
+        }else {
+          $_SESSION['arrayError'] = $arrayError;
+          header("location:".'?controlleurs=vehicule&views=edit.conducteur');
+          exit;
+        }
+
       }
     }
 ?>
