@@ -30,11 +30,13 @@
 
       <div class="collapse navbar-collapse ml-5" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
+        <?php if(!est_gestionnaire() && !est_responsable()): ?>
           <li class="nav-item active">
             <a class="nav-link" href="<?= WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule'?>"
               >Accueil
               <span class="sr-only">(current)</span>
             </a>
+          <?php endif ?>
           </li>
           <?php if(est_client()): ?>
             <li class="nav-item">
@@ -42,6 +44,11 @@
             </li>
           <?php endif ?>
           <?php if(est_gestionnaire()): ?>
+            <ul class="navbar-nav mr-o ml-2">
+            <li class="nav-item">
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule'?>">Liste vehicule</a>
+            </li>
+          </ul>
           <ul class="navbar-nav mr-o ml-2">
            <li class="nav-item">
               <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.vehicule'?>">Vehicule</a>

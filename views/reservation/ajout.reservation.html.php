@@ -1,8 +1,14 @@
-<?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
+<?php  
+if (isset($_SESSION['arrayError'])) {
+    $arrayError=$_SESSION['arrayError'];
+    unset($_SESSION['arrayError']);
+}
+require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post">
               <input type="hidden" name="controlleurs" value="reservation">
-              <input type="hidden" name="action" value="ajout.reservation">
+              <input type="hidden" name="id_vehicule" value="<?=isset($vehicule[0]['id_vehicule'])?$vehicule[0]['id_vehicule']:""?>">
+              <input type="hidden" name="action" value="add.reservation">
             <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
@@ -15,49 +21,55 @@
                         </div>
                     </div>
                      <div class="row">
-                         <div class="col-md-4">
+                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="" class="text-warning">Date debut</label>
-                                <input type="date" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                <small id="helpId" class="text-muted"></small>
+                                <input type="date" name="date_debut" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                <small id="helpId" class="text-danger">
+                                <?= isset($arrayError['date_debut']) ? $arrayError['date_debut'] :"" ?>
+                                </small>
                             </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="" class="text-warning">Date fin</label>
-                                <input type="date" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                <small id="helpId" class="text-muted"></small>
+                                <input type="date" name="date_fin" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                <small id="helpId" class="text-danger">
+                                <?= isset($arrayError['date_fin']) ? $arrayError['date_fin'] :"" ?>
+                                </small>
                             </div>
                          </div>
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="" class="text-warning">Duree</label>
-                                <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
-                                <small id="helpId" class="text-muted"></small>
+                                <input type="text" name="duree" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                <small id="helpId" class="text-danger"></small>
                             </div>
-                         </div>
+                         </div> -->
                          
                      </div>
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group">
                                <label for="" class="text-warning">Marque</label>
-                               <input type="text" name="" value="<?=$vehicule[0]['nom_marque']?>" id="" class="form-control bg" disabled  placeholder="" aria-describedby="helpId">
-                               <small id="helpId" class="text-muted"></small>
+                               <input type="text" name="marque" value="<?=$vehicule[0]['nom_marque']?>" id="" class="form-control bg" disabled  placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger"></small>
                              </div>
                          </div>
                          <div class="col-md-4">
                              <div class="form-group">
                                <label for="" class="text-warning">Modele</label>
-                               <input type="text" name="" id="" class="form-control bg" value="<?=$vehicule[0]['nom_modele']?>" disabled placeholder="" aria-describedby="helpId">
-                               <small id="helpId" class="text-muted"></small>
+                               <input type="text" name="modele" id="" class="form-control bg" value="<?=$vehicule[0]['nom_modele']?>" disabled placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                                    
+                               </small>
                              </div>
                          </div>
                          <div class="col-md-4">
                              <div class="form-group">
                                <label for="" class="text-warning">Categorie</label>
-                               <input type="text" name="" id="" class="form-control" value="<?=$vehicule[0]['nom_categorie']?>" disabled placeholder="" aria-describedby="helpId">
-                               <small id="helpId" class="text-muted"></small>
+                               <input type="text" name="categorie" id="" class="form-control" value="<?=$vehicule[0]['nom_categorie']?>" disabled placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger"></small>
                              </div>
                          </div>
                      </div>
@@ -92,16 +104,20 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">Prenom</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="prenom" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                        <?= isset($arrayError['prenom']) ? $arrayError['prenom'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                     <label for="" class="text-warning">Nom</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="nom" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['nom']) ? $arrayError['nom'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                      </div>
@@ -110,16 +126,21 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">Telephone</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="telephone" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['numero']) ? $arrayError['numero'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                     <label for="" class="text-warning">Email</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="login" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['login']) ? $arrayError['login'] :"" ?>
+                                    <?= isset($arrayError['loginExist']) ? $arrayError['loginExist'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                      </div>
@@ -128,16 +149,20 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">Password</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="password" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['password']) ? $arrayError['password'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                     <label for="" class="text-warning">Confirm Password</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="confirm_password" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['confirm']) ? $arrayError['confirm'] :"" ?>
+                                    </small>
                              </div>
                         </div>
                        
@@ -147,32 +172,40 @@
                              <div class="form-group">
                                <label for="" class="text-warning">Ville</label>
                                <input type="text"
-                                 class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                               <small id="helpId" class="form-text text-muted"></small>
+                                 class="form-control" name="ville" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['ville']) ? $arrayError['ville'] :"" ?>
+                               </small>
                              </div>
                          </div>
                          <div class="col-md-3">
                              <div class="form-group">
                                <label for="" class="text-warning">Rue</label>
                                <input type="text"
-                                 class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                               <small id="helpId" class="form-text text-muted"></small>
+                                 class="form-control" name="rue" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['ville']) ? $arrayError['ville'] :"" ?>
+                               </small>
                              </div>
                          </div>
                          <div class="col-md-3">
                              <div class="form-group">
                                <label for="" class="text-warning">Pays</label>
                                <input type="text"
-                                 class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                               <small id="helpId" class="form-text text-muted"></small>
+                                 class="form-control" name="pays" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['pays']) ? $arrayError['pays'] :"" ?>
+                               </small>
                              </div>
                          </div>
                          <div class="col-md-3">
                              <div class="form-group">
                                <label for="" class="text-warning">Code Postal</label>
                                <input type="text"
-                                 class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                               <small id="helpId" class="form-text text-muted"></small>
+                                 class="form-control" name="code_postal" id="" aria-describedby="helpId" placeholder="">
+                               <small id="helpId" class="form-text text-danger">
+                               <?= isset($arrayError['code_postal']) ? $arrayError['code_postal'] :"" ?>
+                               </small>
                              </div>
                          </div>
                      </div>
@@ -205,6 +238,7 @@
     .jjj{
         margin-top: -6%;
     }
+    
     .section-title::after {
     content: ' ';
     position: absolute;

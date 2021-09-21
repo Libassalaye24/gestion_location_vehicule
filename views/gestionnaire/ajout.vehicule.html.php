@@ -1,8 +1,8 @@
 <?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
-          <form action="" method="post">
+          <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="add.bien">
+              <input type="hidden" name="action" value="add.vehicule">
             <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
@@ -19,7 +19,7 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">kilometrage</label>
                                     <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="kmt" value="<?=isset($_SESSION['post']['kmt']) ? $_SESSION['post']['kmt'] : ""?>" id="" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-muted"></small>
                              </div>
                         </div>
@@ -40,6 +40,7 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning ">Marque</label>
                               <select class="form-control  bg-secondary" name="marque" id="">
+                                  <option value="<?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : ""?>"></option>
                               <?php foreach($marques as $marque): ?>
                                  <option value="<?=$marque['id_marque']?>"><?=$marque['nom_marque']?></option>
                                 <?php endforeach ?>
@@ -56,8 +57,7 @@
                               </select>
                             </div>
                         </div>
-                       <!--  <?php //$nbr=genere_reference(); ?>
-                        <input type="hidden" name="numero_vehicule" value="<?=$nbr?>"> -->
+                    
                      </div>
                      <div class="row ">
                         <div class="col-md-3">
@@ -89,7 +89,7 @@
                         <div class="col-md-3">
                            <div class="form-check form-check-inline">
                                <label class="form-check-label text-warning">
-                                   <input class="form-check-input " type="radio" name="type_vehicule" id="" value="<?=$type['id_type_vehicule']?>"> <?=$type['nom_type_vehicule']?>
+                                   <input class="form-check-input  "  type="radio" name="typeVehicule" id="" value="<?=$type['id_type_vehicule']?>"> <?=$type['nom_type_vehicule']?>
                                </label>
                            </div>
                         </div>
@@ -222,4 +222,8 @@ function checkCheckBox(ele) {
                                     <small id="helpId" class="form-text text-muted"></small>
                              </div>
                         </div> -->
-<?php require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
+<?php
+if (isset($_SESSION['post'])) {
+    unset($_SESSION['post']);
+}
+ require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

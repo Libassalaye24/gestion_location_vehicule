@@ -19,9 +19,9 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                         </div>
                     </div>
                     <?php if(isset($arrayError['loginExist'])): ?>
-                       <!--  <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             <?=$arrayError['loginExist']?>
-                        </div> -->
+                        </div>
                     <?php endif ?>
                     <div class="row">                     
                         <div class="col-md-6">
