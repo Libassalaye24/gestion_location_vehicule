@@ -32,7 +32,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" href="<?= WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule'?>"
-              ><i class="fas fa-home">Accueil</i>
+              >Accueil
               <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -40,6 +40,34 @@
             <li class="nav-item">
               <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations'?>">Mes Réservations</a>
             </li>
+          <?php endif ?>
+          <?php if(est_gestionnaire()): ?>
+          <ul class="navbar-nav mr-o ml-2">
+           <li class="nav-item">
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.vehicule'?>">Vehicule</a>
+            </li>
+          </ul>
+        <ul class="navbar-nav mr-o mr-4">
+            <li class="nav-item dropdown mr-md-5">
+              <a
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Parametrage</a
+              >
+                <div class="dropdown-menu ">
+                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.conducteur'?>">Conducteur</a>
+                <a class="dropdown-item"   href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie'?>">Categorie</a>
+                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.marque'?>">Marque</a>
+                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.modele'?>">Modele</a>
+                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.option'?>">Option</a>
+                </div>
+            
+            </li>
+          </ul>
           <?php endif ?>
           <?php if(est_responsable()): ?>
             <li class="nav-item">
@@ -53,30 +81,7 @@
               <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=bien&views=creer.bien'?>">Crer un bien</a>
             </li> -->
         </ul>
-        <?php if(est_gestionnaire()): ?>
-        <ul class="navbar-nav mr-o mr-4">
-            
-            <li class="nav-item dropdown mr-md-5">
-              <a
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-                href="#"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false"
-                >Ajouter</a
-              >
-                <div class="dropdown-menu ">
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.vehicule'?>">Ajouter vehicule</a>
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie'?>">Ajouter categorie</a>
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque'?>">Ajoueter marque</a>
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.modele'?>">Ajouter modele</a>
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.option'?>">Ajouter option</a>
-                </div>
-            
-            </li>
-          </ul>
-          <?php endif ?>
+       
         <ul class="navbar-nav mr-o mr-4">
             
             <li class="nav-item dropdown mr-md-5">
@@ -91,7 +96,7 @@
               >
               <?php if(!est_connect()): ?>
                 <div class="dropdown-menu ">
-                  <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=security&views=connexion'?>"> Se Connecter</a>
+                <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=security&views=connexion'?>"> Se Connecter</a>
                 </div>
                 <?php elseif(est_connect()): ?>
                 <div class="dropdown-menu ">

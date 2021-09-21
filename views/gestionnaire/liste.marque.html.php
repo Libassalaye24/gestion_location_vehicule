@@ -3,54 +3,53 @@
     <div class="row jjj">
          <div class="col-md-12">
             <h3 class="section-title font-weight-light text-white mb-4">
-                <span class="headline">Parametrage Conducteur</span>
+                <span class="headline">Parametrage Categorie</span>
             </h3 >
          </div>
     </div>
     <div class="row">
-         <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.conducteur'?>" class="btn btn-warning ml-auto mr-auto">
+        <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque'?>" class="btn btn-warning ml-auto mr-auto" >
          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
             <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-            </svg> Ajouter Conducteur
-         </a>
+            </svg> Ajouter Marque
+        </a>
+       
 
     </div>
     <div class="row mt-5">
          <table class="table table-bordered">
             <thead>
                 <tr>
-                <th scope="col" class="text-warning">Nom & Prenom</th>
-                <th scope="col" class="text-warning">Telephone</th>
-                <th scope="col" class="text-warning">Action</th>
+                <th scope="col" class="text-white">Marques</th>
+                <th scope="col" class="text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($conducteurs as $conducteur): ?>
+            <?php foreach($marques as $marque): ?>
                 <tr>
-                <td class="text-white"><?=$conducteur['nom_conducteur'].' '.$conducteur['prenom_conducteur']?></td>
-                <td class="text-white"><?=$conducteur['telephone_conducteur']?></td>
-                <td class="text-white">
-                        <a name="" id="" class="btn border-secondary text-secondary" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver&id_conducteur='.$conducteur['id_conducteur']?>" role="button">archiver</a>
-                        <a name="" id="" class="btn border-warning text-warning" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.conducteur&id_conducteur='.$conducteur['id_conducteur']?>" role="button">modifier</a>
+                <td class="text-white"><?=$marque['nom_marque']?></td>
+                <td class="text-white ">
+                    <a href="#" class="btn text-secodary border-secondary active" role="button">Archiver</a>
+                    <a href="#" class="btn text-warning border-warning active" role="button">Modifier</a>
                 </td>
                 </tr>
-              <?php endforeach ?>
+            <?php endforeach ?>
             </tbody>
             </table>
     </div>
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
             <li class="page-item ">
-                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.option'?>" tabindex="-1">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque' ?>" tabindex="-1">
                  <span aria-hidden="true" class="tt">&laquo;</span>
                  <span class="sr-only">Previous</span>
                 </a>
             </li>
             <?php //for($i=1;$i<=$nbrPage;$i++): ?>
-                 <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.option' ?>">1</a></li>
+                 <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque' ?>">1</a></li>
             <?php //endfor ?>
-            <li class="page-item  ">
-                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.option' ?>">
+            <li class="page-item ">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.marque'?>">
                       <span aria-hidden="true" class="tt">&raquo;</span>
                       <span class="sr-only">Next</span>
                 </a>
@@ -79,6 +78,7 @@
 .section-title{
     font-size: 20px;
 }
+
 .pagination a
 {
     color: #000;

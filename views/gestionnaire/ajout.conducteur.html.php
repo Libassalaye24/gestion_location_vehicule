@@ -3,18 +3,23 @@
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
   }
+/*  var_dump($driver);
+ die; */
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="add.conducteur">
-            <div class="card text-left group shadow mb-4">
+              <input type="hidden" name="action" value="<?=!isset($driver[0]['id_conducteur']) ?'add.conducteur': 'edit.conducteur' ?>">
+              <input type="hidden" name="id" value="<?=isset($driver[0]['id_conducteur']) ? $driver[0]['id_conducteur'] : ""; ?>">
+              <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
                     <div class="row jjjj">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
-                                <span class="headline">Ajouter Conducteur</span>
+                                <span class="headline">
+                                  <?=isset($driver[0]['id_conducteur']) ? 'Modifier' : "Ajouter"; ?> Conducteur
+                                </span>
                             </h3 >
                         </div>
                     </div>
@@ -28,7 +33,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             <div class="form-group">
                                     <label for="" class="text-warning">Prenom</label>
                                     <input type="text"
-                                        class="form-control" name="prenom" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="prenom" id="" value="<?=isset($driver[0]['prenom_conducteur']) ? $driver[0]['prenom_conducteur'] : ""; ?>" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
                                         <?= isset($arrayError['prenom']) ? $arrayError['prenom'] :"" ?>
                                     </small>
@@ -38,7 +43,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             <div class="form-group">
                                     <label for="" class="text-warning">Nom</label>
                                     <input type="text"
-                                        class="form-control" name="nom" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="nom" id="" aria-describedby="helpId" value="<?=isset($driver[0]['nom_conducteur']) ? $driver[0]['nom_conducteur'] : ""; ?>" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
                                     <?= isset($arrayError['nom']) ? $arrayError['nom'] :"" ?>
                                     </small>
@@ -50,7 +55,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             <div class="form-group">
                                     <label for="" class="text-warning">Telephone</label>
                                     <input type="text"
-                                        class="form-control" name="telephone" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="telephone" id="" value="<?=isset($driver[0]['telephone_conducteur']) ? $driver[0]['telephone_conducteur'] : ""; ?>" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
                                     <?= isset($arrayError['numero']) ? $arrayError['numero'] :"" ?>
                                     </small>
@@ -60,6 +65,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                            <div class="form-group">
                              <label for="" class="text-warning">Type de Permis</label>
                              <select class="form-control bg" name="permis" id="">
+                               <option value="<?=isset($driver[0]['id_permis']) ? $driver[0]['id_permis'] : "" ?>"><?=isset($driver[0]['id_permis']) ? $driver[0]['type_permis'] : "" ?></option>
                                 <?php foreach($permis as $permi): ?>
                                <option value="<?=$permi['id_permis']?>"><?=$permi['type_permis']?></option>
                               <?php endforeach ?>
@@ -74,7 +80,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              <div class="form-group">
                                <label for="" class="text-warning">Pays</label>
                                <input type="text"
-                                 class="form-control" name="pays" id="" aria-describedby="helpId" placeholder="">
+                                 class="form-control" name="pays" id="" value=" <?=isset($driver[0]['pays']) ? $driver[0]['pays'] : ""; ?>" aria-describedby="helpId" placeholder="">
                                <small id="helpId" class="form-text text-danger">
                                <?= isset($arrayError['pays']) ? $arrayError['pays'] :"" ?>
                                </small>
@@ -84,7 +90,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              <div class="form-group">
                                <label for="" class="text-warning">Ville</label>
                                <input type="text"
-                                 class="form-control" name="ville" id="" aria-describedby="helpId" placeholder="">
+                                 class="form-control" name="ville" value=" <?=isset($driver[0]['ville']) ? $driver[0]['ville'] : ""; ?>" id="" aria-describedby="helpId" placeholder="">
                                <small id="helpId" class="form-text text-danger">
                                <?= isset($arrayError['ville']) ? $arrayError['ville'] :"" ?>
                                </small>
@@ -94,7 +100,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              <div class="form-group">
                                <label for="" class="text-warning">Rue</label>
                                <input type="text"
-                                 class="form-control" name="rue" id="" aria-describedby="helpId" placeholder="">
+                                 class="form-control" name="rue" value=" <?=isset($driver[0]['rue']) ? $driver[0]['rue'] : ""; ?>" id="" aria-describedby="helpId" placeholder="">
                                <small id="helpId" class="form-text text-danger">
                                <?= isset($arrayError['rue']) ? $arrayError['rue'] :"" ?>
                                </small>
@@ -105,7 +111,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              <div class="form-group">
                                <label for="" class="text-warning">Code Postal</label>
                                <input type="text"
-                                 class="form-control" name="code_postal" id="" aria-describedby="helpId" placeholder="">
+                                 class="form-control" name="code_postal" value=" <?=isset($driver[0]['code_postal']) ? $driver[0]['code_postal'] : ""; ?>" id="" aria-describedby="helpId" placeholder="">
                                <small id="helpId" class="form-text text-danger">
                                <?= isset($arrayError['code_postal']) ? $arrayError['code_postal'] :"" ?>
                                </small>
@@ -114,7 +120,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                      </div>
                        <div class="row">
                          <div class="col-md-6">
-                            <button type="submit" name="add.conducteur" class="btn btn-warning"> S'inscrire</button>
+                            <button type="submit" name="add.conducteur" class="btn btn-warning"> <?=isset($driver[0]['id_conducteur']) ? 'Modifier' : "S'inscrire"; ?></button>
                          </div>
                          <div class="col-md-6">
                            <a name="" id="" class=" text-primary " href="#" >Se connecter en tant que client !!</a>

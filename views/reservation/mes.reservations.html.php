@@ -69,9 +69,9 @@ figure.zoom img {
                   <p class=" text-white"> Luxury
                     Mercedes Classe S 350	
                  </p>
-               <!--  <span class="badge badge-warning"><?=$bien['type_bien']?>
+               <!--  <span class="badge badge-warning">
                  </span> -->
-                <span class="badge badge-warning"><?=$bien['prix_bien']." CFA"?>67890</span>
+                <span class="badge badge-warning">67890</span>
               </h5>
               <hr />
               <span class="float-left btn btn-sm text-center disabled"
