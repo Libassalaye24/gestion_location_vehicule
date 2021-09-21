@@ -15,8 +15,8 @@
 
     function login_exist(string $login):array{
         $pdo=ouvrir_connection_db();
-        $sql='select * from user u ,role ro where 
-                u.loguin=?';
+        $sql='SELECT * from user 
+                where email_user=?';
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($login));
         $user = $sth->fetchAll();

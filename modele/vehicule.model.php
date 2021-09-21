@@ -123,16 +123,17 @@
          return $dernier_id ;
     }
 
-    /* function insert_into_permis($permis):int{
+    function insert_into_vehicule(array $vehicules):int{
         $pdo= ouvrir_connection_db();
-        $sql="INSERT INTO `permis` (`type_permis`)
-                     VALUES (?)";
+        $sql="INSERT INTO `vehicule` (`numero_vehicule`, `immatriculation_vehicule`, `kilometrage_vehicule`,
+                 `id_categorie`, `id_modele`, `id_marque`, `id_type_vehicule`, `id_etat`)
+                      VALUES (?,?,?,?,?,?,?,?)";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array($permis));
+        $sth->execute($vehicules);
         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;
-    } */
+    }
 
     function find_categorie_by_id( $id_categorie):array{
         $pdo= ouvrir_connection_db();

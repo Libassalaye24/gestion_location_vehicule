@@ -13,14 +13,14 @@
                 return $reservation_bien;
             }
         
-            function ajout_reservation_vehicule(int $id_vehicule,int $id_user){
+            function ajout_reservation_vehicule(array $reservations){
                 $pdo=ouvrir_connection_db();
-                $sql="INSERT INTO reservation (date_reservation,etat_reservation,description_reservation,id_bien,id_user,id_reservation)
-                 VALUES (?, ?, ?, ?, ?, ?)";
+                $sql="INSERT INTO reservation (date_debut_location,date_fin_location,id_user,id_modele,id_marque,id_categorie,id_etat)
+                 VALUES (?,?,?,?,?,?,?)";
                   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                   $now=date_create();
-                   $now=date_format($now,'Y-m-d H:i:s');
-                   $sth->execute(array($now,'en cours','description',$id_vehicule   ,$id_user,NULL));
+                   /* $now=date_create();
+                   $now=date_format($now,'Y-m-d H:i:s'); */
+                   $sth->execute($reservations);
                    fermer_connection_db($pdo);
             }
 ?>
