@@ -97,16 +97,47 @@
         return $number;
     }
 
-    function valide_nom_categorie($valeur,string $key,array $arrayError):void{
+    function valide_nom_categorie($valeur,string $key,array &$arrayError):void{
         if (empty($valeur)) {
             $arrayError[$key] = 'Champs obligatoire';
         }
     }
-    function valide_prix_categorie($valeur,string $key,array $arrayError):void{
+    function valide_nom_marque($valeur,string $key,array &$arrayError):void{
+        if (empty($valeur)) {
+            $arrayError[$key] = 'Champs obligatoire';
+        }elseif (est_numeric($valeur)) {
+            $arrayError[$key] = 'saisir des lettres';
+        }
+    }
+    function valide_prix_categorie($valeur,string $key,array &$arrayError):void{
         if (empty($valeur)) {
             $arrayError[$key] = 'Champs obligatoire';
         }elseif (!est_numeric($valeur)) {
             $arrayError[$key] = 'saisir des entiers';
         }
     }
+    function nombrePageTotal($array, $nombreElement): int {
+        $nombrePage = 0;
+        $longueurArray = count($array);
+        if ($longueurArray % $nombreElement == 0) {
+            $nombrePage = $longueurArray / $nombreElement;
+        } else {
+            $nombrePage = ($longueurArray / $nombreElement) + 1;
+        }
+        return $nombrePage;
+    }
+
+function get_element_to_display(array $array, int $page, int $nombreElement): array {
+    $arrayElement = [];
+    $indiceDepart = ($page*$nombreElement) - $nombreElement;
+    $limitElement = $page * $nombreElement;
+    for ($i = $indiceDepart; $i < $limitElement; $i++) {
+        if ($i >= count($array)) {
+            return $arrayElement;
+        } else {
+            $arrayElement[] = $array[$i];
+        }
+    }
+    return $arrayElement;
+}
 ?>
