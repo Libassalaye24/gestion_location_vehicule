@@ -5,13 +5,35 @@ function insert_adresse(array $adresse):int{
     $sql="INSERT INTO adresse (rue,ville,numero_adresse, pays, code_postal)
                      VALUES (?, ?, ?, ?,?)";
     $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    $sth->execute($adresse);
    
+    $sth->execute($adresse);
     $dernier_id = $pdo->lastInsertId();
-   /*  var_dump($dernier_id);
-    die; */
     fermer_connection_db($pdo);
     return $dernier_id;
 }
+
+function update_adresse(array $adresses):int{
+    $pdo=ouvrir_connection_db();
+    $sql="UPDATE `adresse` 
+            SET `rue` = ?,
+             `ville` = ?,
+              `pays` = ?, 
+              `code_postal` = ? 
+              WHERE `id_adresse` = ?";
+     $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    /*  var_dump( $sth->execute([
+         15,
+         'Diamniadio',
+         'senegal',
+         12400,
+         1
+     ]));
+     die; */
+   
+    $sth->execute($adresses);
+     $dernier_id = $pdo->lastInsertId();
+     fermer_connection_db($pdo);//fermeture
+     return $dernier_id ;     
+  }
     
 ?>

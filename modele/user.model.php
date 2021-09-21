@@ -6,15 +6,10 @@
         $sql=" INSERT INTO user (nom_user,prenom_user,email_user,telephone_user,
                                 fax_user,password_user,id_adresse,id_role,confirm_password) 
                 VALUES (?,?,?,?,?,?,?,?,?)";
-               /*  if (!est_connect()) {
-                    $id_role=2;
-                } */ //$id_adresse=insert_adresse();
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute($user);
         $dernier_id = $pdo->lastInsertId();
         fermer_connection_db($pdo);
-       /*  var_dump($sth);
-            die;  */
         return $dernier_id;
     }
 
