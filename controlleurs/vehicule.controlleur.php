@@ -8,7 +8,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
           catalogue();
       }elseif ($_GET['views']=='ajout.vehicule') {
        show_ajout_vehicule();
-      }elseif ($_GET['views']=='liste.marque') {
+      }elseif ($_GET['views']=='liste.vehicule') {
+        require_once(ROUTE_DIR.'views/gestionnaire/liste.vehicule.html.php');
+       }elseif ($_GET['views']=='liste.marque') {
          show_liste_marque();
       }elseif ($_GET['views']=='liste.modele') {
          show_liste_modele();
@@ -38,11 +40,17 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     
 }elseif ($_SERVER['REQUEST_METHOD']=='POST') {
     if (isset($_POST['action'])) {
-      if ($_POST['action']=='add.bien') {
+      if ($_POST['action']=='add.vehicule') {
           if (isset($_POST['nbre'])) {
             show_ajout_vehicule($_POST['nbre_image']);
+          }elseif(isset($_POST['type_vehicule'])) {
+            if ($_POST['typeVehicule']==1) {
+              $_SESSION['post']=$_POST;
+              show_ajout_vehicule($_POST['nbre_image']);
+            }
+           
           }else {
-            
+              //fonction ajouter vehicule
           }
       }elseif ($_POST['action']=='add.categorie') {
          /* var_dump($_POST);
@@ -196,7 +204,7 @@ function show_liste_conducteur(){
       if (form_valid($arrayError)) {
        /*  var_dump($data['id']);
         die; */
-        if (!isset($data['id'])) {
+       
           $adresse=[
             (int)$rue,
              $ville,
@@ -218,7 +226,7 @@ function show_liste_conducteur(){
           insert_conducteur($conducteurs);
           header("location:".'?controlleurs=vehicule&views=liste.conducteur');
           exit;
-        }elseif (isset($data['id'])) {
+        /* if (isset($data['id'])) {
           $adresse=[
             (int)$rue,
              $ville,
@@ -226,8 +234,7 @@ function show_liste_conducteur(){
             (int)$code_postal,
             $driver['id_adresse']
           ];
-        /*   var_dump( $adresse);
-          die; */
+       
        $id_adresse= update_adresse($adresse);
           $conducteurs=[
             $nom,
@@ -237,7 +244,7 @@ function show_liste_conducteur(){
             $permis
           ];
           update_conducteur($conducteurs);
-        }
+        } */
         header("location:".'?controlleurs=vehicule&views=liste.conducteur');
         exit;
       }else {
@@ -253,4 +260,10 @@ function show_liste_conducteur(){
 
       }
     }
+
+    function add_vehicule(){
+
+    }
+
+
 ?>

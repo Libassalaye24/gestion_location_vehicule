@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         if ($_POST['action']=='connexion') {
            connexion($_POST['login'],$_POST['password']);
         }elseif ($_POST['action']=='inscription') {
-             add_user($_POST);
+            // add_user($_POST);
            
-            // inscription($_POST);
+             inscription($_POST);
         }
     }
 }
@@ -47,7 +47,7 @@ function connexion(string $login,string $password):void{
           header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations');
           exit();
         }elseif ($user['nom_role']=='GESTIONNAIRE') {
-            header('location:'.WEB_ROUTE);
+            header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule');
             exit();
         }else {
             header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations');
@@ -85,8 +85,8 @@ function inscription(array $data):void{
       header('location:'.WEB_ROUTE.'?controlleurs=security&views=inscription');
       exit;
    }
-  // valide_image($files,'image',$arrayError,$target_file);
-   if (login_exist($login)==false) {
+   $user=login_exist($login);
+   if ($user!=false) {
       $arrayError['loginExist'] = 'ce login exist deja';
       $_SESSION['arrayError']=$arrayError;
       header('location:'.WEB_ROUTE.'?controlleurs=security&views=inscription');
@@ -94,19 +94,16 @@ function inscription(array $data):void{
    }
    if (form_valid($arrayError)) {
  
-       /*  var_dump($data);
-        die();   */
-      $adresse=[
-        (int)$rue,
-        $ville,
-        genere_reference(),
-        $pays,
-        (int)$code_postal
-    ];
-   
-    $last_id = insert_adresse($adresse);
-
-    $user=[
+    $adresse=[
+      (int)$rue,
+      $ville,
+      genere_reference(),
+      $pays,
+      (int)$code_postal
+  ];
+  $last_id = insert_adresse($adresse);
+  
+   $user=[
       $nom,
       $prenom,
       $login,
@@ -115,12 +112,11 @@ function inscription(array $data):void{
       $password,
       $last_id,
       2,
-      $confirm_passwor
-    ];
-     inscrire_utilisateur($user);
-        header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
-        exit;
-        
+      $confirm_password
+   ];
+    inscrire_utilisateur($user);
+  header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
+  exit;       
    }else {
     $_SESSION['arrayError']=$arrayError;
     header('location:'.WEB_ROUTE.'?controlleurs=security&views=inscription');
@@ -128,38 +124,35 @@ function inscription(array $data):void{
   
 } 
      
-       
-       
-
 function add_user(array $post):void{
   extract($post);
-  
-  $adresse=[
-    (int)$rue,
-    $ville,
-    3,
-    $pays,
-    (int)$code_postal
-];
-$last_id = insert_adresse($adresse);
-
- $user=[
-    $nom,
-    $prenom,
-    $login,
-    $telephone,
-    $fax,
-    $password,
-    $last_id,
-    2,
-    $confirm_password
- ];
-
- 
-    inscrire_utilisateur($user);
-    header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
-    exit;
+    
+      $adresse=[
+          (int)$rue,
+          $ville,
+          genere_reference(),
+          $pays,
+          (int)$code_postal
+      ];
+      $last_id = insert_adresse($adresse);
+      
+       $user=[
+          $nom,
+          $prenom,
+          $login,
+          $telephone,
+          $fax,
+          $password,
+          $last_id,
+          2,
+          $confirm_password
+       ];
+        inscrire_utilisateur($user);
+      header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
+      exit;
 }
+       
+
 function deconnexion():void{
     unset($_SESSION['userConnect']);
     header('location:'.WEB_ROUTE);
