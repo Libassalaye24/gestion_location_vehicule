@@ -2,11 +2,12 @@
 
     function find_bien_disponible():array{
         $pdo=ouvrir_connection_db();
-        $sql="select * from vehicule v,etat e,categorie c,modele mo,marque ma
+        $sql="select * from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv
                  where v.id_etat=e.id_etat
                     and v.id_categorie=c.id_categorie
                     and v.id_modele=mo.id_modele
                     and v.id_marque=ma.id_marque
+                    and v.id_type_vehicule=tv.id_type_vehicule
                     and e.nom_etat=?";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array('disponible'));
@@ -123,11 +124,41 @@
          return $dernier_id ;
     }
 
-    function insert_into_vehicule(array $vehicules):int{
+    function insert_voiture_vehicule(array $vehicules):int{
         $pdo= ouvrir_connection_db();
         $sql="INSERT INTO `vehicule` (`numero_vehicule`, `immatriculation_vehicule`, `kilometrage_vehicule`,
                  `id_categorie`, `id_modele`, `id_marque`, `id_type_vehicule`, `id_etat`)
                       VALUES (?,?,?,?,?,?,?,?)";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute($vehicules);
+        $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;
+    }
+    function insert_image(array $image):int{
+        $pdo= ouvrir_connection_db();
+        $sql="INSERT INTO `image` (`nom_image`, `id_vehicule`) VALUES (?,?);";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      $sth->execute($image);
+      $dernier_id = $pdo->lastInsertId();
+      fermer_connection_db($pdo);//fermeture
+      return $dernier_id ;
+    }
+    function insert_vehicule_option(array $option_vehicule):int{
+        $pdo= ouvrir_connection_db();
+        $sql="INSERT INTO `vehicule_option_vehicule` (`id_option_vehicule`, `id_vehicule`) VALUES (?,?);";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      $sth->execute($option_vehicule);
+      $dernier_id = $pdo->lastInsertId();
+      fermer_connection_db($pdo);//fermeture
+      return $dernier_id ;
+    }
+    function insert_camion_vehicule(array $vehicules):int{
+        $pdo= ouvrir_connection_db();
+        $sql="INSERT INTO `vehicule` (`numero_vehicule`, `immatriculation_vehicule`, `kilometrage_vehicule`,
+                `volume_m3`,`charge_maximale_kg`,`longueur`,`largeur`,`hauteur`,
+                 `id_categorie`, `id_modele`, `id_marque`, `id_type_vehicule`, `id_etat`)
+                      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute($vehicules);
         $dernier_id = $pdo->lastInsertId();
@@ -145,6 +176,7 @@
         return $categorie;
     }
 
+
     function find_modele_by_id( $id_modele):array{
         $pdo= ouvrir_connection_db();
         $sql="SELECT * from modele where id_modele=?";
@@ -154,6 +186,24 @@
         fermer_connection_db($pdo);
         return $modele;
     }
+    function find_marque_by_id( $id_marque):array{
+        $pdo= ouvrir_connection_db();
+        $sql="SELECT * from marque where id_marque=?";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_marque));
+        $marque = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $marque;
+    }
+    function find_option_by_id( $id_option):array{
+        $pdo= ouvrir_connection_db();
+        $sql="SELECT * from option_vehicule where id_option_vehicule=?";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_option));
+        $option = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $option;
+    }
 
     function find_vehicule_by_id( $id_vehicule):array{
         $pdo= ouvrir_connection_db();
@@ -161,12 +211,109 @@
                 where v.id_categorie=c.id_categorie
                     and v.id_marque=ma.id_marque
                     and v.id_modele=mo.id_modele
-                    and id_vehicule=?";
+                    and v.id_vehicule=?";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($id_vehicule));
         $vehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
         fermer_connection_db($pdo);
         return $vehicule;
     }
+    function find_all_vehicule_option_vehicule($id_vehicule){
+        $pdo= ouvrir_connection_db();
+        $sql="SELECT ve.*,op.* FROM `vehicule_option_vehicule` ve,option_vehicule op,vehicule v
+                 WHERE v.id_vehicule=ve.id_vehicule 
+                    and ve.id_option_vehicule=op.id_option_vehicule
+                         and v.id_vehicule=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_vehicule));
+        $vehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $vehicule;
+    }
+   
 
+    function find_all_vehicule_by_marque_modele_categorie($categorie,$marque,$modele):array{
+        $pdo=ouvrir_connection_db();
+        $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,modele mo,type_vehicule tv
+               WHERE re.id_categorie=ca.id_categorie
+                and re.id_marque=ma.id_marque
+                and re.id_modele=mo.id_modele
+                and re.id_type_vehicule=tv.id_type_vehicule
+                and ca.nom_categorie like ? 
+                and ma.nom_marque like ?
+                and mo.nom_modele like ? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($categorie,$marque,$modele));
+        $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $filtreVehicule;
+    }
+    function update_categorie(array $categories):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `categorie` 
+                SET `nom_categorie` = ?,
+                 `prix_location_jour` = ?,
+                  `prix_location_km` = ?, 
+                  `caution` = ? 
+                  WHERE `id_categorie` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute($categories);
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+
+      function update_marque(array $marques):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `marque` 
+                SET `nom_marque` = ?
+                  WHERE `id_marque` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute($marques);
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+      function update_modele(array $modeles):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `modele` 
+                SET `nom_modele` = ?
+                  WHERE `id_modele` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute($modeles);
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+      function update_option(array $options):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `option_vehicule` 
+                SET `nom_option_vehicule` = ?
+                  WHERE `id_option_vehicule` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute($options);
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+
+      function find_all_vehicule_by_marque_modele_categorie_options(array $vehicule):array{
+        $pdo=ouvrir_connection_db();
+        $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,
+        modele mo,type_vehicule tv,vehicule_option_vehicule vov,option_vehicule ov
+               WHERE re.id_categorie=ca.id_categorie
+               and v.id_vehicule=vov.id_vehicule
+               and vov.id_option_vehicule=ov.id_option_vehicule
+                and re.id_marque=ma.id_marque
+                and re.id_modele=mo.id_modele
+                and re.id_type_vehicule=tv.id_type_vehicule
+                and ca.nom_categorie like ? 
+                and ma.nom_marque like ?
+                and mo.nom_modele like ? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute($vehicule);
+        $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $filtreVehicule;
+    }
 ?>
