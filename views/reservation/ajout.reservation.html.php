@@ -3,6 +3,8 @@ if (isset($_SESSION['arrayError'])) {
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
 }
+/* var_dump($vehicule);
+die; */
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post">
@@ -76,19 +78,20 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                      <div class="row ">
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
-                                <label class="form-check-label">
+                                <label class="form-check-label text-warning">
                                     Options
                                 </label>
                             </div>
                         </div>
+                    <?php foreach($options as $option): ?>
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" name="" id="" value="checkedValue"> Display value
+                                <label class="form-check-label text-warning">
+                                        <input type="checkbox" class="form-check-input" name="" id="" value="checkedValue" checked> <?=$option['nom_option_vehicule']?>
                                 </label>
                             </div>
                         </div>
-                        
+                     <?php endforeach ?>   
                      </div>
                                        
                      <?php if(!est_connect() ): ?>

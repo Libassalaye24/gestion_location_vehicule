@@ -3,12 +3,15 @@ if (isset($_SESSION['arrayError'])) {
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
 }
+
+/* var_dump($modele[0]['id_modele']);
+die; */
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
     <div class="row jjj">
          <div class="col-md-12">
             <h3 class="section-title font-weight-light text-white mb-4">
-                <span class="headline">Parametrage Modele</span>
+                <span class="headline"><?=isset($modele[0]['id_modele']) ? 'Modification' : "Parametrage" ?> Modele</span>
             </h3 >
          </div>
     </div>
@@ -23,19 +26,20 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
     <div class="container">
          <form action="" method="post">
              <input type="hidden" name="controlleurs" value="vehicule">
-             <input type="hidden" name="action" value="add.modele">
+             <input type="hidden" name="action" value="<?=!isset($modele[0]['id_modele']) ? 'add.modele' : "edit.modele" ?>">
+             <input type="hidden" name="id_modele" value="<?=isset($modele[0]['id_modele']) ? $modele[0]['id_modele'] : "" ?>">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="" class="text-warning">Saisir le modele</label>
-                                <input type="text" name="modele" id="" class="form-control" placeholder="Entrer le modele" aria-describedby="helpId">
+                                <input type="text" name="modele" id="" class="form-control" value="<?=isset($modele[0]['nom_modele']) ? $modele[0]['nom_modele'] : "" ?>" placeholder="Entrer le modele" aria-describedby="helpId">
                                 <small id="helpId" class="text-danger">
                                     <?=isset($arrayError['modele']) ? $arrayError['modele'] : "" ?>
                                 </small>
                             </div>
                         </div>
                         <div class="col-md-4 mt">
-                            <button type="submit" name="ajout.modele" class="btn btn-warning">Ajouter</button>
+                            <button type="submit" name="ajout.modele" class="btn btn-warning"><?=!isset($modele[0]['id_modele']) ? 'Ajouter' : "Modifier" ?></button>
                         </div>
                     </div>
             </form>

@@ -3,7 +3,7 @@
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
   }
-/*  var_dump($driver);
+ /* var_dump($driver);
  die; */
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
@@ -11,6 +11,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
               <input type="hidden" name="controlleurs" value="vehicule">
               <input type="hidden" name="action" value="<?=!isset($driver[0]['id_conducteur']) ?'add.conducteur': 'edit.conducteur' ?>">
               <input type="hidden" name="id" value="<?=isset($driver[0]['id_conducteur']) ? $driver[0]['id_conducteur'] : ""; ?>">
+              <input type="hidden" name="id_adresse" value="<?=isset($driver[0]['id_adresse']) ? $driver[0]['id_adresse'] : ""; ?>">
               <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">

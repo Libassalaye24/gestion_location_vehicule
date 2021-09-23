@@ -30,8 +30,8 @@
                 <tr>
                 <td class="text-white"><?=$modele['nom_modele']?></td>
                 <td class="text-white ">
-                    <a href="#" class=" btn text-secondary border-secondary active" role="button">Archiver</a>
-                    <a href="#" class="btn text-warning border-warning active" role="button">Modifier</a>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.modele&id_modele='.$modele['id_modele']?>" class=" btn text-secondary border-secondary active" role="button"><i class="fas fa-file-archive archive "></i>Archiver</a>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.modele&id_modele='.$modele['id_modele']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
                 </tr>
              <?php endforeach ?>  

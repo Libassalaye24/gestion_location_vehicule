@@ -3,6 +3,7 @@
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
   }
+ 
  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
     <div class="row jjj">
@@ -33,7 +34,7 @@
                 <td class="text-white"><?=$categorie['nom_categorie']?></td>
                 <td class="text-white">
                     <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver&id_categorie='.$categorie['id_categorie']?>" role="button">Archiver</a>
-                    <a name="" data-toggle="modal" data-target="#exampleModalLong" id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit&id_categorie='.$categorie['id_categorie']?>"  role="button">Modifier</a>
+                    <a name=""  id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.categorie&id_categorie='.$categorie['id_categorie']?>" >Modifier</a>
                 </td>
                 </tr>
                 <?php endforeach ?>

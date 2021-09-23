@@ -1,15 +1,20 @@
-<?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
+<?php 
+    if (isset($_SESSION['arrayError'])) {
+        $arrayError=$_SESSION['arrayError'];
+        unset($_SESSION['arrayError']);
+    }
+  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="add.vehicule">
+              <input type="hidden" name="action" value="add.voiture">
             <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
                      <div class="row jjjj">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
-                                <span class="headline">Ajout Vehicule</span>
+                                <span class="headline">Ajout Voiture</span>
                             </h3 >
                         </div>
                     </div>
@@ -19,8 +24,10 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">kilometrage</label>
                                     <input type="text"
-                                        class="form-control" name="kmt" value="<?=isset($_SESSION['post']['kmt']) ? $_SESSION['post']['kmt'] : ""?>" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                        class="form-control" name="kmt" value="" id="" aria-describedby="helpId" placeholder="">
+                                    <small id="helpId" class="form-text text-danger">
+                                    <?=$arrayError['kmt'] ? $arrayError['kmt'] : "" ?>
+                                    </small>
                              </div>
                         </div>
                      </div>
@@ -40,7 +47,7 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning ">Marque</label>
                               <select class="form-control  bg-secondary" name="marque" id="">
-                                  <option value="<?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : ""?>"></option>
+                                  <option ><?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : ""?></option>
                               <?php foreach($marques as $marque): ?>
                                  <option value="<?=$marque['id_marque']?>"><?=$marque['nom_marque']?></option>
                                 <?php endforeach ?>
@@ -77,34 +84,33 @@
                         
                         
                      </div>
-                     <div class="row">    
-                         <div class="col-md-3">
-                           <div class="form-check form-check-inline">
-                               <label class="form-check-label text-warning">
-                                  Vehicule
-                               </label>
-                           </div>
-                        </div>   
-                        <?php foreach($type_vehicule as $type): ?>             
-                        <div class="col-md-3">
-                           <div class="form-check form-check-inline">
-                               <label class="form-check-label text-warning">
-                                   <input class="form-check-input  "  type="radio" name="typeVehicule" id="" value="<?=$type['id_type_vehicule']?>"> <?=$type['nom_type_vehicule']?>
-                               </label>
-                           </div>
-                        </div>
-                        <?php endforeach?>
-                       
-                        <div class="col-md-3 mt">
-                          <button type="submit" name="type_vehicule" class="btn btn-warning">OK</button>
-                        </div>
-                     </div>
-                     <div class="row mt-2">
+                               <!--  <script>
+                                        function myFunction() {
+                                          if (  document.querySelector('#myradio2').checked ) {
+                                              document.getElementById("myText").disabled = true;
+                                              document.getElementById("myText1").disabled = true;
+                                              document.getElementById("myText2").disabled = true;
+                                              document.getElementById("myText3").disabled = true;
+                                              document.getElementById("myText4").disabled = true;
+                            
+                                          }else{
+                                            document.getElementById("myText").disabled = false;
+                                            document.getElementById("myText1").disabled = false;
+                                            document.getElementById("myText2").disabled = false;
+                                            document.getElementById("myText3").disabled = false;
+                                            document.getElementById("myText4").disabled = false;
+                                          }
+                                             
+                                        }
+                                    </script> -->
+                     <div class="row">
                         <div class="col-md-5">
                              <div class="form-group">
                                     <label for="" class="text-warning">Saisir le nbre image</label>
-                                    <input type="text" class="form-control" name="nbre_image" id="" placeholder="" aria-describedby="fileHelpId">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                    <input type="number" class="form-control bg-secondary" name="nbre_image" id="" placeholder="" aria-describedby="fileHelpId">
+                                    <small id="helpId" class="form-text text-danger">
+                                   
+                                    </small>
                              </div>
                            
                         </div>
@@ -120,7 +126,9 @@
                             <div class="form-group">
                                 <label for=""></label>
                                 <input type="file" class="form-control-file ml-3" name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
-                                <small id="fileHelpId" class="form-text text-muted"></small>
+                                <small id="fileHelpId" class="form-text text-danger">
+                                    
+                                </small>
                             </div>
                         </div>
                      <?php endfor ?>
@@ -219,11 +227,11 @@ function checkCheckBox(ele) {
                                     <label for="" class="text-warning">Immatriculation</label>
                                     <input type="text"
                                         class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-muted"></small>
+                                    <small id="helpId" class="form-text text-danger"></small>
                              </div>
                         </div> -->
 <?php
-if (isset($_SESSION['post'])) {
+/* if (isset($_SESSION['post'])) {
     unset($_SESSION['post']);
-}
+} */
  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

@@ -44,17 +44,27 @@
             </li>
           <?php endif ?>
           <?php if(est_gestionnaire()): ?>
-            <ul class="navbar-nav mr-o ml-2">
-            <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule'?>">Liste vehicule</a>
+            
+          <ul class="navbar-nav mr-o ml-4">
+          <li class="nav-item dropdown mr-md-5">
+              <a
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Vehicule</a
+              >
+                <div class="dropdown-menu ">
+                <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicules'?>">Liste Vehicules</a>
+                <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.voiture'?>">Ajout voiture</a>
+                <a class="dropdown-item" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.camion'?>">Ajout camion</a>
+                </div>
+            
             </li>
           </ul>
-          <ul class="navbar-nav mr-o ml-2">
-           <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.vehicule'?>">Vehicule</a>
-            </li>
-          </ul>
-        <ul class="navbar-nav mr-o mr-4">
+        <ul class="navbar-nav mr-o ">
             <li class="nav-item dropdown mr-md-5">
               <a
                 class="nav-link dropdown-toggle"
@@ -75,18 +85,18 @@
             
             </li>
           </ul>
+          <ul class="navbar-nav mr-o ">
+            <li class="nav-item">
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.archives'?>">Liste Archives</a>
+            </li>
+          </ul>
           <?php endif ?>
           <?php if(est_responsable()): ?>
             <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservation'?>">Liste Reservations</a>
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>">Liste Reservations</a>
             </li>
           <?php endif ?>
-          <!--   <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=bien&views=liste.bien'?>">Biens</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=bien&views=creer.bien'?>">Crer un bien</a>
-            </li> -->
+          
         </ul>
        
         <ul class="navbar-nav mr-o mr-4">
@@ -115,7 +125,7 @@
       </div>
     </nav>
     <style>
-        .navbar{
+       /*  .navbar{
             background-image: url("https://mapauto.sn/img/desktop_navbar_bg.jpg");
             position: fixed;
             top: 0;
@@ -124,8 +134,31 @@
             right: 0;
             left: 0;
             z-index: 1039;
+        } */
+        @media only screen and (max-width: 992px) {
+          .navbar{
+           background: #000;
+
+        } 
+       
         }
-  
+        @media only screen and (min-width: 992px) {
+          .navbar{
+            background-image: url("https://mapauto.sn/img/desktop_navbar_bg.jpg");
+            position: fixed;
+            top: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1039;
+        } 
+        .reserv{
+          margin-top: 22%;
+        }
+       
+        }
+
 
         .navbar a{
             color: #d2b100 !important;

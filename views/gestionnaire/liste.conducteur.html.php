@@ -16,7 +16,7 @@
 
     </div>
     <div class="row mt-5">
-         <table class="table table-bordered">
+         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
                 <th scope="col" class="text-warning">Nom & Prenom</th>
@@ -30,8 +30,8 @@
                 <td class="text-white"><?=$conducteur['nom_conducteur'].' '.$conducteur['prenom_conducteur']?></td>
                 <td class="text-white"><?=$conducteur['telephone_conducteur']?></td>
                 <td class="text-white">
-                        <a name="" id="" class="btn border-secondary text-secondary" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver&id_conducteur='.$conducteur['id_conducteur']?>" role="button">archiver</a>
-                        <a name="" id="" class="btn border-warning text-warning" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.conducteur&id_conducteur='.$conducteur['id_conducteur']?>" role="button">modifier</a>
+                        <a name="" id="" class="btn border-secondary text-secondary" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.conducteur&id_conducteur='.$conducteur['id_conducteur']?>" role="button"><i class="fas fa-file-archive archive"></i>archiver</a>
+                        <a name="" id="" class="btn border-warning text-warning" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.conducteur&id_conducteur='.$conducteur['id_conducteur']?>" role="button"><i class="fas fa-edit edit "></i>modifier</a>
                 </td>
                 </tr>
               <?php endforeach ?>
@@ -79,6 +79,7 @@
 .section-title{
     font-size: 20px;
 }
+
 .pagination a
 {
     color: #000;

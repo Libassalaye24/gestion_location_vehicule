@@ -3,7 +3,7 @@
     <div class="row jjj">
          <div class="col-md-12">
             <h3 class="section-title font-weight-light text-white mb-4">
-                <span class="headline">Parametrage Categorie</span>
+                <span class="headline">Parametrage Marque</span>
             </h3 >
          </div>
     </div>
@@ -17,7 +17,7 @@
 
     </div>
     <div class="row mt-5">
-         <table class="table table-bordered">
+         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
                 <th scope="col" class="text-white">Marques</th>
@@ -29,8 +29,8 @@
                 <tr>
                 <td class="text-white"><?=$marque['nom_marque']?></td>
                 <td class="text-white ">
-                    <a href="#" class="btn text-secodary border-secondary active" role="button">Archiver</a>
-                    <a href="#" class="btn text-warning border-warning active" role="button">Modifier</a>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.marque&id_marque='.$marque['id_marque']?>" class="btn text-secodary border-secondary active" role="button"><i class="fas fa-file-archive archive"></i>Archiver</a>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.marque&id_marque='.$marque['id_marque']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
                 </tr>
             <?php endforeach ?>

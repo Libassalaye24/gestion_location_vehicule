@@ -8,12 +8,12 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
     <div class="row jjj">
          <div class="col-md-12">
             <h3 class="section-title font-weight-light text-white mb-4">
-                <span class="headline">Parametrage Categorie</span>
+                <span class="headline">Parametrage Marque</span>
             </h3 >
          </div>
     </div>
     <div class="row">
-         <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.marque'?>" class="btn btn-warning ml-auto mr-auto" data-toggle="modal" data-target="#exampleModalLong">
+         <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.marque'?>" class="btn btn-warning ml-auto mr-auto" >
          <i class="fas fa-list-ul"></i> Liste Marque
         </a>
 
@@ -21,19 +21,20 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
     <div class="container">
         <form action="" method="post">
             <input type="hidden" name="controlleurs" value="vehicule">
-            <input type="hidden" name="action"  value="add.marque">
+            <input type="hidden" name="action"  value="<?=!isset($marque[0]['id_marque']) ? 'add.marque' : "edit.marque" ?>">
+            <input type="hidden" name="id_marque" value="<?=isset($marque[0]['id_marque']) ? $marque[0]['id_marque'] : "" ?>">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label for="" class="text-warning">Nom marque</label>
-                                    <input type="text" name="marque" id="" class="form-control" placeholder="Enter la marque" aria-describedby="helpId">
+                                    <input type="text" name="marque" id="" value="<?=isset($marque[0]['nom_marque']) ? $marque[0]['nom_marque'] : "" ?>" class="form-control" placeholder="Enter la marque" aria-describedby="helpId">
                                     <small id="helpId" class="text-danger">
                                         <?=isset($arrayError['marque']) ? $arrayError['marque'] : ""?>
                                     </small>
                                 </div>
                             </div>
                             <div class="col-md-4 mt">
-                                 <button type="submit" name="ajout.marque" class="btn btn-warning ">Ajouter</button>
+                                 <button type="submit" name="ajout.marque" class="btn btn-warning "><?=isset($marque[0]['id_marque']) ? 'Modifier' : "Ajouter" ?></button>
                             </div>
                         </div>
                 
