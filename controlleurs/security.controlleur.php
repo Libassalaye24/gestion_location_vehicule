@@ -47,7 +47,7 @@ function connexion(string $login,string $password):void{
           header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations');
           exit();
         }elseif ($user['nom_role']=='GESTIONNAIRE') {
-            header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule');
+            header('location:'.WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicules');
             exit();
         }else {
             header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations');

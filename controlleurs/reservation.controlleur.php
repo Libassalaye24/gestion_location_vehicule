@@ -6,11 +6,15 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         if ($_GET['views']=='mes.reservations') {
             show_mes_reservations();
         }elseif ($_GET['views']=='liste.reservations') {
-         require(ROUTE_DIR.'views/reservation/liste.reservations.html.php');
+            show_liste_reservations();
         }elseif ($_GET['views']=='ajout.reservation') {
-           show_ajout_reservation($_GET['id_vehicule']);
+            show_ajout_reservation($_GET['id_vehicule']);
+        }elseif ($_GET['views']=='reservation.client') {
+           show_reservation_client($_GET['id_client']);
+        }elseif ($_GET['views']=='traiter.reservation') {
+           show_traiter_reservation((int)$_GET['id_reservation']);
         }
- 
+        
      }else{
           require(ROUTE_DIR.'views/client/liste.vehicule.html.php');
      }
@@ -19,12 +23,21 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     if (isset($_POST['action'])) {
         if ($_POST['action']=='add.reservation') {
             add_user_reserve($_POST);
+        }elseif ($_POST['action']=='filtre_reservation') {
+              show_liste_reservations($_POST);
         }
     }
 }
 
-
-
+function show_traiter_reservation($id_reservation){
+    $reservation=find_reservation_by_id_reservation($id_reservation);
+    $conducteurs=find_all_conducteur_by_permis();
+    require(ROUTE_DIR.'views/reservation/traiter.reservation.html.php');
+}
+function show_reservation_client($id_client){
+    $reserve_client=lister_reservation_by_client($id_client);
+    require(ROUTE_DIR.'views/reservation/reservation.client.html.php');
+}
 function add_user_reserve(array $post):void{
     $arrayError=[];
     extract($post);
@@ -104,8 +117,21 @@ function add_user_reserve(array $post):void{
         $_SESSION['id_marque']=$vehicule[0]['id_marque'];
         $_SESSION['id_modele']=$vehicule[0]['id_modele'];
         $_SESSION['id_categorie']=$vehicule[0]['id_categorie'];
-        
+        $options=find_all_vehicule_option_vehicule($id_vehicule);
         require(ROUTE_DIR.'views/reservation/ajout.reservation.html.php');
+   }
+   function show_liste_reservations($post=null){
+       $etats=find_all_etat();
+       if (is_null($post)) {
+        $encours_reservation=find_all_reservation_cours();
+
+        }else {
+            extract($post);
+            $date=date_format(date_create($date),'Y-m-d H:i:s');
+            $encours_reservation=find_all_reservation_by_date_or_etat($etat_reservation,$date);
+        }
+        require(ROUTE_DIR.'views/reservation/liste.reservations.html.php');
+
    }
 
    
