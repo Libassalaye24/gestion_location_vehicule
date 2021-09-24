@@ -45,11 +45,12 @@
             }
             function ajout_reservation_vehicule(array $reservations){
                 $pdo=ouvrir_connection_db();
-                $sql="INSERT INTO reservation (date_debut_location,date_fin_location,id_user,id_modele,id_marque,id_categorie,id_etat)
-                 VALUES (?,?,?,?,?,?,?)";
+                $sql="INSERT INTO reservation (date_debut_location,date_fin_location,id_user,id_modele,id_marque,id_categorie,id_etat,id_type_vehicule)
+                 VALUES (?,?,?,?,?,?,?,?)";
                   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                    /* $now=date_create();
                    $now=date_format($now,'Y-m-d H:i:s'); */
+                  
                    $sth->execute($reservations);
                    fermer_connection_db($pdo);
             }
@@ -69,10 +70,13 @@
                 fermer_connection_db($pdo);
                 return  $reservation_bien;
             }
-            function find_reservation_by_id_reservation($id_reservation){
+            function find_reservation_by_id_reservation($id_reservation):array{
                 $pdo=ouvrir_connection_db();
-                $sql="SELECT * from reservation 
-                        where id_reservation=?";
+                $sql="SELECT * from reservation re,categorie ca,marque ma,modele mo
+                        where re.id_categorie=ca.id_categorie
+                            and re.id_marque=ma.id_marque
+                            and re.id_modele=mo.id_modele
+                            and re.id_reservation=?";
                   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                   $sth->execute(array($id_reservation));
                   $reservation = $sth->fetchAll();

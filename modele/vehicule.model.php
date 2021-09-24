@@ -1,6 +1,6 @@
 <?php
 
-    function find_bien_disponible():array{
+    function find_bien_disponible($start,$num_page):array{
         $pdo=ouvrir_connection_db();
         $sql="select * from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv
                  where v.id_etat=e.id_etat
@@ -8,7 +8,23 @@
                     and v.id_modele=mo.id_modele
                     and v.id_marque=ma.id_marque
                     and v.id_type_vehicule=tv.id_type_vehicule
-                    and e.nom_etat=?";
+                    and e.nom_etat=? limit $start,$num_page";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array('disponible'));
+        $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
+         // var_dump($biendispo);die();
+        fermer_connection_db($pdo);
+        return $vehicule_disponible;
+    }
+    function find_bien_disponible_pa():array{
+        $pdo=ouvrir_connection_db();
+        $sql="SELECT  * from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv
+                 where v.id_etat=e.id_etat
+                    and v.id_categorie=c.id_categorie
+                    and v.id_modele=mo.id_modele
+                    and v.id_marque=ma.id_marque
+                    and v.id_type_vehicule=tv.id_type_vehicule
+                    and e.nom_etat=? ";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array('disponible'));
         $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -248,6 +264,22 @@
         fermer_connection_db($pdo);
         return $filtreVehicule;
     }
+    function find_all_vehicule_by_marque_modele_categorie_paginate($categorie,$marque,$modele,$start,$nbrPage):array{
+        $pdo=ouvrir_connection_db();
+        $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,modele mo,type_vehicule tv
+               WHERE re.id_categorie=ca.id_categorie
+                and re.id_marque=ma.id_marque
+                and re.id_modele=mo.id_modele
+                and re.id_type_vehicule=tv.id_type_vehicule
+                and ca.nom_categorie like ? 
+                and ma.nom_marque like ?
+                and mo.nom_modele like ? limit $start,$nbrPage";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($categorie,$marque,$modele));
+        $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $filtreVehicule;
+    }
     function update_categorie(array $categories):int{
         $pdo=ouvrir_connection_db();
         $sql="UPDATE `categorie` 
@@ -300,10 +332,8 @@
       function find_all_vehicule_by_marque_modele_categorie_options(array $vehicule):array{
         $pdo=ouvrir_connection_db();
         $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,
-        modele mo,type_vehicule tv,vehicule_option_vehicule vov,option_vehicule ov
+        modele mo,type_vehicule tv
                WHERE re.id_categorie=ca.id_categorie
-               and v.id_vehicule=vov.id_vehicule
-               and vov.id_option_vehicule=ov.id_option_vehicule
                 and re.id_marque=ma.id_marque
                 and re.id_modele=mo.id_modele
                 and re.id_type_vehicule=tv.id_type_vehicule
@@ -316,4 +346,18 @@
         fermer_connection_db($pdo);
         return $filtreVehicule;
     }
+
+    function archive_vehicule( $id_etat,int $id_vehicule):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `vehicule` 
+                SET `id_etat` = ?
+                  WHERE `id_vehicule` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute(array($id_etat,$id_vehicule));
+       /*   var_dump($id_conducteur);
+         die; */
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
 ?>
