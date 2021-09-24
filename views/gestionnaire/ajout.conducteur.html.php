@@ -16,6 +16,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
                     <div class="row jjjj">
+                      <a style="color:#d2b100" class="ml-3" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.conducteur'?>"><i class="fa fa-arrow-left " aria-hidden="true"></i></a>
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
                                 <span class="headline">

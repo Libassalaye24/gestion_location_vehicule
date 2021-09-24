@@ -93,6 +93,16 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                         </div>
                      <?php endforeach ?>   
                      </div>
+                     <?php if($vehicule[0]['id_type_vehicule']==1): ?>
+                     <div class="row">
+                             <div class="form-check ml-3">
+                                 <label class="form-check-label text-warning">
+                                 <input type="radio" class="form-check-input" name="chauffeur" id="chauffeur"  >
+                                        Si un chauffeur est necessaire cochez!
+                               </label>
+                             </div>                        
+                     </div>
+                     <?php endif ?>
                                        
                      <?php if(!est_connect() ): ?>
                     <div class="row jjjj">

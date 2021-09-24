@@ -109,7 +109,7 @@
                 role="button"
                 aria-haspopup="true"
                 aria-expanded="false"
-                ><i class="fas fa-user">Utilisateur</i></a
+                ><?=est_connect() ? $_SESSION['userConnect']['prenom_user'].' '.$_SESSION['userConnect']['nom_user'] : "Utilisateur" ?></a
               >
               <?php if(!est_connect()): ?>
                 <div class="dropdown-menu ">
