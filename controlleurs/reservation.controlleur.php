@@ -32,11 +32,21 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 function show_traiter_reservation($id_reservation){
     $reservation=find_reservation_by_id_reservation($id_reservation);
     $conducteurs=find_all_conducteur_by_permis();
+    $vehicule=find_all_vehicule_by_marque_modele_categorie($reservation[0]['nom_categorie'],$reservation[0]['nom_marque'],$reservation[0]['nom_modele']);
     require(ROUTE_DIR.'views/reservation/traiter.reservation.html.php');
 }
 function show_reservation_client($id_client){
     $reserve_client=lister_reservation_by_client($id_client);
     require(ROUTE_DIR.'views/reservation/reservation.client.html.php');
+}
+function show_ajout_reservation($id_vehicule){
+    $vehicule=find_vehicule_by_id($id_vehicule);
+    $_SESSION['id_marque']=$vehicule[0]['id_marque'];
+    $_SESSION['id_modele']=$vehicule[0]['id_modele'];
+    $_SESSION['id_categorie']=$vehicule[0]['id_categorie'];
+    $_SESSION['id_type_vehicule']=$vehicule[0]['id_type_vehicule'];
+    $options=find_all_vehicule_option_vehicule($id_vehicule);
+    require(ROUTE_DIR.'views/reservation/ajout.reservation.html.php');
 }
 function add_user_reserve(array $post):void{
     $arrayError=[];
@@ -69,6 +79,9 @@ function add_user_reserve(array $post):void{
         exit;
      }
     if (form_valid($arrayError)) {
+        if (isset($post['chauffeur'])) {
+            $_SESSION['chauffeur'] = $post['chauffeur'];
+        }
         $adresse=[
             (int)$rue,
             $ville,
@@ -99,7 +112,8 @@ function add_user_reserve(array $post):void{
             $_SESSION['id_modele'],
             $_SESSION['id_marque'],
             $_SESSION['id_categorie'],
-            1
+            1,
+            $_SESSION['id_type_vehicule']
         ];
         ajout_reservation_vehicule($reservations);
         header('location:'.WEB_ROUTE);
@@ -112,14 +126,7 @@ function add_user_reserve(array $post):void{
     function show_mes_reservations(){
          require(ROUTE_DIR.'views/reservation/mes.reservations.html.php');
     }
-    function show_ajout_reservation($id_vehicule){
-        $vehicule=find_vehicule_by_id($id_vehicule);
-        $_SESSION['id_marque']=$vehicule[0]['id_marque'];
-        $_SESSION['id_modele']=$vehicule[0]['id_modele'];
-        $_SESSION['id_categorie']=$vehicule[0]['id_categorie'];
-        $options=find_all_vehicule_option_vehicule($id_vehicule);
-        require(ROUTE_DIR.'views/reservation/ajout.reservation.html.php');
-   }
+   
    function show_liste_reservations($post=null){
        $etats=find_all_etat();
        if (is_null($post)) {

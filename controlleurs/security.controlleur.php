@@ -35,7 +35,7 @@ function connexion(string $login,string $password):void{
    
     $user =  find_user_by_login_password($login,$password);
    
-    if (count($user)==0) {
+    if ($user==false) {
         $arrayError['invalide']='login ou password incorrecte';
         $_SESSION['arrayError']=$arrayError;
         header('location:'.WEB_ROUTE.'?controlleurs=security&views=connexion');
