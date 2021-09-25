@@ -38,7 +38,10 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
       }elseif ($_GET['views']=='archive.conducteur') {
           $id_conducteur=$_GET['id_conducteur'];
           require_once(ROUTE_DIR.'views/gestionnaire/confirm.archive.html.php');
-      }elseif ($_GET['views']=='liste.archives') {
+      }elseif ($_GET['views']=='archiver.categorie') {
+        $id_categorie=$_GET['id_categorie'];
+        require_once(ROUTE_DIR.'views/gestionnaire/archive.categorie.html.php');
+    }elseif ($_GET['views']=='liste.archives') {
         show_liste_conducteur_archiver();
       }elseif ($_GET['views']=='edit.marque') {
         show_ajout_marque($_GET['id_marque']);
@@ -91,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         add_option($_POST);     
       }elseif ($_POST['action']=='archive.vehicule') {
         liste_vehicule();
+      }elseif ($_POST['action']=='archive.categorie') {
+        show_liste_categorie();
       }
     }
 }
@@ -119,6 +124,7 @@ function show_liste_conducteur_archiver(){
   $conductArchive=find_all_conducteur_archiver();
   require_once(ROUTE_DIR.'views/gestionnaire/liste.archives.html.php'); 
 }
+
 function liste_vehicule($get=null){
   if (isset($_POST['oui'])) {
    // die('hwhd');
@@ -133,7 +139,7 @@ function liste_vehicule($get=null){
     $nbrPage=2;
     $vehicule_disponible=find_bien_disponible_pa();
     $total_records=count($vehicule_disponible);
-    $total_page=ceil($total_records/$nbrPage);
+    $total_page=total_page($total_records,$nbrPage);
     if (isset($get)) {
       $page=$get;
     }else {
@@ -142,7 +148,7 @@ function liste_vehicule($get=null){
     $suivant=$precedent=0;
     $suivant=$page+1;
     $precedent=$page-1;
-    $start_from=($page-1)*($nbrPage);
+    $start_from=start_from($page,$nbrPage);
     $vehicule_disponible= find_bien_disponible($start_from,$nbrPage);
   }else {
     if (isset($_POST['ok'])) {
@@ -151,7 +157,7 @@ function liste_vehicule($get=null){
       $vehicule_disponible= find_all_vehicule_by_marque_modele_categorie($categorie,$marque,$modele);
       $nbrPage=2;
       $total_records=count($vehicule_disponible);
-      $total_page=ceil($total_records/$nbrPage);
+      $total_page=total_page($total_records,$nbrPage);
       if (isset($get)) {
         $page=$get;
       }else {
@@ -192,25 +198,98 @@ function show_ajout_conducteur($get=null){
   $permis=find_all_type_permis();
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.conducteur.html.php');  
 }
-function show_liste_categorie(int $nbrElementPage=4,$page=1){
+function show_liste_categorie(){
+  if (isset($_POST['archiver'])) {
+    archive_categorie($_POST['id_categorie']);
+  }
   $categories=find_all_categorie();
+  $nbrPage=2;
+  $total_records=count($categories);
+  $total_page=total_page($total_records,$nbrPage);
+  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $categories=find_all_categorie($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.categorie.html.php'); 
 }
 
 function show_liste_marque(){
   $marques=find_all_marque();
+  $nbrPage=2;
+  $total_records=count($marques);
+  $total_page=total_page($total_records,$nbrPage);
+  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $marques=find_all_marque($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.marque.html.php'); 
 }
 function show_liste_modele(){
   $modeles=find_all_modele();
+  $nbrPage=2;
+  $total_records=count($modeles);
+  $total_page=total_page($total_records,$nbrPage);
+  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $modeles=find_all_modele($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.modele.html.php'); 
 }
 function show_liste_option(){
   $options=find_all_option();
+  $nbrPage=2;
+  $total_records=count($options);
+  $total_page=total_page($total_records,$nbrPage);
+  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $options=find_all_option($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.option.html.php'); 
 }
 function show_liste_conducteur(){
   $conducteurs=find_all_conducteur();
+  $nbrPage=2;
+  $total_records=count($conducteurs);
+  $total_page=total_page($total_records,$nbrPage);
+  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $conducteurs=find_all_conducteur_pagi($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.conducteur.html.php'); 
 }
 function show_liste_conducteur_ar($id_conducteur){
@@ -464,7 +543,7 @@ function show_liste_conducteur_ar($id_conducteur){
        
         $vehicules=[
           genere_reference(),
-          genere_reference(),
+          genere_matriculation(),
           $kmt,
           $categorie,
           $modele,

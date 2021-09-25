@@ -12,7 +12,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_GET['views']=='reservation.client') {
            show_reservation_client($_GET['id_client']);
         }elseif ($_GET['views']=='traiter.reservation') {
-           show_traiter_reservation((int)$_GET['id_reservation']);
+           if (est_responsable()) {
+            show_traiter_reservation((int)$_GET['id_reservation']);
+           }else {
+            header("location:".WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule');
+           }
         }
         
      }else{
@@ -25,9 +29,13 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             add_user_reserve($_POST);
         }elseif ($_POST['action']=='filtre_reservation') {
               show_liste_reservations($_POST);
+        }elseif ($_POST['action']=='traiter.reservation') {
+           
+            show_liste_reservations();
         }
     }
 }
+
 
 function show_traiter_reservation($id_reservation){
     $reservation=find_reservation_by_id_reservation($id_reservation);
@@ -103,21 +111,21 @@ function add_user_reserve(array $post):void{
             $confirm_password
          ];
           $id_user=inscrire_utilisateur($user);
-     $date_debut=date_format(date_create($date_debut),'Y-m-d H:i:s');
-     $date_fin=date_format(date_create($date_fin),'Y-m-d H:i:s');
-        $reservations=[
-            $date_debut,
-            $date_fin,
-            $id_user,
-            $_SESSION['id_modele'],
-            $_SESSION['id_marque'],
-            $_SESSION['id_categorie'],
-            1,
-            $_SESSION['id_type_vehicule']
-        ];
-        ajout_reservation_vehicule($reservations);
-        header('location:'.WEB_ROUTE);
-        exit;
+          $date_debut=date_format(date_create($date_debut),'Y-m-d H:i:s');
+          $date_fin=date_format(date_create($date_fin),'Y-m-d H:i:s');
+            $reservations=[
+                $date_debut,
+                $date_fin,
+                $id_user,
+                $_SESSION['id_modele'],
+                $_SESSION['id_marque'],
+                $_SESSION['id_categorie'],
+                1,
+                $_SESSION['id_type_vehicule']
+            ];
+            ajout_reservation_vehicule($reservations);
+            header('location:'.WEB_ROUTE);
+            exit;
     }else {
         $_SESSION['arrayError']=$arrayError;
         header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$post['id_vehicule']);
@@ -128,14 +136,59 @@ function add_user_reserve(array $post):void{
     }
    
    function show_liste_reservations($post=null){
-       $etats=find_all_etat();
-       if (is_null($post)) {
-        $encours_reservation=find_all_reservation_cours();
+       if (isset($_POST['traiter'])) {
+           if (isset($_POST['conducteur'])) {
+               update_reservation_id_vehicule_id_conducteur_and_etat((int)$_POST['vehicule'],(int)$_POST['conducteur'],2,(int)$_GET['id_reservation']);
 
+           }else {
+            update_reservation_id_vehicule_and_etat((int)$_POST['vehicule'],2,(int)$_GET['id_reservation']);
+ 
+           }
+          // die('test');
+       }
+       $etats=find_all_etat();
+        if (is_null($post)) {
+             $encours_reservation=find_all_reservation_by_date_or_etat_paginate();
+             $nbrPage=2;
+             $total_records=count($encours_reservation);
+             $total_page=total_page($total_records,$nbrPage);
+             $get=$_GET['page'];
+             if (isset($get)) {
+               $page=$get;
+             }else {
+               $page=1;
+             }
+             $suivant=$precedent=0;
+             $suivant=$page+1;
+             $precedent=$page-1;
+             $start_from=start_from($page,$nbrPage);
+             $encours_reservation=find_all_reservation_by_date_or_etat_paginate('en cours',null,$start_from,$nbrPage);
         }else {
             extract($post);
+          /*  $_SESSION['date']=$date;
+           var_dump( $_SESSION['date']);
+           die; */
+           if ($date==null) {
+            $encours_reservation=find_all_reservation_by_date_or_etat_paginate($etat_reservation);
+            $nbrPage=3;
+            $total_records=count($encours_reservation);
+            $total_page=total_page($total_records,$nbrPage);
+            $get=$_GET['page'];
+            if (isset($get)) {
+              $page=$get;
+            }else {
+              $page=1;
+            }
+            $suivant=$precedent=0;
+            $suivant=$page+1;
+            $precedent=$page-1;
+            $start_from=start_from($page,$nbrPage);
+             $encours_reservation=find_all_reservation_by_date_or_etat_paginate($etat_reservation,null,$start_from,$nbrPage);
+           }else {
             $date=date_format(date_create($date),'Y-m-d H:i:s');
             $encours_reservation=find_all_reservation_by_date_or_etat($etat_reservation,$date);
+           }
+        
         }
         require(ROUTE_DIR.'views/reservation/liste.reservations.html.php');
 
