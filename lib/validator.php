@@ -96,6 +96,28 @@
         }
         return $number;
     }
+    function genere_matriculation():string{
+        $chiffre='0123456789';
+        $lettre='QWERTYUIOPLKJHGFDSAZXCVBNM';
+      $number=$ltrs1=$ltrs2=$genere="";
+        for ($i=0; $i < 4; $i++) { 
+            $number.=$chiffre[rand(0,strlen($chiffre)-1)];
+        }
+        for ($i=0; $i < 2; $i++) { 
+            $ltrs1.=$lettre[rand(0,strlen($lettre)-1)];
+        }
+        for ($i=0; $i < 2; $i++) { 
+            $ltrs2.=$lettre[rand(0,strlen($lettre)-1)];
+        }
+        $genere.=$ltrs1.'-'.$number.'-'.$ltrs2;
+        return $genere;
+    }
+    function total_page($total_records,$nbrPage):int{
+        return ceil($total_records/$nbrPage);
+    }
+    function start_from($page,$nbrPage):int{
+        return ($page-1) * ($nbrPage);
+    }
 
     function valide_nom_categorie($valeur,string $key,array &$arrayError):void{
         if (empty($valeur)) {
@@ -114,6 +136,8 @@
             $arrayError[$key] = 'Champs obligatoire';
         }elseif (!est_numeric($valeur)) {
             $arrayError[$key] = 'saisir des entiers';
+        }elseif ($valeur<1) {
+            $arrayError[$key] = 'sasir une valeur superieur a 0';
         }
     }
     function nombrePageTotal($array, $nombreElement): int {
@@ -139,5 +163,10 @@ function get_element_to_display(array $array, int $page, int $nombreElement): ar
         }
     }
     return $arrayElement;
+}
+
+function difference_date(DateTime $date1,DateTime $date2):string{
+    $diff=date_diff($date1,$date2);
+    return $diff -> format("%d");
 }
 ?>
