@@ -2,18 +2,57 @@
 die; */
  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container  reserv">
-        <div class="card">
-            <div class="card-body bg">
+        <div class="card bg">
+            <div class="card-body ">
                 <div class="row">
                     <div class="col">
-                    <h4 class="text-warning">Les donnees de reservation</h4>
+                    <h5 class="text-warning">Les donnees de reservation</h5>
                     </div>
-                   
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card ">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                        <p>Type Vehicule : <?=$reservation[0]['nom_type_vehicule']?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                        <p>Vehicule : <?=$reservation[0]['nom_marque'].' '.$reservation[0]['nom_modele']?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                        <p>Prix location jour : <?=$reservation[0]['prix_location_jour'].' '.'FCFA'?></p>
+                                        </div>
+                                        <?php
+                                         $date1=date_create($reservation[0]['date_fin_location']);
+                                         $date2=date_create($reservation[0]['date_debut_location']);
+                                         $jr= difference_date($date1,$date2);
+                                         $prix = intval($jr)*intval($reservation[0]['prix_location_jour']);
+                                         ?>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p>Caution : <?=$reservation[0]['caution']?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p>Nbrs jours : <?= $jr ?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p>Prix total : <?= $prix.' '.'FCFA' ?></p>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
 <form action="" method="post">
-    <div class="row ">
+    <input type="hidden" name="controlleurs" value="reservation">
+    <input type="hidden" name="action" value="traiter.reservation">
+    <input type="hidden" name="id_vehicule" value="<?=$vehicule[0]['id_vehicule']?>">
+    <div class="row mt-2">
         <div class="col-md-6">
-            <h4 class="text-warning">Vehicule Disponible</h4>
+            <h5 class="text-warning">Vehicule Disponible</h5>
             <div class="row">
             </div>
                 <?php foreach($vehicule as $vhl): ?> 
@@ -21,8 +60,8 @@ die; */
                        <div class="card-body">
                        <div class="form-check">
                     <label class="form-check-label mt">
-                    <input type="radio" class="form-check-input" name="jj" id="" value="" >
-                   <?=$vhl['nom_categorie'].' '.$vhl['nom_marque'].' '.$vhl['nom_modele']?>
+                    <input type="radio" class="form-check-input" name="vehicule" id="" value="<?=$vhl['id_vehicule']?>" >
+                   <?=$vhl['nom_categorie'].' '.$vhl['nom_marque'].' '.$vhl['nom_modele'].' '.$vhl['immatriculation_vehicule']?>
                   </label>
                 </div>
                        </div>
@@ -33,9 +72,9 @@ die; */
         <div class="col-md-6  ">
             <div class="container ">
             <div class="row">
-                <h4 class="text-warning ml-2">
+                <h5 class="text-warning ml-3">
                     Liste des conducteurs
-                </h4>
+                </h5>
             </div>
 
             <?php foreach($conducteurs as $conducteur): ?>
@@ -44,7 +83,7 @@ die; */
                    <div class="card-body">
                         <div class="form-check">
                             <label class="form-check-label t">
-                             <input type="radio" <?=$reservation[0]['id_type_vehicule']==2 ? 'disabled' : ""?> class="form-check-input" name="radio" id="" value="" >
+                             <input type="radio" <?=($reservation[0]['id_type_vehicule']==2 && !isset($_SESSION['chauffeur'])) ? 'disabled' : ""?> class="form-check-input" name="conducteur" id="" value="<?=$conducteur['id_conducteur']?>" >
                              <i class="fa fa-user" aria-hidden="true"></i> <?=$conducteur['nom_conducteur'].' '.$conducteur['prenom_conducteur']?>
                             </label>
                         </div>
@@ -57,7 +96,10 @@ die; */
         
           </div>
                 <div class="row">
-                    <button type="submit" name="valider" class="btn mt-2 btn-warning ml-auto mr-auto w-50">Valider</button>
+                  <!--   <div class="col-md-6"> -->
+                        <a name="" id="" class="btn mt-2 btn-warning ml-3 mr-auto" href="#" role="button">Annuler</a>
+                 <!--    </div> -->
+                    <button type="submit" name="traiter" class="btn h-25  btn-warning ml-auto  ">Valider</button>
                 </div>
     </form>
             </div>

@@ -21,10 +21,11 @@
         </a>
     </div>
     <div class="row mt-5">
-         <table class="table border bordered w-75 ml-auto mr-auto ">
+         <table class="table border bordered table-sm ml-auto mr-auto ">
             <thead>
                 <tr>
                 <th scope="col" class="text-warning">Nom Categorie</th>
+                <th scope="col" class="text-warning">Etat</th>
                 <th scope="col" class="text-warning">Action</th>
                 </tr>
             </thead>
@@ -32,9 +33,14 @@
                 <?php foreach($categories as $categorie): ?>
                 <tr>
                 <td class="text-white"><?=$categorie['nom_categorie']?></td>
+                <td class="text-white"><?=$categorie['etat']?></td>
                 <td class="text-white">
-                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver&id_categorie='.$categorie['id_categorie']?>" role="button">Archiver</a>
-                    <a name=""  id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.categorie&id_categorie='.$categorie['id_categorie']?>" >Modifier</a>
+                <?php if($categorie['etat']=='archiver'):?>
+                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=desarchiver.categorie&id_categorie='.$categorie['id_categorie']?>" role="button"><i class="fas fa-file-archive archive "></i>Désarchiver</a>
+                <?php else :?>  
+                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver.categorie&id_categorie='.$categorie['id_categorie']?>" role="button"><i class="fas fa-file-archive archive "></i>Archiver</a>
+                <?php endif ?>  
+                    <a name=""  id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.categorie&id_categorie='.$categorie['id_categorie']?>" ><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
                 </tr>
                 <?php endforeach ?>
@@ -45,17 +51,17 @@
     
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
-            <li class="page-item  ">
-                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.categorie' ?>" tabindex="-1">
+            <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?> ">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$precedent ?>" tabindex="-1">
                  <span aria-hidden="true" class="tt">&laquo;</span>
                  <span class="sr-only">Previous</span>
                 </a>
             </li>
-            <?php for($i=1;$i<=$nbrsPage;$i++): ?>
+            <?php for($i=1;$i<=$total_page;$i++): ?>
                  <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$i ?>"><?=$i?></a></li>
             <?php endfor ?>
-            <li class="page-item ">
-                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie' ?>">
+            <li class="page-item  <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  ">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$suivant ?>">
                       <span aria-hidden="true" class="tt">&raquo;</span>
                       <span class="sr-only">Next</span>
                 </a>

@@ -7,7 +7,7 @@
                     <input type="hidden" name="action" value="filtre_reservation">
                     <div class="form-group">
                       <label for="" class="text-white">Date</label>
-                      <input type="date" name="date" id="" class="form-control ml-3  bg-secondary" placeholder="" aria-describedby="helpId">
+                      <input type="date" name="date" value="" id="" class="form-control ml-3  bg-secondary" placeholder="" aria-describedby="helpId">
                       <small id="helpId" class="text-muted"></small>
                     </div>
                     <div class="form-group ml-5">
@@ -45,15 +45,66 @@
       </td><?php $date=date_format(date_create($reservation['date_debut_location']),'d-m-Y') ?>
       <td class="text-white"><?=$date?></td>
       <td class="text-white">
-        <a name="" id="" class="btn btn-warning" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-wrench" aria-hidden="true"></i>Traiter</a>
+        <?php if($reservation['nom_etat']=='valider'):?>
+           <a name="" id="" class="btn btn-success" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-backward" aria-hidden="true"></i>Gerer retour</a>
+        <?php elseif($reservation['nom_etat']=='en cours'): ?>
+          <a name="" id="" class="btn btn-warning" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-wrench" aria-hidden="true"></i>Traiter</a>
+        <?php endif ?>
       </td>
     </tr>
     <?php endforeach ?>
   </tbody>
 </table>
 </div>
+<nav aria-label="Page navigation example ">
+        <ul class="pagination justify-content-center ">
+            <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+                 <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$precedent ?>" tabindex="-1">
+                 <span aria-hidden="true" class="tt">&laquo;</span>
+                 <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <?php for($i=1;$i<=$total_page;$i++): ?>
+                 <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$i ?>"><?=$i?></a></li>
+            <?php endfor ?>
+            <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  " >
+                 <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$suivant ?>">
+                      <span aria-hidden="true" class="tt">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <style>
+
+.pagination a
+{
+    color: #000;
+}
+.tt{
+    color: #000;
+}
+.tt:hover{
+    color: #d2b100;
+    transition: all 0,3s;
+}
+.pagination a:hover:not(.next)
+{
+    background-color: #000 !Important;
+    color: #d2b100;
+     border: solid 1px #000; 
+}
+.next{
+    background-color: #d2b100;
+    color: #000;
+    border: solid 1px #d2b100; 
+}
+.next:hover{
+    background-color: #d2b100;
+    color: #000;
+    border: solid 1px #d2b100; 
+}
   a i{
     color: #000;
   }

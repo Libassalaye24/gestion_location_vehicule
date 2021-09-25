@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Title</title>
+    <title>Gestion_location_vehicule</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -87,7 +87,7 @@
           </ul>
           <ul class="navbar-nav mr-o ">
             <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.archives'?>">Liste Archives</a>
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.archives'?>">Archives</a>
             </li>
           </ul>
           <?php endif ?>
@@ -154,7 +154,7 @@
             z-index: 1039;
         } 
         .reserv{
-          margin-top: 22%;
+          margin-top: 15%;
         }
        
         }
