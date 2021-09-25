@@ -13,7 +13,16 @@ function insert_conducteur(array $conducteurs):int{
 
 function find_all_conducteur():array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur where etat=?";
+  $sql="select * from conducteur where etat=? ";
+  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $sth->execute(array('normal'));
+  $conducteurs = $sth->fetchAll();
+  fermer_connection_db($pdo);//fermeture
+  return $conducteurs;
+}
+function find_all_conducteur_pagi($start,$nbrPage):array{
+  $pdo= ouvrir_connection_db();//ouvertur
+  $sql="select * from conducteur where etat=? limit $start,$nbrPage ";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->execute(array('normal'));
   $conducteurs = $sth->fetchAll();

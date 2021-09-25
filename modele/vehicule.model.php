@@ -42,38 +42,50 @@
         fermer_connection_db($pdo);//fermeture
         return $nbr_cat_page;
     } */
-    function find_all_categorie():array{
+    function find_all_categorie($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
-        $sql="select * from categorie";
+        $sql="select * from categorie ";
+        if (!is_null($start) && !is_null($parPage)) {
+            $sql.= "limit $start,$parPage";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute();
+        $sth->execute(array($start,$parPage));
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
-    function find_all_modele():array{
+    function find_all_modele($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
-        $sql="select * from modele";
+        $sql="select * from modele ";
+        if (!is_null($start) && !is_null($parPage)) {
+            $sql.= "limit $start,$parPage";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute();
+        $sth->execute(array($start,$parPage));
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
-    function find_all_marque():array{
+    function find_all_marque($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
-        $sql="select * from marque";
+        $sql="select * from marque ";
+        if (!is_null($start) && !is_null($parPage)) {
+            $sql.= "limit $start,$parPage";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute();
+        $sth->execute(array($start,$parPage));
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
-    function find_all_option():array{
+    function find_all_option($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
         $sql="select * from option_vehicule";
+        if (!is_null($start) && !is_null($parPage)) {
+            $sql.= " limit $start,$parPage";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute();
+        $sth->execute(array($start,$parPage));
         $datas = $sth->fetchAll(PDO::FETCH_ASSOC);
         fermer_connection_db($pdo);//fermeture
         return $datas;
@@ -354,6 +366,19 @@
                   WHERE `id_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($id_etat,$id_vehicule));
+       /*   var_dump($id_conducteur);
+         die; */
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+      function archive_categorie(int $id_categorie):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `categorie` 
+                SET `etat` = ?
+                  WHERE `id_categorie` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute(array('archiver',$id_categorie));
        /*   var_dump($id_conducteur);
          die; */
          $dernier_id = $pdo->lastInsertId();
