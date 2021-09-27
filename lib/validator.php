@@ -169,4 +169,14 @@ function difference_date(DateTime $date1,DateTime $date2):string{
     $diff=date_diff($date1,$date2);
     return $diff -> format("%d");
 }
+function compare_date(DateTime $date_fin,DateTime $date_debut,string $key,array &$arrayError):void{
+    $date=date_create(); 
+    if ($date_debut > $date_fin) {
+        $arrayError[$key] = 'la date de fin doit etre superieur au date de debut ou egal';
+    }/* elseif ($date_debut<$date) {
+        $arrayError[$key] = 'la date de debut doit etre superieur a  aujourd\'hui';
+    }elseif ($date_fin<$date) {
+        $arrayError[$key] = 'la date de fin doit etre superieur a aujourd\'hui';
+    } */
+}
 ?>
