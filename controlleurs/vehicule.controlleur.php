@@ -5,6 +5,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     if (isset($_GET['views'])) {
       if ($_GET['views']=='liste.vehicule') {
           catalogue();
+      }elseif ($_GET['views']=='details.vehicule') {
+        show_details_vehicule($_GET['id_vehicule']);
       }elseif ($_GET['views']=='ajout.voiture') {
        show_ajout_voiture();
       }elseif ($_GET['views']=='ajout.camion') {
@@ -62,12 +64,21 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     if (isset($_POST['action'])) {
       if ($_POST['action']=='add.voiture') {
           if (isset($_POST['nbre'])) {
+            $_SESSION['post']=$_POST;
             show_ajout_voiture($_POST['nbre_image']);
           }else {
+          
            add_voiture($_POST,$_FILES);
-           
-              //fonction ajouter vehicule
+              
           }
+      }elseif ($_POST['action']=='add.camion') {
+           if (isset($_POST['nbre'])) {
+            $_SESSION['post1']=$_POST;
+            show_ajout_camion($_POST['nbre_image']);  
+           }else {
+             add_camion($_POST,$_FILES);
+           }
+                
       }elseif ($_POST['action']=='add.categorie') {
             add_categorie($_POST);          
       }elseif ($_POST['action']=='add.conducteur') {
@@ -100,8 +111,31 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     }
 }
 
+function show_details_vehicule($id_vehicule){
+  $images=find_all_image_vehicule_by_id_($id_vehicule);
+  $vehicule=find_vehicule_by_id($id_vehicule);
+  require_once(ROUTE_DIR.'views/client/details.vehicule.html.php');  
+}
+
 function catalogue(){
-  $vehicule_disponible= find_bien_disponible_pa();
+    $categorie=find_all_categorie();
+    $marques=find_all_marque();
+    $modeles=find_all_modele();
+    $vehicule_disponible= find_bien_disponible_pa();
+    $nbrPage=3;
+    $total_records=count($vehicule_disponible);
+    $total_page=total_page($total_records,$nbrPage);
+    $get=$_GET['page'];
+    if (isset($get)) {
+      $page=$get;
+    }else {
+      $page=1;
+    }
+    $suivant=$precedent=0;
+    $suivant=$page+1;
+    $precedent=$page-1;
+    $start_from=start_from($page,$nbrPage);
+    $vehicule_disponible= find_bien_disponible_pa($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/client/liste.vehicule.html.php');  
 }
 function show_ajout_categorie($id_categorie=null){
@@ -137,7 +171,7 @@ function liste_vehicule($get=null){
   if (!isset($_POST['ok'])) {
    // die('geed');
     $nbrPage=2;
-    $vehicule_disponible=find_bien_disponible_pa();
+    $vehicule_disponible=find_bien_disponible();
     $total_records=count($vehicule_disponible);
     $total_page=total_page($total_records,$nbrPage);
     if (isset($get)) {
@@ -180,6 +214,9 @@ function show_ajout_voiture($nbre=1){
   $options=find_all_option();
   $categories=find_all_categorie();
   $type_vehicule=find_all_type_vehicule();
+  $model=find_all_modele_by_id((int)$_SESSION['post']['modele']);
+  $marque=find_marque_by_id((int)$_SESSION['post']['marque']);
+  $categorie=find_categorie_by_id((int)$_SESSION['post']['categorie']);
   $_SESSION['nbre_image']=$nbre;
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.voiture.html.php');  
 }
@@ -189,7 +226,10 @@ function show_ajout_camion($nbre=1){
   $options=find_all_option();
   $categories=find_all_categorie();
   $type_vehicule=find_all_type_vehicule();
-  $_SESSION['nbre_image']=$nbre;
+  $model=find_all_modele_by_id((int)$_SESSION['post1']['modele']);
+  $marque=find_marque_by_id((int)$_SESSION['post1']['marque']);
+  $categorie=find_categorie_by_id((int)$_SESSION['post1']['categorie']);
+  $_SESSION['nbr_image']=$nbre;
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.camion.html.php');  
 }
 function show_ajout_conducteur($get=null){
@@ -523,23 +563,13 @@ function show_liste_conducteur_ar($id_conducteur){
       }
     }
 
-    function add_voiture(array $post,$files):void{
+    function add_voiture(array $post,array $files):void{
       $arrayError=[];
       extract($post);
-     // validefield1($kmt,'kmt',$arrayError);
+      validefield1($kmt,'kmt',$arrayError);
      // valide_prix_categorie($nbre_image,'nbre_image',$arrayError);
       //valide_image($files,'avatar[]',$arrayError,UPLOAD_DIR);
-    
-       
-       
-      
       if (form_valid($arrayError)) {
-       /*  var_dump(ROUTE_DIR);
-        var_dump(UPLOAD_DIR);
-        var_dump(move_uploaded_file($files["avatar"]["tmp_name"],$targetFile));
-        var_dump(!move_uploaded_file($files["avatar"]["tmp_name"],$targetFile));
-        var_dump($files["avatar"]["tmp_name"]);
-        die; */
        
         $vehicules=[
           genere_reference(),
@@ -551,17 +581,19 @@ function show_liste_conducteur_ar($id_conducteur){
           2,
           6
         ];
-        $id_vehicule= insert_voiture_vehicule($vehicules);
-       /*  echo "<pre>";
-        var_dump($files);
-        echo "<pre>";
-        die; */
-        //$targetFile=UPLOAD_DIR . basename($files["avatar"]["tmp_name"]);
-        foreach ($files["avatar"]["tmp_name"] as $key ) {
-          $targetFile=UPLOAD_DIR . basename($files["avatar"]["tmp_name"][$key]);
-          move_uploaded_file($files["avatar"]["tmp_name"][$key],$targetFile);
-          var_dump(move_uploaded_file($files["avatar"]["tmp_name"][$key],$targetFile));
-          die;
+        $id_vehicule= insert_voiture_vehicule($vehicules); 
+      
+        foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
+          $file_name=$files["avatar"]["name"][$key];
+          $file_name_tmp=$files["avatar"]["tmp_name"][$key];
+         $ext=pathinfo($file_name,PATHINFO_EXTENSION);
+          if (file_exists(UPLOAD_DIR .$file_name)) {
+            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+          }else {
+            $file_name=str_replace('.','-',basename($file_name,$ext));
+            $newfilename=$file_name.time().".".$ext;
+            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$newfilename);
+          }
         }
         foreach ($files['avatar']['name'] as $file) {
           $image=[
@@ -572,12 +604,66 @@ function show_liste_conducteur_ar($id_conducteur){
           insert_image($image);
         }
        
-       /*  var_dump(ROUTE_DIR);
-        var_dump(UPLOAD_DIR);
-        var_dump(move_uploaded_file($files["avatar"]["tmp_name"],$targetFile));
-        var_dump(!move_uploaded_file($files["avatar"]["tmp_name"],$targetFile));
-        var_dump($files["avatar"]["tmp_name"]);
-        die; */
+    
+        foreach ($options as $opv) {
+          $option=[
+             $opv,
+             $id_vehicule
+          ];
+          insert_vehicule_option($option);
+        }
+        header("location:".'?controlleurs=vehicule&views=liste.vehicules');
+        exit;
+      }else {
+        $_SESSION['arrayError'] = $arrayError;
+        header("location:".'?controlleurs=vehicule&views=ajout.voiture');
+        exit;
+      }
+    }
+
+    function add_camion(array $post,array $files):void{
+      $arrayError=[];
+      extract($post);
+   //   validefield1($kmt,'kmt',$arrayError);
+     // valide_prix_categorie($nbre_image,'nbre_image',$arrayError);
+      //valide_image($files,'avatar[]',$arrayError,UPLOAD_DIR);
+      if (form_valid($arrayError)) {
+       
+        $vehicules=[
+          genere_reference(),
+          genere_matriculation(),
+          $kmt,
+          $volume,
+          $charge,
+          $longueur,
+          $largeur,
+          $hauteur,
+          $categorie,
+          $modele,
+          $marque,
+          1,
+          6
+        ];
+        $id_vehicule= insert_camion_vehicule($vehicules); 
+      
+        foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
+          $file_name=$files["avatar"]["name"][$key];
+          $file_name_tmp=$files["avatar"]["tmp_name"][$key];
+         $ext=pathinfo($file_name,PATHINFO_EXTENSION);
+          if (!file_exists(UPLOAD_DIR .$file_name)) {
+            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+          }
+        }
+        foreach ($files['avatar']['name'] as $file) {
+          $image=[
+             $file,
+             $id_vehicule
+          ];
+         
+          insert_image($image);
+        }
+       
+    
         foreach ($options as $opv) {
           $option=[
              $opv,

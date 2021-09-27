@@ -7,6 +7,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             show_mes_reservations();
         }elseif ($_GET['views']=='liste.reservations') {
             show_liste_reservations();
+        }elseif ($_GET['views']=='retour.location') {
+            require(ROUTE_DIR.'views/reservation/retour.location.html.php');
         }elseif ($_GET['views']=='ajout.reservation') {
             show_ajout_reservation($_GET['id_vehicule']);
         }elseif ($_GET['views']=='reservation.client') {
@@ -71,6 +73,9 @@ function add_user_reserve(array $post):void{
     validefield2($code_postal,'code_postal',$arrayError);
     valide_user_name($date_debut,'date_debut',$arrayError);
     valide_user_name($date_fin,'date_fin',$arrayError);
+    //$date_debut=date_create($date_debut);
+   // $date_fin=date_create($date_fin);
+   // compare_date($date_fin,$date_debut,'date_debut',$arrayError);
     if ($password!=$confirm_password) {
         $arrayError['confirm'] = 'le mot de passe est different';
         $_SESSION['arrayError']=$arrayError;
