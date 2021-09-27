@@ -2,7 +2,8 @@
 
 <div class="container">
 <div class="row jjj">
-                        <div class="col-md-12">
+    <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>"><i class="fa fa-arrow-circle-left  " style="color: #d2b100;" aria-hidden="true"></i></a>
+                        <div class="col-md-12 mr-2">
                             <h3 class="section-title font-weight-light text-white mb-4 mr-1">
                                 <span class="headline">Reservations par client</span>
                             </h3 >
@@ -33,7 +34,7 @@
 </div>
 <style>
     .jjj{
-        margin-top: 32%;
+        margin-top: 26%;
     }
     .section-title{
     font-size: 20px;

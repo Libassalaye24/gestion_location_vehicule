@@ -71,9 +71,10 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                         <div class="col-md-4">
                             <div class="form-group">
                                     <label for="" class="text-warning">Password</label>
-                                    <input type="text"
-                                        class="form-control" name="password" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-danger">
+                                    <input type="password"
+                                        class="form-control" name="password" id="myInput" aria-describedby="helpId" placeholder="">
+                                        <input type="checkbox" class="mt-4" onclick="myFunction()"><label class="text-warning ml-2" for="">Voir Password </label>
+                                        <small id="helpId" class="form-text text-danger">
                                     <?= isset($arrayError['password']) ? $arrayError['password'] :"" ?>
                                     </small>
                              </div>
@@ -81,9 +82,10 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                         <div class="col-md-4">
                             <div class="form-group">
                                     <label for="" class="text-warning">Confirm Password</label>
-                                    <input type="text"
-                                        class="form-control" name="confirm_password" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-danger">
+                                    <input type="password"
+                                        class="form-control" name="confirm_password" id="Input" aria-describedby="helpId" placeholder="">
+                                        <input type="checkbox" class="mt-4" onclick="myFunction1()"><label class="text-warning ml-2" for="">Voir Password </label>
+                                        <small id="helpId" class="form-text text-danger">
                                     <?= isset($arrayError['confirm']) ? $arrayError['confirm'] :"" ?>
                                     </small>
                              </div>
@@ -165,8 +167,13 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
     input[type=text]{
         background: grey;
     }
+    input[type=password]{
+        background: grey;
+        color: white;
+    }
     input[type=date]{
         background: grey;
+
     }
     .jjj{
         margin-top: -6%;

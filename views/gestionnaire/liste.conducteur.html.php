@@ -80,32 +80,5 @@
     font-size: 20px;
 }
 
-.pagination a
-{
-    color: #000;
-}
-.tt{
-    color: #000;
-}
-.tt:hover{
-    color: #d2b100;
-    transition: all 0,3s;
-}
-.pagination a:hover:not(.next)
-{
-    background-color: #000 !Important;
-    color: #d2b100;
-     border: solid 1px #000; 
-}
-.next{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
-.next:hover{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
 </style>
 <?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

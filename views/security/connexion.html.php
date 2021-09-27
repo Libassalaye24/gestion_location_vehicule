@@ -6,19 +6,14 @@
 }
  require_once(ROUTE_DIR.'views/imc/header.html.php'); 
  ?>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
-<div class="wrapper fadeInDown ">
-  <div id="formContent">
+<div class="wrapper fadeInDown mt">
+  <div id="formContent shadow-lg   ">
     <!-- Tabs Titles -->
-<div class="card mt-5  mb-3 ml-auto mr-auto text-left" style="width: 32rem;background:#000;">
-  <div class="card-body shadow-lg p-3 mb-5    ">
-  <!--  <div class="row bg-warning">
-      <h3 class="ml-auto mr-auto">Login Form</h3>
-   </div> -->
+<div class="card mt-5 w-75 col-md-12  mb-3 ml-auto mr-auto text-left" style="background:#191919" >
+  <div class="card-body    ">
+
  
     <form action="<?=WEB_ROUTE?>" method="post">
     <input type="hidden" name="controlleurs" value="security">
@@ -30,20 +25,29 @@
       </strong>
     </div>
     <?php endif ?>
-        <div class="form-group  ">
-          <label for="" class="text-warning">Saisir le login</label>
-          <input type="text" name="login" id="" class="form-control bg-secondary" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-danger">
-               <?= isset($arrayError['login']) ? $arrayError['login'] : ""; ?>
-          </small>
-        </div>
-        <div class="form-group ">
-          <label for=""  class="text-warning">Saisir le mot de passe</label>
-          <input type="password" name="password" id="" class="form-control bg-secondary" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-danger">
-              <?= isset($arrayError['password']) ? $arrayError['password'] : ""; ?>
-          </small>
-        </div>
+       <div class="row">
+            <div class="col-md-12">
+            <div class="form-group  ">
+            <label for="" class="text-warning">Saisir le login</label>
+            <input type="text" name="login" required="required" id="" class="form-control bg-secondary" placeholder="" aria-describedby="helpId">
+            <small id="helpId" class="text-danger">
+                <?= isset($arrayError['login']) ? $arrayError['login'] : ""; ?>
+            </small>
+          </div>
+            </div>
+       </div>
+       <div class="row">
+         <div class="col-md-12  ">
+          <div class="form-group ">
+            <label for=""  class="text-warning">Saisir le mot de passe</label>
+            <input type="password" name="password" id="myInput" class="form-control bg-secondary" placeholder="" aria-describedby="helpId">
+            <input type="checkbox" class="mt-4" onclick="myFunction()"><label class="text-warning ml-2" for="">Voir Password </label>
+            <small id="helpId" class="text-danger">
+                <?= isset($arrayError['password']) ? $arrayError['password'] : ""; ?>
+            </small>
+          </div>
+         </div>
+       </div>
         <div class="row">
           <div class="col-md-4 ">
           <button type="submit" class="btn btn-warning " name="connexion">Se connecter</button>
@@ -64,18 +68,19 @@
 </div>
 <style>
 
-/* BASIC */
-/* 
-html {
-  background-color: #d2b100;
-} */
 
+/* input[type=text]{
+  border-bottom-color: yellow;
+} */
 body {
-  font-family: "Poppins", sans-serif;
-  height: 80vh;
+  /*  font-family: "Poppins", sans-serif;
+    height: 80vh; */
   background-color: #000;
 }
-
+.mt{
+  margin-top: 17%;
+}
 
 </style>
+
         <?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

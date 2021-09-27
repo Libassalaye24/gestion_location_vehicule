@@ -4,18 +4,12 @@
 <div class="container">
    <div class="row jjjj">
      
-     <div class="col-md-8">
-       <h3 class="section-title font-weight-light text-white mb-4">
+     <div class="col">
+       <h5 class="section-title font-weight-light text-white mb-4">
          <span class="headline">Liste Vehicules</span>
-       </h3 >
+       </h5 >
      </div>
-     <div class="col-md-4">
-     <a name="" id="" class="btn btn-warning ml-auto mt-1" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=ajout.vehicule'?>" role="button">
-     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-            </svg>Ajouter</a>
-
-     </div>
+     
    </div>
   
    
@@ -138,33 +132,6 @@ body{
   ;
 }
 
-.pagination a
-{
-    color: #000;
-}
-.tt{
-    color: #000;
-}
-.tt:hover{
-    color: #d2b100;
-    transition: all 0,3s;
-}
-.pagination a:hover:not(.next)
-{
-    background-color: #000 !Important;
-    color: #d2b100;
-     border: solid 1px #000; 
-}
-.next{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
-.next:hover{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
 
     .card {
         background: #000;

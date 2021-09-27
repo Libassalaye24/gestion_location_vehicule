@@ -9,13 +9,15 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-  </head>
+    <link rel="stylesheet" href="<?= WEB_ROUTE.'css/style.css' ?>"> 
+   
+   </head>
   <body>
       
   
 <nav class="navbar navbar-expand-lg navbar-dark ">
       <!-- <a class="navbar-brand" href="#">E-221</a> -->
-      <a href=""><img src="https://mapauto.sn/img/logo-avec-slogan2.webp" alt="" class="ml-5"></a>
+      <a href=""><img src="<?=WEB_ROUTE.'img/logo1.png'?>" alt="" height="105" class="ml-5"></a>
       <button
         class="navbar-toggler"
         type="button"

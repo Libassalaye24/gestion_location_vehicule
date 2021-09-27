@@ -24,7 +24,7 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">kilometrage</label>
                                     <input type="text"
-                                        class="form-control" name="kmt" value="" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="kmt" value="<?=isset($_SESSION['post']['kmt']) ? $_SESSION['post']['kmt'] : "" ?>" id="" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
                                     <?=$arrayError['kmt'] ? $arrayError['kmt'] : "" ?>
                                     </small>
@@ -37,6 +37,7 @@
                             <div class="form-group ">
                               <label for="" class="text-warning">Categorie</label>
                               <select class="form-control  bg-secondary" name="categorie" id="">
+                              <option value="<?=isset($_SESSION['post']['categorie']) ? $_SESSION['post']['categorie'] : "0"?>" ><?=$categorie[0]['nom_categorie']?></option>
                                 <?php foreach($categories as $categorie): ?>
                                  <option value="<?=$categorie['id_categorie']?>"><?=$categorie['nom_categorie']?></option>
                                 <?php endforeach ?>
@@ -47,7 +48,7 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning ">Marque</label>
                               <select class="form-control  bg-secondary" name="marque" id="">
-                                  <option ><?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : ""?></option>
+                              <option value="<?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : "0"?>" ><?=$marque[0]['nom_marque']?></option>
                               <?php foreach($marques as $marque): ?>
                                  <option value="<?=$marque['id_marque']?>"><?=$marque['nom_marque']?></option>
                                 <?php endforeach ?>
@@ -58,6 +59,7 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning">Modele</label>
                               <select class="form-control  bg-secondary" name="modele" id="">
+                              <option value="<?=isset($_SESSION['post']['modele']) ? $_SESSION['post']['modele'] : "0"?>"><?=$model[0]['nom_modele']?></option>
                               <?php foreach($modeles as $modele): ?>
                                  <option value="<?=$modele['id_modele']?>"><?=$modele['nom_modele']?></option>
                                 <?php endforeach ?>
@@ -71,45 +73,28 @@
                             <div class="form-group">
                                 <label for="" class="text-warning">Options</label>
                             </div>
-                        </div>
+                        </div><?php $i=1; ?>
                         <?php foreach($options as $option): ?>
                         <div class="col-md-3">
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label text-warning" >
-                                    <input class="form-check-input" type="checkbox" name="options[]" id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
+                                    <input class="form-check-input" type="checkbox" <?=isset($_SESSION['post']['options'.$i]) ? 'checked' : "0"?>  name="options<?=$i?>" id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
                                 </label>
                             </div>
                         </div>
+                        <?php $i++;?>
                         <?php endforeach?>
                         
                         
                      </div>
-                               <!--  <script>
-                                        function myFunction() {
-                                          if (  document.querySelector('#myradio2').checked ) {
-                                              document.getElementById("myText").disabled = true;
-                                              document.getElementById("myText1").disabled = true;
-                                              document.getElementById("myText2").disabled = true;
-                                              document.getElementById("myText3").disabled = true;
-                                              document.getElementById("myText4").disabled = true;
-                            
-                                          }else{
-                                            document.getElementById("myText").disabled = false;
-                                            document.getElementById("myText1").disabled = false;
-                                            document.getElementById("myText2").disabled = false;
-                                            document.getElementById("myText3").disabled = false;
-                                            document.getElementById("myText4").disabled = false;
-                                          }
-                                             
-                                        }
-                                    </script> -->
+                             
                      <div class="row">
                         <div class="col-md-5">
                              <div class="form-group">
                                     <label for="" class="text-warning">Saisir le nbre image</label>
-                                    <input type="number" class="form-control bg-secondary" name="nbre_image" id="" placeholder="" aria-describedby="fileHelpId">
+                                    <input type="number" class="form-control bg-secondary" value="<?=isset($_SESSION['post']['nbre_image']) ? $_SESSION['post']['nbre_image'] : "" ?>" name="nbre_image" id="" placeholder="" aria-describedby="fileHelpId">
                                     <small id="helpId" class="form-text text-danger">
-                                   
+                                    <?=$arrayError['nbre_image'] ? $arrayError['nbre_image'] : "" ?>
                                     </small>
                              </div>
                            
@@ -132,9 +117,9 @@
                             </div>
                         </div>
                      <?php endfor ?>
-                       <div class="row mt-3">
-                         <div class="col-md-6">
-                            <button type="submit" name="inscription" class="btn btn-warning"> Ajouter</button>
+                       <div class="row mt-3 ">
+                         <div class="col-md-6 ">
+                            <button type="submit" name="inscription" class="btn btn-warning "> Ajouter</button>
                          </div>
                         
                      </div>
@@ -180,58 +165,10 @@
     margin-left: -106%;
 }
 </style>
-<SCRIPT LANGUAGE="JavaScript">
- 
-function addField(){
-    var field = "<input type='file' name='file' value='' class='form-control-file image' aria-describedby='fileHelpId'/><br/>";
-    document.getElementById('fields').innerHTML += field;
-}
-    function check(ele) {
-    
-        if (ele.checked == true ) {
-            return true;
-        }else{
-            return false;
-        }
-        if (check(ele)==true) {
-                var field = "<input type='file' name='file' value='' class='form-control-file image' aria-describedby='fileHelpId'/><br/>";
-                document.getElementById('check').innerHTML += field;
-         }
-    
-    }
-   
- 
-</SCRIPT>
-<script type="text/javascript">
-function checkCheckBox(ele) {
- 
-    if (ele.checked == false ) {
-        var div = document.getElementById("ajout");
-        div.removeChild(div.firstChild);
-    return false;
-    }
-    else {
-        var input = document.createElement("input");
-        input.type = "text";
-        input.name = "name_de_l_input";
-        document.getElementById("ajout").appendChild(input);
-    }
-    return true;
-     
-}
-</script>
-<!-- <input type="checkbox" value="0" name="oui" onclick="checkCheckBox(this)" > Coché ce que vous voulez
-<div id="ajout"></div> -->
-<!-- <div class="col-md-6">
-                            <div class="form-group">
-                                    <label for="" class="text-warning">Immatriculation</label>
-                                    <input type="text"
-                                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                    <small id="helpId" class="form-text text-danger"></small>
-                             </div>
-                        </div> -->
+
+
 <?php
-/* if (isset($_SESSION['post'])) {
+if (isset($_SESSION['post'])) {
     unset($_SESSION['post']);
-} */
+}
  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

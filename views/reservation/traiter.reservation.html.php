@@ -97,7 +97,7 @@ die; */
           </div>
                 <div class="row">
                   <!--   <div class="col-md-6"> -->
-                        <a name="" id="" class="btn mt-2 btn-warning ml-3 mr-auto" href="#" role="button">Annuler</a>
+                        <a name="" id="" class="btn mt-2 btn-warning ml-3 mr-auto" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>" role="button">Annuler</a>
                  <!--    </div> -->
                     <button type="submit" name="traiter" class="btn h-25  btn-warning ml-auto  ">Valider</button>
                 </div>

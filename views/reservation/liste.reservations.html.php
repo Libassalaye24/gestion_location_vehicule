@@ -46,7 +46,7 @@
       <td class="text-white"><?=$date?></td>
       <td class="text-white">
         <?php if($reservation['nom_etat']=='valider'):?>
-           <a name="" id="" class="btn btn-success" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-backward" aria-hidden="true"></i>Gerer retour</a>
+           <a name="" id="" class="btn btn-success" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=retour.location&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-backward" aria-hidden="true"></i>Gerer retour</a>
         <?php elseif($reservation['nom_etat']=='en cours'): ?>
           <a name="" id="" class="btn btn-warning" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$reservation['id_reservation']?>" role="button"><i class="fa fa-wrench" aria-hidden="true"></i>Traiter</a>
         <?php endif ?>
@@ -78,33 +78,6 @@
 </div>
 <style>
 
-.pagination a
-{
-    color: #000;
-}
-.tt{
-    color: #000;
-}
-.tt:hover{
-    color: #d2b100;
-    transition: all 0,3s;
-}
-.pagination a:hover:not(.next)
-{
-    background-color: #000 !Important;
-    color: #d2b100;
-     border: solid 1px #000; 
-}
-.next{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
-.next:hover{
-    background-color: #d2b100;
-    color: #000;
-    border: solid 1px #d2b100; 
-}
   a i{
     color: #000;
   }
