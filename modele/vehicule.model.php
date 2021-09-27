@@ -1,6 +1,6 @@
 <?php
 
-    function find_bien_disponible($start,$num_page):array{
+    function find_bien_disponible($start=null,$num_page=null):array{
         $pdo=ouvrir_connection_db();
         $sql="select * from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv
                  where v.id_etat=e.id_etat
@@ -8,7 +8,10 @@
                     and v.id_modele=mo.id_modele
                     and v.id_marque=ma.id_marque
                     and v.id_type_vehicule=tv.id_type_vehicule
-                    and e.nom_etat=? limit $start,$num_page";
+                    and e.nom_etat=? ";
+        if (!is_null($start) && !is_null($num_page)) {
+            $sql.=" limit $start,$num_page";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array('disponible'));
         $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -16,15 +19,39 @@
         fermer_connection_db($pdo);
         return $vehicule_disponible;
     }
-    function find_bien_disponible_pa():array{
+    function find_all_image_vehicule_by_id_($id_vehicule):array{
         $pdo=ouvrir_connection_db();
-        $sql="SELECT  * from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv
+        $sql="SELECT nom_image from image  where id_vehicule=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_vehicule));
+        $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
+         // var_dump($biendispo);die();
+        fermer_connection_db($pdo);
+        return $vehicule_disponible;
+    }
+    function find_image_vehicule_by_id($id_vehicule):array{
+        $pdo=ouvrir_connection_db();
+        $sql="SELECT nom_image from image  where id_vehicule=? LIMIT 1,1";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_vehicule));
+        $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
+         // var_dump($biendispo);die();
+        fermer_connection_db($pdo);
+        return $vehicule_disponible;
+    }
+    function find_bien_disponible_pa($start=null,$num_page=null):array{
+        $pdo=ouvrir_connection_db();
+        $sql="SELECT  distinct c.*,mo.*,ma.*,v.*,i.id_vehicule  from vehicule v,etat e,categorie c,modele mo,marque ma,type_vehicule tv,image i
                  where v.id_etat=e.id_etat
                     and v.id_categorie=c.id_categorie
+                    and v.id_vehicule=i.id_vehicule
                     and v.id_modele=mo.id_modele
                     and v.id_marque=ma.id_marque
                     and v.id_type_vehicule=tv.id_type_vehicule
                     and e.nom_etat=? ";
+         if (!is_null($start) && !is_null($num_page)) {
+            $sql.="limit $start,$num_page ";
+        }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array('disponible'));
         $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -62,6 +89,33 @@
         }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($start,$parPage));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
+    function find_all_modele_by_id($id_modele):array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from modele where id_modele= ?";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_modele));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
+    function find_all_marque_by_id($id_marque):array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from marque where id_marque= ?";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_marque));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
+    function find_all_categorie_by_id($id_categorie):array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from categorie where id_categorie= ?";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_categorie));
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
@@ -235,9 +289,10 @@
 
     function find_vehicule_by_id( $id_vehicule):array{
         $pdo= ouvrir_connection_db();
-        $sql="SELECT * from vehicule v,categorie c,marque ma,modele mo
+        $sql="SELECT * from vehicule v,categorie c,marque ma,modele mo,type_vehicule tv
                 where v.id_categorie=c.id_categorie
                     and v.id_marque=ma.id_marque
+                    and v.id_type_vehicule=tv.id_type_vehicule
                     and v.id_modele=mo.id_modele
                     and v.id_vehicule=?";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
