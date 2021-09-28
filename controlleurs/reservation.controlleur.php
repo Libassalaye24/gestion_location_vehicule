@@ -5,8 +5,13 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     if (isset($_GET['views'])) {
         if ($_GET['views']=='mes.reservations') {
             show_mes_reservations();
+        }elseif ($_GET['views']=='annuler.reservation') {
+            $id_reservation=(int)$_GET['id_reservation'];
+            show_confirm_annuler_reservation();
         }elseif ($_GET['views']=='liste.reservations') {
             show_liste_reservations();
+        }elseif ($_GET['views']=='mesreservations.encours') {
+            show_mesreservations_encours();
         }elseif ($_GET['views']=='retour.location') {
             require(ROUTE_DIR.'views/reservation/retour.location.html.php');
         }elseif ($_GET['views']=='ajout.reservation') {
@@ -28,16 +33,47 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 }elseif ($_SERVER['REQUEST_METHOD']=='POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action']=='add.reservation') {
-            add_user_reserve($_POST);
+            if (isset($_POST['inscription'])) {
+                  add_user_reserve($_POST);
+            }else {
+                add_reserve_client($_POST);
+            }
+          
         }elseif ($_POST['action']=='filtre_reservation') {
               show_liste_reservations($_POST);
         }elseif ($_POST['action']=='traiter.reservation') {
            
             show_liste_reservations();
+        }elseif ($_POST['action']=='annuler.reservation') {
+            show_mes_reservations();
+           //show_confirm_annuler_reservation((int)$_POST['id_reservation']);
+           
         }
     }
 }
+function show_mesreservations_encours(){
+    $reservations=find_all_reservation_cours();
+    $nbrPage=2;
+    $total_records=count($reservations);
+    $total_page=total_page($total_records,$nbrPage);
+    $get=$_GET['page'];
+    if (isset($get)) {
+      $page=$get;
+    }else {
+      $page=1;
+    }
+    $suivant=$precedent=0;
+    $suivant=$page+1;
+    $precedent=$page-1;
+    $start_from=start_from($page,$nbrPage);
+    $reservations=find_all_reservation_cours('en cours',$start_from,$nbrPage);
+    require(ROUTE_DIR.'views/reservation/mesreservations.encours.html.php');
+}
+function show_confirm_annuler_reservation(){
+    
+    require(ROUTE_DIR.'views/reservation/confirm.annuler.reservation.html.php');
 
+   }
 
 function show_traiter_reservation($id_reservation){
     $reservation=find_reservation_by_id_reservation($id_reservation);
@@ -136,8 +172,57 @@ function add_user_reserve(array $post):void{
         header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$post['id_vehicule']);
     }
   }
+  function add_reserve_client(array $post):void{
+    $arrayError=[];
+    extract($post);
+   
+    valide_user_name($date_debut,'date_debut',$arrayError);
+    valide_user_name($date_fin,'date_fin',$arrayError);
+    //$date_debut=date_create($date_debut);
+   // $date_fin=date_create($date_fin);
+   // compare_date($date_fin,$date_debut,'date_debut',$arrayError);
+    if (form_valid($arrayError)) {
+        
+          $date_debut=date_format(date_create($date_debut),'Y-m-d H:i:s');
+          $date_fin=date_format(date_create($date_fin),'Y-m-d H:i:s');
+            $reservations=[
+                $date_debut,
+                $date_fin,
+                $_SESSION['userConnect']['id_user'],
+                $_SESSION['id_modele'],
+                $_SESSION['id_marque'],
+                $_SESSION['id_categorie'],
+                1,
+                $_SESSION['id_type_vehicule']
+            ];
+            ajout_reservation_vehicule($reservations);
+            header('location:'.WEB_ROUTE);
+            exit;
+    }else {
+        $_SESSION['arrayError']=$arrayError;
+        header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$post['id_vehicule']);
+    }
+  }
     function show_mes_reservations(){
-         require(ROUTE_DIR.'views/reservation/mes.reservations.html.php');
+        if (isset($_POST['oui'])) {
+            update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
+        }
+        $reservations = lister_reservation_by_client($_SESSION['userConnect']['id_user']);
+        $nbrPage=3;
+        $total_records=count($reservations);
+        $total_page=total_page($total_records,$nbrPage);
+        $get=$_GET['page'];
+        if (isset($get)) {
+          $page=$get;
+        }else {
+          $page=1;
+        }
+        $suivant=$precedent=0;
+        $suivant=$page+1;
+        $precedent=$page-1;
+        $start_from=start_from($page,$nbrPage);
+        $reservations = lister_reservation_by_client($_SESSION['userConnect']['id_user'],$start_from,$nbrPage);
+        require(ROUTE_DIR.'views/reservation/mes.reservations.html.php');
     }
    
    function show_liste_reservations($post=null){
@@ -150,6 +235,8 @@ function add_user_reserve(array $post):void{
  
            }
           // die('test');
+       }elseif (isset($_POST['annuler'])) {
+          update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
        }
        $etats=find_all_etat();
         if (is_null($post)) {

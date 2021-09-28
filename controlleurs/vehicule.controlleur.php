@@ -107,6 +107,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         liste_vehicule();
       }elseif ($_POST['action']=='archive.categorie') {
         show_liste_categorie();
+      }elseif ($_POST['action']=='filtrer') {
+        catalogue();
+      }elseif ($_POST['action']=='archiver.marque') {
+        
+        show_liste_marque($_POST);
       }
     }
 }
@@ -118,10 +123,15 @@ function show_details_vehicule($id_vehicule){
 }
 
 function catalogue(){
-    $categorie=find_all_categorie();
+    $categories=find_all_categorie();
     $marques=find_all_marque();
     $modeles=find_all_modele();
     $vehicule_disponible= find_bien_disponible_pa();
+   /*  if (isset($_POST['ok'])) {
+     
+      $vehicule_disponible=find_all_vehicule_by_marque_modele_categorie($_POST['categorie'],$_POST['marque'],$_POST['modele']);
+    } */
+   
     $nbrPage=3;
     $total_records=count($vehicule_disponible);
     $total_page=total_page($total_records,$nbrPage);
@@ -260,7 +270,17 @@ function show_liste_categorie(){
   require_once(ROUTE_DIR.'views/gestionnaire/liste.categorie.html.php'); 
 }
 
-function show_liste_marque(){
+function show_liste_marque($post=null){ 
+  
+   
+    if (isset($post['archiver'])) {
+     // die('ssd');
+      archive_marque('archiver',$post['id_marque']);
+    }
+    if(isset($post['desarchiver'])) {
+      archive_marque('normal',$post['id_marque']);
+    }
+  
   $marques=find_all_marque();
   $nbrPage=2;
   $total_records=count($marques);
@@ -587,7 +607,7 @@ function show_liste_conducteur_ar($id_conducteur){
           $file_name=$files["avatar"]["name"][$key];
           $file_name_tmp=$files["avatar"]["tmp_name"][$key];
          $ext=pathinfo($file_name,PATHINFO_EXTENSION);
-          if (file_exists(UPLOAD_DIR .$file_name)) {
+          if (!file_exists(UPLOAD_DIR .$file_name)) {
             move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
           }else {
             $file_name=str_replace('.','-',basename($file_name,$ext));
