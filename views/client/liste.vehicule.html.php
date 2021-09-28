@@ -14,14 +14,14 @@
 <div class="row  ">
 <div class="col-md-offset-3">
                 <form action="" class="form-inline" method="post">
-                         <input type="hidden" name="controlleurs" value="bien">
-                        <input type="hidden" name="action" value="test">
+                         <input type="hidden" name="controlleurs" value="vehicule">
+                        <input type="hidden" name="action" value="filtrer">
                     <div class="form-group ml-3">
                     <div class="form-group">
                       <label for="" class="p-3 text-white">Categorie</label>
                       <select class="form-control bg-dark" name="categorie" id="">
-                        <?php foreach($categorie as $ctgr): ?>
-                        <option  value="<?=$ctgr['id_categorie']?>"><?=$ctgr['nom_categorie']?></option>
+                        <?php foreach($categories as $ctgr): ?>
+                        <option  value="<?=$ctgr['nom_categorie']?>"><?=$ctgr['nom_categorie']?></option>
                         <?php endforeach ?>
                       </select>
                     </div>
@@ -29,9 +29,9 @@
                     <div class="form-group ml-3">
                     <div class="form-group">
                       <label for="" class="p-3 text-white">Marque</label>
-                      <select class="form-control bg-dark" name="etat_bien" id="">
+                      <select class="form-control bg-dark" name="marque" id="">
                       <?php foreach($marques as $ctgr): ?>
-                        <option  value="<?=$ctgr['id_marque']?>"><?=$ctgr['nom_marque']?></option>
+                        <option  value="<?=$ctgr['nom_marque']?>"><?=$ctgr['nom_marque']?></option>
                         <?php endforeach ?>
                       </select>
                     </div>
@@ -39,9 +39,9 @@
                     <div class="form-group ml-3">
                     <div class="form-group">
                       <label for="" class="p-3 text-white">Modele</label>
-                      <select class="form-control bg-dark" name="etat_bien" id="">
+                      <select class="form-control bg-dark" name="modele" id="">
                       <?php foreach($modeles as $ctgr): ?>
-                        <option  value="<?=$ctgr['id_modele']?>"><?=$ctgr['nom_modele']?></option>
+                        <option  value="<?=$ctgr['nom_modele']?>"><?=$ctgr['nom_modele']?></option>
                         <?php endforeach ?>
                       </select>
                     </div>
@@ -108,20 +108,11 @@
      
 <style>
     .jjjj{
-        margin-top: 20%;
+        margin-top: 16%;
    
     
     }
-    .section-title::after {
-    content: ' ';
-    position: absolute;
-    display: block;
-    width: 40px;
-    border: 1px solid #d2b100;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-}
+   
     .card {
         background: #000;
     }

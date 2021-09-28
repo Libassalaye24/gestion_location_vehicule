@@ -117,16 +117,7 @@
    
     
     }
-    .section-title::after {
-    content: ' ';
-    position: absolute;
-    display: block;
-    width: 40px;
-    border: 1px solid #d2b100;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-}
+   
 body{
   overflow-x: hidden
   ;

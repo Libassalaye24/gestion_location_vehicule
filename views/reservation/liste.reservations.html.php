@@ -28,12 +28,12 @@
  <div class="row mt-5">
  
 <table class="table  shadow mb-3 border ">
-  <thead class="thead bg-warning">
+  <thead class="thead ">
     <tr>
-      <th  scope="col">Nom & prenom</th>
-      <th scope="col">etat</th>
-      <th scope="col">Date</th>
-      <th scope="col">Traiter Reservation</th>
+      <th class="text-warning"  scope="col">Nom & prenom</th>
+      <th class="text-warning" scope="col">etat</th>
+      <th class="text-warning" scope="col">Date</th>
+      <th class="text-warning" scope="col">Traiter Reservation</th>
     </tr>
   </thead>
   <tbody>

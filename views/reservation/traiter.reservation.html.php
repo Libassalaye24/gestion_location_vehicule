@@ -27,12 +27,12 @@ die; */
                                          $date1=date_create($reservation[0]['date_fin_location']);
                                          $date2=date_create($reservation[0]['date_debut_location']);
                                          $jr= difference_date($date1,$date2);
-                                         $prix = intval($jr)*intval($reservation[0]['prix_location_jour']);
+                                         $prix = intval($jr)*intval($reservation[0]['prix_location_jour']) + intval($reservation[0]['caution']);
                                          ?>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <p>Caution : <?=$reservation[0]['caution']?></p>
+                                            <p>Caution : <?=$reservation[0]['caution'].' '.'FCFA'?></p>
                                         </div>
                                         <div class="col-md-4">
                                             <p>Nbrs jours : <?= $jr ?></p>
@@ -97,8 +97,7 @@ die; */
           </div>
                 <div class="row">
                   <!--   <div class="col-md-6"> -->
-                        <a name="" id="" class="btn mt-2 btn-warning ml-3 mr-auto" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>" role="button">Annuler</a>
-                 <!--    </div> -->
+                    <button type="submit" name="annuler" class="btn h-25  btn-warning mr-auto ml-3  ">Annuler</button>                 <!--    </div> -->
                     <button type="submit" name="traiter" class="btn h-25  btn-warning ml-auto  ">Valider</button>
                 </div>
     </form>

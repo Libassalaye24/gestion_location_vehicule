@@ -139,9 +139,14 @@
         } */
         @media only screen and (max-width: 992px) {
           .navbar{
-           background: #000;
-
+            background-image: url("https://mapauto.sn/img/desktop_navbar_bg.jpg");
         } 
+      } 
+        @media only screen and (max-width: 768px) {
+          .xs{
+            margin-top: 23%;
+            margin-left: -8%;
+          }
        
         }
         @media only screen and (min-width: 992px) {

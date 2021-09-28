@@ -21,17 +21,28 @@
             <thead>
                 <tr>
                 <th scope="col" class="text-white">Marques</th>
+                <th scope="col" class="text-white">Etat</th>
                 <th scope="col" class="text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
             <?php foreach($marques as $marque): ?>
                 <tr>
+                    <form action="" method="post">
+                    <input type="hidden" name="contolleurs" value="vehicule">
+                    <input type="hidden" name="action" value="archiver.marque">
+                    <input type="hidden" name="id_marque" value="<?=$marque['id_marque']?>">
                 <td class="text-white"><?=$marque['nom_marque']?></td>
+                <td class="text-white"><?=$marque['etat']?></td>
                 <td class="text-white ">
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.marque&id_marque='.$marque['id_marque']?>" class="btn text-secodary border-secondary active" role="button"><i class="fas fa-file-archive archive"></i>Archiver</a>
+                    <?php if($marque['etat']=='normal'): ?>
+                        <button type="submit" name="archiver" class="btn text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Archiver</button>
+                    <?php else: ?>
+                        <button type="submit" name="desarchiver" class="btn text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Désarchiver</button>
+                    <?php endif ?>
                     <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.marque&id_marque='.$marque['id_marque']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
+                </form>
                 </tr>
             <?php endforeach ?>
             </tbody>

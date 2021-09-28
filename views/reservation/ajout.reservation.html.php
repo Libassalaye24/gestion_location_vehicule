@@ -3,8 +3,7 @@ if (isset($_SESSION['arrayError'])) {
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
 }
-/* var_dump($vehicule);
-die; */
+
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post">
@@ -229,6 +228,13 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                          <div class="col-md-6">
                            <a name="" id="" class=" text-primary " href="#" >Se connecter en tant que client !!</a>
                          </div>
+                     </div>
+                     <?php else:?>
+                     <div class="row mt-2">
+                         <div class="col-md-6">
+                            <button type="submit" name="reserver" class="btn btn-warning">Reserver</button>
+                         </div>
+                       
                      </div>
                      <?php endif ?>
                 </div>
