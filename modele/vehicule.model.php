@@ -127,7 +127,7 @@
             $sql.= "limit $start,$parPage";
         }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array($start,$parPage));
+        $sth->execute();
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
@@ -436,6 +436,17 @@
          $sth->execute(array('archiver',$id_categorie));
        /*   var_dump($id_conducteur);
          die; */
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
+      function archive_marque(string $etat,int $id_marque):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `marque` 
+                SET `etat` = ?
+                  WHERE `id_marque` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute(array($etat,$id_marque));
          $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;     
