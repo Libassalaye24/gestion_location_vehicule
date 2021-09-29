@@ -27,7 +27,7 @@ die; */
                                          $date1=date_create($reservation[0]['date_fin_location']);
                                          $date2=date_create($reservation[0]['date_debut_location']);
                                          $jr= difference_date($date1,$date2);
-                                         $prix = intval($jr)*intval($reservation[0]['prix_location_jour']) + intval($reservation[0]['caution']);
+                                         $prix = intval($jr)*intval($reservation[0]['prix_location_jour']);
                                          ?>
                                     </div>
                                     <div class="row">
@@ -50,6 +50,7 @@ die; */
     <input type="hidden" name="controlleurs" value="reservation">
     <input type="hidden" name="action" value="traiter.reservation">
     <input type="hidden" name="id_vehicule" value="<?=$vehicule[0]['id_vehicule']?>">
+    <input type="hidden" name="caution" value="<?=$reservation[0]['caution']?>">
     <div class="row mt-2">
         <div class="col-md-6">
             <h5 class="text-warning">Vehicule Disponible</h5>

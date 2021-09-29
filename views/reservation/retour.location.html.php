@@ -8,11 +8,59 @@
  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
     <div class="row jjj">
-        <a class="ml-2" style="color: #d2b100;" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a>
+        <a class="ml-3" style="color: #d2b100;text-decoration:none;" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Retourner</a>
          <div class="col-md-12">
             <h3 class="section-title font-weight-light text-white mb-4">
                 <span class="headline"> Gerer retour vehicule </span>
             </h3 >
+         </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+             <div class="card w-100 " style="background-color: #212529;">
+                        <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="text-white">Date debut location : <?=date_format(date_create($reservations[0]['date_debut_location']),'Y-m-d')?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-white">Date fin location : <?= date_format(date_create($reservations[0]['date_fin_location']),'Y-m-d') ?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                             <p class="text-white">Type Vehicule : <?=$reservations[0]['nom_type_vehicule']?></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                             <p class="text-white">Immatriculation Vehicule : <?=$reservations[0]['immatriculation_vehicule']?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                              <p class="text-white">Vehicule : <?=$reservations[0]['nom_marque'].' '.$reservations[0]['nom_modele']?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-white">Prix location jour : <?=$reservations[0]['prix_location_jour'].' '.'FCFA'?></p>
+                                        </div>
+                                        <?php
+                                         $date1=date_create($reservations[0]['date_fin_location']);
+                                         $date2=date_create($reservations[0]['date_debut_location']);
+                                         $jr= difference_date($date1,$date2);
+                                         $prix = intval($jr)*intval($reservations[0]['prix_location_jour']);
+                                         ?>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="text-white">Caution : <?=$reservations[0]['caution'].' '.'FCFA'?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-white">Nbrs jours : <?= $jr ?></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-white">Prix total : <?= $prix.' '.'FCFA' ?></p>
+                                        </div>
+                                       
+                                    </div>
+                         </div>
+              </div>
          </div>
     </div>
     
@@ -20,29 +68,31 @@
     <form action="" method="post">
                 <input type="hidden" name="controlleurs" value="reservation">
                 <input type="hidden" name="action" value="gerer.retour">
+                <input type="hidden" name="id" value="<?=$id_reservation?>">
+                <input type="hidden" name="id_vehicule" value="<?=$reservations[0]['id_vehicule']?>">
                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="" class="text-warning">Nbrs jours de location</label>
-                                <input type="text" name="nbrsJour" id="" class="form-control" placeholder="" value="<?=isset($categorie[0]['prix_location_jour']) ? $categorie[0]['prix_location_jour'] : "" ?>" aria-describedby="helpId">
+                                <label for="" class="text-warning">Date de retour reel</label>
+                                <input type="date" name="date_retour_reel" id="" class="form-control "  style="background-color: #212529;color:white" placeholder=""  aria-describedby="helpId">
                                 <small id="helpId" class="text-danger">
-                                <?=isset($arrayError['nbrsJour']) ? $arrayError['nbrsJour'] : '';?>
+                                <?=isset($arrayError['date_retour']) ? $arrayError['date_retour'] : '';?>
                                 </small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="" class="text-warning">Kilometre Parcourus</label>
-                                <input type="text" name="kilometre" id="" value="<?=isset($categorie[0]['prix_location_km']) ? $categorie[0]['prix_location_km'] : "" ?>" class="form-control" placeholder="" aria-describedby="helpId">
+                                <input type="text" name="kilometre" id="" value="" class="form-control"  style="background-color: #212529;color:white" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-danger">
                                 <?=isset($arrayError['kilometre']) ? $arrayError['kilometre'] : '';?>
                                 </small>
                             </div>
                         </div>
                     </div>
-            <div class="row  ml-1">
-                <button type="submit" class="btn btn-warning" name="add.retour"><?=isset($categorie[0]['id_categorie']) ? 'Modifier' : "Ajouter" ?></button>
+            <div class="row  ">
+                <button type="submit" class="btn btn-warning ml-3" name="add.retour">Valider</button>
             </div>
         </form>
  
