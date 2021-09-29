@@ -10,5 +10,6 @@
             define("DB_CHAINE_CONNECTION","mysql:dbname=gestion_location_vehicule;host=".HOST_DB);
             ///////////////////////////////
             define("UPLOAD_DIR" , ROUTE_DIR. 'public/img/uploads/vehicule/');
+            define("NBR_PAGE",2);
             
 ?>
