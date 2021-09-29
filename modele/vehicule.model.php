@@ -451,4 +451,15 @@
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;     
       }
+      function update_etat_vehicule_nom_etat(int $id_etat,int $id_vehicule):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `vehicule` 
+                SET `id_etat` = ?
+                  WHERE `id_vehicule` = ?";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute(array($id_etat,$id_vehicule));
+         $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;     
+      }
 ?>
