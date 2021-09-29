@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_GET['views']=='mesreservations.encours') {
             show_mesreservations_encours();
         }elseif ($_GET['views']=='retour.location') {
+            $reservations = find_reservation_by_id_reservation($_GET['id_reservation']);
+            $id_reservation=$_GET['id_reservation'];
             require(ROUTE_DIR.'views/reservation/retour.location.html.php');
         }elseif ($_GET['views']=='ajout.reservation') {
             show_ajout_reservation($_GET['id_vehicule']);
@@ -24,6 +26,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
            }else {
             header("location:".WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule');
            }
+        }elseif ($_GET['views']=='facture') {
+            $paiement=find_paiement((int)$_GET['id_reservation']);
+            $reservations = find_reservation_by_id_reservation((int)$_GET['id_reservation']);
+            require(ROUTE_DIR.'views/reservation/facture.html.php');
+          
         }
         
      }else{
@@ -38,16 +45,16 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             }else {
                 add_reserve_client($_POST);
             }
-          
         }elseif ($_POST['action']=='filtre_reservation') {
               show_liste_reservations($_POST);
         }elseif ($_POST['action']=='traiter.reservation') {
-           
             show_liste_reservations();
         }elseif ($_POST['action']=='annuler.reservation') {
             show_mes_reservations();
            //show_confirm_annuler_reservation((int)$_POST['id_reservation']);
-           
+        }elseif ($_POST['action']=='gerer.retour') {
+            //enregistrer les donnees du retour;
+            gerer_retour_vehicule($_POST);
         }
     }
 }
@@ -69,20 +76,43 @@ function show_mesreservations_encours(){
     $reservations=find_all_reservation_cours('en cours',$start_from,$nbrPage);
     require(ROUTE_DIR.'views/reservation/mesreservations.encours.html.php');
 }
+function gerer_retour_vehicule(array $data){
+    $arrayError=[];
+    extract($data);
+    validefield1($kilometre,'kilometre',$arrayError);
+    valide_nom_categorie($date_retour_reel,'date_retour',$arrayError);
+    if (form_valid($arrayError)) {
+        $date_retour_reel = date_format(date_create($date_retour_reel),'Y-m-d H:i:s');
+        update_reservation_date_retour_reel_kilometre((int)$kilometre,$date_retour_reel,(int)$data['id']);
+        //remettre l'etat du vehicule reserver a disponible 
+        update_etat_vehicule_nom_etat(6,(int)$data['id_vehicule']);
+        //  changer aussi l'etat de la reservation et le mettre a terminer
+        update_reservation__annuler_by_id(5,(int)$data['id']);
+        header("location:".'?controlleurs=reservation&views=facture&id_reservation='.$data['id']);
+        exit;
+    }else {
+        $_SESSION['arrayError'] = $arrayError;
+        header("location:".'?controlleurs=reservation&views=retour.location&id_reservation='.$data['id']);
+        exit;
+    }
+}
 function show_confirm_annuler_reservation(){
-    
+    $reserva = lister_reservation_by_client($_SESSION['userConnect']['id_user']);
     require(ROUTE_DIR.'views/reservation/confirm.annuler.reservation.html.php');
 
    }
 
 function show_traiter_reservation($id_reservation){
     $reservation=find_reservation_by_id_reservation($id_reservation);
+   // var_dump($reservation); die;
     $conducteurs=find_all_conducteur_by_permis();
     $vehicule=find_all_vehicule_by_marque_modele_categorie($reservation[0]['nom_categorie'],$reservation[0]['nom_marque'],$reservation[0]['nom_modele']);
     require(ROUTE_DIR.'views/reservation/traiter.reservation.html.php');
 }
 function show_reservation_client($id_client){
-    $reserve_client=lister_reservation_by_client($id_client);
+    $reserve_client=lister_reservation_client($id_client);
+   /*  var_dump($reserve_client);
+    die; */
     require(ROUTE_DIR.'views/reservation/reservation.client.html.php');
 }
 function show_ajout_reservation($id_vehicule){
@@ -205,7 +235,9 @@ function add_user_reserve(array $post):void{
   }
     function show_mes_reservations(){
         if (isset($_POST['oui'])) {
+         
             update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
+            update_etat_vehicule_nom_etat(6,$_POST['id_vehicule']);
         }
         $reservations = lister_reservation_by_client($_SESSION['userConnect']['id_user']);
         $nbrPage=3;
@@ -229,19 +261,21 @@ function add_user_reserve(array $post):void{
        if (isset($_POST['traiter'])) {
            if (isset($_POST['conducteur'])) {
                update_reservation_id_vehicule_id_conducteur_and_etat((int)$_POST['vehicule'],(int)$_POST['conducteur'],2,(int)$_GET['id_reservation']);
-
            }else {
             update_reservation_id_vehicule_and_etat((int)$_POST['vehicule'],2,(int)$_GET['id_reservation']);
- 
            }
-          // die('test');
+          //changer l'etat du vehicule a indisponible aprs avoir attribuer la vehicule
+          update_etat_vehicule_nom_etat(7,(int)$_POST['vehicule']);
+          //inserer la caution dans la table paiement apres valider la reservation
+          insert_into_paiement_caution((int)$_POST['caution'],(int)$_GET['id_reservation'],1);
        }elseif (isset($_POST['annuler'])) {
+           //annuler la reservation
           update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
        }
        $etats=find_all_etat();
         if (is_null($post)) {
              $encours_reservation=find_all_reservation_by_date_or_etat_paginate();
-             $nbrPage=2;
+             $nbrPage=5;
              $total_records=count($encours_reservation);
              $total_page=total_page($total_records,$nbrPage);
              $get=$_GET['page'];
@@ -262,7 +296,7 @@ function add_user_reserve(array $post):void{
            die; */
            if ($date==null) {
             $encours_reservation=find_all_reservation_by_date_or_etat_paginate($etat_reservation);
-            $nbrPage=3;
+            $nbrPage=5;
             $total_records=count($encours_reservation);
             $total_page=total_page($total_records,$nbrPage);
             $get=$_GET['page'];
