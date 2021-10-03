@@ -13,18 +13,18 @@ function insert_conducteur(array $conducteurs):int{
 
 function find_all_conducteur():array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur where etat=? ";
+  $sql="select * from conducteur ";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->execute(array('normal'));
+  $sth->execute();
   $conducteurs = $sth->fetchAll();
   fermer_connection_db($pdo);//fermeture
   return $conducteurs;
 }
 function find_all_conducteur_pagi($start,$nbrPage):array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur where etat=? limit $start,$nbrPage ";
+  $sql="select * from conducteur limit $start,$nbrPage ";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->execute(array('normal'));
+  $sth->execute();
   $conducteurs = $sth->fetchAll();
   fermer_connection_db($pdo);//fermeture
   return $conducteurs;
@@ -55,11 +55,8 @@ function archive_conducteur($etat,int $id_conducteur):int{
             WHERE `id_conducteur` = ?";
    $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
    $sth->execute(array($etat,$id_conducteur));
- /*   var_dump($id_conducteur);
-   die; */
-   $dernier_id = $pdo->lastInsertId();
    fermer_connection_db($pdo);//fermeture
-   return $dernier_id ;     
+   return $sth->rowCount() ;     
 }
 function find_conducteur_by_id( $id_conducteur):array{
   $pdo= ouvrir_connection_db();
@@ -83,8 +80,17 @@ function find_conducteur_by_id( $id_conducteur):array{
               WHERE `id_conducteur` = ?";
      $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
      $sth->execute($conducteurs);
-     $dernier_id = $pdo->lastInsertId();
      fermer_connection_db($pdo);//fermeture
-     return $dernier_id ;     
+     return $sth->rowCount() ;     
+  }
+  function update_conducteur_etat($etat,int $id_conducteur):int{
+    $pdo=ouvrir_connection_db();
+    $sql="UPDATE `conducteur` 
+            SET `etat` = ?
+              WHERE `id_conducteur` = ?";
+     $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+     $sth->execute(array($etat,$id_conducteur));
+     fermer_connection_db($pdo);//fermeture
+     return $sth->rowCount() ;     
   }
 ?>

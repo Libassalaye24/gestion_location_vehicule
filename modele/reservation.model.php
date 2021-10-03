@@ -1,6 +1,6 @@
 <?php 
 
-            function find_all_reservation_cours($etat_reservation='en cours',$start=null,$parPage=null):array{
+            function find_all_reservation_cours($id_user,$etat_reservation='en cours',$start=null,$parPage=null):array{
                 $pdo=ouvrir_connection_db();
                 $sql=" SELECT * FROM reservation re,user u,etat e,modele mo,marque ma,categorie ca,type_vehicule tv
                        WHERE re.id_user=u.id_user
@@ -9,13 +9,14 @@
                        and re.id_categorie=ca.id_categorie
                        and re.id_etat=e.id_etat
                        and re.id_type_vehicule=tv.id_type_vehicule
+                       and re.id_user=?
                         and e.nom_etat like ? ";
                 if (!is_null($start) && !is_null($parPage)) {
                     $sql.=" limit $start,$parPage";
                 }
                 $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
              
-                $sth->execute(array($etat_reservation));
+                $sth->execute(array($id_user,$etat_reservation));
                 $reservation_bien = $sth->fetchAll();
                 fermer_connection_db($pdo);
                 return $reservation_bien;
@@ -83,16 +84,59 @@
                 fermer_connection_db($pdo);
                 return$dernier_id;
             }
+            function lister_reservation_by_client_filter(int $id_client,$start=null,$parPage=null,$etat):array{
+                $pdo=ouvrir_connection_db();
+                $sql=" SELECT * FROM reservation re,modele mo,marque ma,categorie ca,user u,type_vehicule tv,etat e
+                         WHERE re.id_modele=mo.id_modele
+                            and re.id_type_vehicule=tv.id_type_vehicule
+                            and re.id_marque=ma.id_marque
+                            and re.id_user=u.id_user
+                            and re.id_etat=e.id_etat
+                            and re.id_categorie=ca.id_categorie
+                            and re.id_vehicule!= 0
+                            and re.id_user=?
+                            and e.nom_etat=? ";
+                if (!is_null($start) && !is_null($parPage)) {
+                    $sql.="limit $start,$parPage";
+                }
+                $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array($id_client,$etat));
+                $reservation_bien = $sth->fetchAll();
+                fermer_connection_db($pdo);
+                return  $reservation_bien;
+            }
+
+            function lister_reservation_by_client_filter_date(int $id_client,$start=null,$parPage=null,$date,$etat):array{
+                $pdo=ouvrir_connection_db();
+                $sql=" SELECT * FROM reservation re,modele mo,marque ma,categorie ca,user u,type_vehicule tv,etat e
+                         WHERE re.id_modele=mo.id_modele
+                            and re.id_type_vehicule=tv.id_type_vehicule
+                            and re.id_marque=ma.id_marque
+                            and re.id_user=u.id_user
+                            and re.id_etat=e.id_etat
+                            and re.id_categorie=ca.id_categorie
+                            and re.id_vehicule!= 0
+                            and re.id_user=?
+                            and re.date_debut_location=? 
+                            and e.nom_etat=? ";
+                if (!is_null($start) && !is_null($parPage)) {
+                    $sql.=" limit $start,$parPage";
+                }
+                $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array($id_client,$date,$etat));
+                $reservation_bien = $sth->fetchAll();
+                fermer_connection_db($pdo);
+                return  $reservation_bien;
+            }
             function lister_reservation_by_client(int $id_client,$start=null,$parPage=null):array{
                 $pdo=ouvrir_connection_db();
-                $sql=" SELECT distinct re.*,mo.*,ma.*,ca.*,u.*,tv.*,i.id_vehicule,e.* FROM reservation re,modele mo,marque ma,categorie ca,user u,type_vehicule tv,image i,etat e
+                $sql=" SELECT * FROM reservation re,modele mo,marque ma,categorie ca,user u,type_vehicule tv,etat e
                        WHERE re.id_modele=mo.id_modele
                        and re.id_type_vehicule=tv.id_type_vehicule
                        and re.id_marque=ma.id_marque
                        and re.id_user=u.id_user
                        and re.id_etat=e.id_etat
                        and re.id_categorie=ca.id_categorie
-                       and re.id_vehicule=i.id_vehicule
                        and re.id_vehicule!= 0
                        and re.id_user=?
                        order by re.date_debut_location desc";
@@ -107,17 +151,20 @@
             }
             function lister_reservation_client(int $id_client,$start=null,$parPage=null):array{
                 $pdo=ouvrir_connection_db();
-                $sql="  SELECT * FROM reservation re,user u,type_vehicule tv
-                            WHERE re.id_type_vehicule=tv.id_type_vehicule
-                                 and re.id_user=u.id_user
-                                 and re.id_user=?
-                                 order by re.date_debut_location desc";
+                $sql="  SELECT * FROM reservation re,marque ma,modele mo,categorie ca,type_vehicule tv,etat e
+                            WHERE re.id_marque=ma.id_marque
+                                and re.id_modele=mo.id_modele
+                                and re.id_etat=e.id_etat
+                                and re.id_categorie=ca.id_categorie  
+                                and re.id_type_vehicule=tv.id_type_vehicule
+                                and re.id_user=? ";
                 if (!is_null($start) && !is_null($parPage)) {
-                    $sql.=" limit $start,$parPage";
+                    $sql.="limit $start,$parPage";
                 }
                 $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 $sth->execute(array($id_client));
                 $reservation_bien = $sth->fetchAll();
+               // var_dump( $reservation_bien); die;
                 fermer_connection_db($pdo);
                 return  $reservation_bien;
             }
