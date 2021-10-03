@@ -4,14 +4,14 @@
     unset($_SESSION['arrayError']);
   }
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
-<div class="container">
+<div class="container jjj">
           <form action="" method="post">
               <input type="hidden" name="controlleurs" value="security">
               <input type="hidden" name="action" value="inscription">
-            <div class="card text-left group shadow mb-4">
+            <div class="card text-left group shadow-white mb-4" style="background:#191919">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
-                    <div class="row jjjj">
+                    <div class="row ">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
                                 <span class="headline">Saisir vos coordonees</span>
@@ -176,7 +176,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 
     }
     .jjj{
-        margin-top: -6%;
+        margin-top: -5%;
     }
     .section-title::after {
     content: ' ';

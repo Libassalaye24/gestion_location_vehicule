@@ -17,7 +17,7 @@
   
 <nav class="navbar navbar-expand-lg navbar-dark ">
       <!-- <a class="navbar-brand" href="#">E-221</a> -->
-      <a href=""><img src="<?=WEB_ROUTE.'img/logo1.png'?>" alt="" height="105" class="ml-5"></a>
+      <a href="" class="logo"><img src="<?=WEB_ROUTE.'img/logo1.png'?>" alt="" height="105" class="ml-5"></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -89,13 +89,16 @@
           </ul>
           <ul class="navbar-nav mr-o ">
             <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.archives'?>">Archives</a>
+              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules'?>">Archives Vehicules</a>
             </li>
           </ul>
           <?php endif ?>
           <?php if(est_responsable()): ?>
             <li class="nav-item">
               <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>">Liste Reservations</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link ml-2" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=tableau.bord'?>">Tableau de bord</a>
             </li>
           <?php endif ?>
           
@@ -170,6 +173,10 @@
         .navbar a{
             color: #d2b100 !important;
         }
+       /*  .navbar a:hover:not(.logo){
+            color: #000 !important;
+            background: #d2b100;
+        } */
         body{
             background: #000;
         }

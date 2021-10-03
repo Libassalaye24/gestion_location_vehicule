@@ -1,14 +1,16 @@
 <?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 
 <div class="container">
-<div class="row jjj">
-    <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=reservation.client&id_client=13'?>"><i class="fa fa-arrow-circle-left  " style="color: #d2b100;" aria-hidden="true"></i></a>
-                        <div class="col-md-12 mr-2">
-                            <h3 class="section-title font-weight-light text-white mb-4 mr-1">
-                                <span class="headline">Reservations par client</span>
-                            </h3 >
-                        </div>
-                    </div>
+        <div class="row jjj">
+            <h3>
+                <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>"><i class="fa fa-arrow-circle-left  " style="color: #d2b100;" aria-hidden="true"></i></a>
+            </h3>
+            <div class="col-md-12 mr-2">
+                <h3 class="section-title font-weight-light text-white mb-4 mr-1">
+                     <span class="headline ">Reservations par client</span>
+                </h3 >
+             </div>
+        </div>
     <div class="row mt-2">
         <table class="table table border ">
             <thead>

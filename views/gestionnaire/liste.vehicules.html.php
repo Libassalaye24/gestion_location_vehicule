@@ -4,11 +4,14 @@
 <div class="container">
    <div class="row jjjj">
      
-     <div class="col">
+     <div class="col-md-6">
        <h5 class="section-title font-weight-light text-white mb-4">
          <span class="headline">Liste Vehicules</span>
        </h5 >
      </div>
+     <div class="col-md-4">
+              <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules'?>" style="color: #fff;text-decoration:none;" >Vehicules archives <i class="fa fa-arrow-right ml-2" style="color: #d2b100;" aria-hidden="true"></i></a>
+        </div>
      
    </div>
   
@@ -75,7 +78,7 @@
                 <td class="text-white"><?=$vehicule['nom_categorie']?></td>
                 <td class="text-white"><?=$vehicule['immatriculation_vehicule']?></td>
                 <td>
-                  <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.vehicules&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit edit"></i>Modifier</a>
+                  <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.vehicule&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit edit"></i>Modifier</a>
                   <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.vehicules&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-danger "><i class="fas fa-file-archive archive "></i>Archiver</a>
                 </td>
               </tr>

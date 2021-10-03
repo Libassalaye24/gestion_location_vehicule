@@ -70,6 +70,7 @@
                 <input type="hidden" name="action" value="gerer.retour">
                 <input type="hidden" name="id" value="<?=$id_reservation?>">
                 <input type="hidden" name="id_vehicule" value="<?=$reservations[0]['id_vehicule']?>">
+                <input type="hidden" name="id_conducteur" value="<?=$reservations[0]['id_conducteur']?>">
                    
                     <div class="row">
                         <div class="col-md-6">

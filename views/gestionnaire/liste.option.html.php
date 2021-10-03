@@ -16,22 +16,33 @@
 
     </div>
     <div class="row mt-5">
-         <table class="table table-bordered">
+         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
                 <th scope="col" class="text-white">Options</th>
+                <th scope="col" class="text-white">Etat</th>
                 <th scope="col" class="text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($options as $option): ?>
-                <tr>
-                <td class="text-white"><?=$option['nom_option_vehicule']?></td>
-                <td class="text-white">
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.option&id_option_vehicule='.$option['id_option_vehicule']?>" class=" btn text-secondary border-secondary active" role="button"><i class="fas fa-file-archive archive "></i>Archiver</a>
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.option&id_option_vehicule='.$option['id_option_vehicule']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit"></i>Modifier</a>
-                </td>
-                </tr>
+                    <form action="" method="post">
+                    <input type="hidden" name="contolleurs" value="vehicule">
+                    <input type="hidden" name="action" value="archiver.option">
+                    <input type="hidden" name="id_option_vehicule" value="<?=$option['id_option_vehicule']?>">
+                        <tr>
+                            <td class="text-white"><?=$option['nom_option_vehicule']?></td>
+                            <td class="text-white"><?=$option['etat']?></td>
+                            <td class="text-white">
+                                <?php if($option['etat']=='normal'): ?>
+                                    <button type="submit" class="btn text-secondary border-secondary active w" name="archiver"> <i class="fa fa-file-archive" aria-hidden="true"></i>Archiver</button>
+                                <?php else: ?> 
+                                    <button type="submit" class="btn text-secondary border-secondary active w" name="desarchiver"> <i class="fas fa-file-archive  "></i> Désarchiver</button>
+                                <?php endif ?>
+                                <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.option&id_option_vehicule='.$option['id_option_vehicule']?>" class="btn text-warning border-warning active w" role="button"><i class="fas fa-edit edit"></i>Modifier</a>
+                            </td>
+                        </tr>
+                    </form>
               <?php endforeach ?>
             </tbody>
             </table>

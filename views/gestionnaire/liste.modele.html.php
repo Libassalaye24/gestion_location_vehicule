@@ -18,26 +18,38 @@
       
     </div>
     <div class="row mt-5">
-         <table class="table table-bordered">
+         <table class="table table-bordered table-sm">
             <thead>
                 <tr>
                 <th scope="col" class="text-white">Modeles</th>
+                <th scope="col" class="text-white">Etat</th>
                 <th scope="col" class="text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
             <?php foreach($modeles as $modele): ?>
+                <form action="" method="post">
+                    <input type="hidden" name="contolleurs" value="vehicule">
+                    <input type="hidden" name="action" value="archiver.modele">
+                    <input type="hidden" name="id_modele" value="<?=$modele['id_modele']?>">
                 <tr>
                 <td class="text-white"><?=$modele['nom_modele']?></td>
+                <td class="text-white"><?=$modele['etat']?></td>
                 <td class="text-white ">
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.modele&id_modele='.$modele['id_modele']?>" class=" btn text-secondary border-secondary active" role="button"><i class="fas fa-file-archive archive "></i>Archiver</a>
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.modele&id_modele='.$modele['id_modele']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
+                <?php if($modele['etat']=='normal'): ?>
+                    <button type="submit" class="btn text-secondary border-secondary active w" name="archiver"> <i class="fa fa-file-archive" aria-hidden="true"></i>Archiver</button>
+                <?php else: ?> 
+                    <button type="submit" class="btn text-secondary border-secondary active w" name="desarchiver"> <i class="fas fa-file-archive  "></i> Désarchiver</button>
+                <?php endif ?>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.modele&id_modele='.$modele['id_modele']?>" class="btn w text-warning border-warning active " role="button"><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
                 </tr>
+                </form>
              <?php endforeach ?>  
             </tbody>
             </table>
     </div>
+  
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
             <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?> ">

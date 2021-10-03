@@ -14,27 +14,28 @@
     <div class="row  ">
          <div class="col-md-offset-3">
                   <form action="" class="form-inline" method="post">
-                       <input type="hidden" name="controlleurs" value="vehicule">
-                       <input type="hidden" name="action" value="filtrer">
+                       <input type="hidden" name="controlleurs" value="reservation">
+                       <input type="hidden" name="action" value="filtrer.mes.reserve">
                       <div class="form-group ml-3">
                         <div class="form-group">
                              <label for="" class="p-3 text-white">Date</label>
-                             <input type="date" name="" class="form-control bg-secondary" id="">
+                             <input type="date" name="date" class="form-control bg-secondary" id="">
                         </div>
                       </div>
                       <div class="form-group ml-3">
                         <div class="form-group">
                             <label for="" class="p-3 text-white">Etat</label>
-                            <select class="form-control bg-secondary" name="categorie" id="">
+                            <select class="form-control bg-secondary" name="etat" id="">
                               <option  value="valider">valider</option>
                               <option  value="annuler">annuler</option>
+                              <option  value="terminer">terminer</option>
                             </select>
                         </div>
                       </div>
                       
                       <div class="row">
                           <div class="col xs">
-                            <button type="submit" name="ok" class="btn btn-warning ml-4">Filtrer</button>
+                            <button type="submit" name="filtre" class="btn btn-warning ml-4">Filtrer</button>
                           </div>
                       </div>                    
                   </form>
@@ -47,7 +48,7 @@
                     $date1=date_create($reserve['date_fin_location']);
                     $date2=date_create($reserve['date_debut_location']);
                     $jr= difference_date($date1,$date2);
-                  $prix = intval($jr)*intval($reserve['prix_location_jour']) + intval($reserve['caution']);?>
+                  $prix = intval($jr)*intval($reserve['prix_location_jour']) ;?>
               <div class="col-sm-4  mb-4">
                 <div class="card " style="width: 22rem">
                   <a href="">
@@ -73,8 +74,8 @@
                         <span class="badge badge-danger">
                             <?= ($reserve['nom_etat']);  ?>
                           </span>
-                        <?php else: ?>
-                        <span class="badge badge-warning">
+                        <?php elseif($reserve['nom_etat']=='terminer' || $reserve['nom_etat']=='valider'): ?>
+                        <span class="badge badge-success ">
                             <?= ($reserve['nom_etat']);  ?>
                           </span>
                       <?php endif ?> 
@@ -86,7 +87,7 @@
                     <span class="float-left btn btn-sm text-center badge badge-warning">
                         <?='Reserver le: '.$reserve['date_debut_location'];  ?>
                     </span>
-                    <?php if($reserve['nom_etat']!='annuler'): ?>
+                    <?php if($reserve['nom_etat']=='valider'): ?>
                     <a href="<?= WEB_ROUTE.'?controlleurs=reservation&views=annuler.reservation&id_reservation='.$reserve['id_reservation']?>" class="btn btn-sm btn-outline-danger float-right">
                         Annuler
                     </a>
@@ -108,7 +109,7 @@
                       <?php for($i=1;$i<=$total_page;$i++): ?>
                             <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations&page='.$i ?>"><?=$i?></a></li>
                       <?php endfor ?>
-                      <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  " >
+                      <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'd-none' : ""?>  " >
                             <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations&page='.$suivant ?>">
                                 <span aria-hidden="true" class="tt">&raquo;</span>
                                 <span class="sr-only">Next</span>

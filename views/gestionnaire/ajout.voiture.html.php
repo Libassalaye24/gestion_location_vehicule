@@ -7,14 +7,14 @@
 <div class="container">
           <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="add.voiture">
+              <input type="hidden" name="action" value="<?= isset($voiture[0]['id_vehicule']) ? "edit.voiture" : "add.voiture" ?>">
+              <input type="hidden" name="id_vehicule" value="<?= isset($voiture[0]['id_vehicule']) ? $voiture[0]['id_vehicule'] : "" ?>">
             <div class="card text-left group shadow mb-4">
-                <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
                      <div class="row jjjj">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
-                                <span class="headline">Ajout Voiture</span>
+                                <span class="headline"><?= isset($voiture[0]['id_vehicule']) ? "Modifier voiture" : "Ajout Voiture" ?></span>
                             </h3 >
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                             <div class="form-group">
                                     <label for="" class="text-warning">kilometrage</label>
                                     <input type="text"
-                                        class="form-control" name="kmt" value="<?=isset($_SESSION['post']['kmt']) ? $_SESSION['post']['kmt'] : "" ?>" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="kmt" value="<?= isset($voiture[0]['kilometrage_vehicule']) ? $voiture[0]['kilometrage_vehicule'] : "" ?> <?php // isset($voiture[0]['kilometrage_vehicule']) ? $voiture[0]['kilometrage_vehicule'] : "" ?>" id="" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
                                     <?=$arrayError['kmt'] ? $arrayError['kmt'] : "" ?>
                                     </small>
@@ -37,33 +37,42 @@
                             <div class="form-group ">
                               <label for="" class="text-warning">Categorie</label>
                               <select class="form-control  bg-secondary" name="categorie" id="">
-                              <option value="<?=isset($_SESSION['post']['categorie']) ? $_SESSION['post']['categorie'] : "0"?>" ><?=$categorie[0]['nom_categorie']?></option>
+                              <option value="<?= isset($voiture[0]['id_categorie']) ? $voiture[0]['id_categorie'] : "0" ?>" ><?=$voiture[0]['nom_categorie']?></option>
                                 <?php foreach($categories as $categorie): ?>
                                  <option value="<?=$categorie['id_categorie']?>"><?=$categorie['nom_categorie']?></option>
                                 <?php endforeach ?>
                               </select>
+                              <small class="text-danger">
+                              <?=$arrayError['o'] ? $arrayError['o'] : "" ?>
+                              </small>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group  ">
                               <label for="" class="text-warning ">Marque</label>
                               <select class="form-control  bg-secondary" name="marque" id="">
-                              <option value="<?=isset($_SESSION['post']['marque']) ? $_SESSION['post']['marque'] : "0"?>" ><?=$marque[0]['nom_marque']?></option>
+                              <option value="<?= isset($voiture[0]['id_marque']) ? $voiture[0]['id_marque'] : "0" ?>" ><?=$voiture[0]['nom_marque']?></option>
                               <?php foreach($marques as $marque): ?>
                                  <option value="<?=$marque['id_marque']?>"><?=$marque['nom_marque']?></option>
                                 <?php endforeach ?>
                               </select>
+                              <small class="text-danger">
+                              <?=$arrayError['a'] ? $arrayError['a'] : "" ?>
+                              </small>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group  ">
                               <label for="" class="text-warning">Modele</label>
                               <select class="form-control  bg-secondary" name="modele" id="">
-                              <option value="<?=isset($_SESSION['post']['modele']) ? $_SESSION['post']['modele'] : "0"?>"><?=$model[0]['nom_modele']?></option>
+                              <option value="<?= isset($voiture[0]['id_modele']) ? $voiture[0]['id_modele'] : "0" ?>" ><?=$voiture[0]['nom_modele']?></option>
                               <?php foreach($modeles as $modele): ?>
                                  <option value="<?=$modele['id_modele']?>"><?=$modele['nom_modele']?></option>
                                 <?php endforeach ?>
                               </select>
+                              <small class="text-danger">
+                                  <?=$arrayError['m'] ? $arrayError['m'] : "" ?>
+                              </small>
                             </div>
                         </div>
                     
@@ -75,51 +84,43 @@
                             </div>
                         </div><?php $i=1; ?>
                         <?php foreach($options as $option): ?>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label text-warning" >
-                                    <input class="form-check-input" type="checkbox" <?=isset($_SESSION['post']['options'.$i]) ? 'checked' : "0"?>  name="options<?=$i?>" id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
+                                    <input class="form-check-input" type="checkbox"  <?php  isset($_SESSION['post']['options'][$i]) ? 'checked' : "" ?>    name="options[]"  id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
                                 </label>
                             </div>
                         </div>
                         <?php $i++;?>
+                       
                         <?php endforeach?>
-                        
+                       
                         
                      </div>
                              
                      <div class="row">
                         <div class="col-md-5">
-                             <div class="form-group">
-                                    <label for="" class="text-warning">Saisir le nbre image</label>
-                                    <input type="number" class="form-control bg-secondary" value="<?=isset($_SESSION['post']['nbre_image']) ? $_SESSION['post']['nbre_image'] : "" ?>" name="nbre_image" id="" placeholder="" aria-describedby="fileHelpId">
-                                    <small id="helpId" class="form-text text-danger">
-                                    <?=$arrayError['nbre_image'] ? $arrayError['nbre_image'] : "" ?>
-                                    </small>
-                             </div>
+                           <div class="form-group">
+                             <label for="" class="text-warning">Cliquer pour ajouter des images</label>
+                                <input type="file" value="" class="form-control-file" name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
+                             <small id="fileHelpId" class="form-text text-danger">
+                                 <?=$arrayError['avatar[]'] ? $arrayError['avatar[]'] : "" ?>
+                             </small>
+                           </div>
                            
                         </div>
-                        <div class="col-md-2 mt-md-2 " id="">
-                            <button type="submit" name="nbre" class="btn btn-warning mt-4 ">
-                                OK
-                            </button>
+                        <div class="col-md-2 m " id="">
+                            <button type="button"  value="+" id="button" onclick="addField()" class="btn btn-warning ">+</button> <br>                       
                         </div>
-                        
                      </div>
-                     <?php for($i=0;$i<$_SESSION['nbre_image'];$i++): ?>
                         <div class="row">
-                            <div class="form-group">
-                                <label for=""></label>
-                                <input type="file" class="form-control-file ml-3" name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
-                                <small id="fileHelpId" class="form-text text-danger">
-                                    
-                                </small>
+                            <div id="fields">
                             </div>
                         </div>
-                     <?php endfor ?>
+                     
                        <div class="row mt-3 ">
                          <div class="col-md-6 ">
-                            <button type="submit" name="inscription" class="btn btn-warning "> Ajouter</button>
+                            <button type="submit" name="inscription" class="btn btn-warning "> <?= isset($voiture[0]['id_vehicule']) ? "Modifier " : "Ajouter" ?></button>
                          </div>
                         
                      </div>
@@ -168,7 +169,7 @@
 
 
 <?php
-if (isset($_SESSION['post'])) {
-    unset($_SESSION['post']);
-}
+    if (isset($_SESSION['post'])) {
+        unset($_SESSION['post']);
+    }
  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
