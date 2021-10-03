@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_GET['views']=='ajout.reservation') {
             show_ajout_reservation($_GET['id_vehicule']);
         }elseif ($_GET['views']=='reservation.client') {
-           show_reservation_client($_GET['id_client']);
+           show_reservation_client((int)$_GET['id_client']);
         }elseif ($_GET['views']=='traiter.reservation') {
            if (est_responsable()) {
             show_traiter_reservation((int)$_GET['id_reservation']);
@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             $reservations = find_reservation_by_id_reservation((int)$_GET['id_reservation']);
             require(ROUTE_DIR.'views/reservation/facture.html.php');
           
+        }elseif ($_GET['views'] == 'tableau.bord') {
+            show_dashboard();
         }
         
      }else{
@@ -55,11 +57,23 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_POST['action']=='gerer.retour') {
             //enregistrer les donnees du retour;
             gerer_retour_vehicule($_POST);
+        }elseif ($_POST['action'] == 'filtrer.mes.reserve') {
+          show_mes_reservations();
         }
     }
 }
+function show_dashboard(){
+    $vtrDispo = count_vehicule_disponible(2);
+    $cmonDispo=  count_vehicule_disponible(1);
+    $reserveNow=count_reservation_now();
+    $veh_louer_now =count_location_vehicule_to_now(2);
+    $cam_louer_now =count_location_vehicule_to_now(1);
+  //  var_dump($vtrDispo); die;
+    require_once(ROUTE_DIR.'views/reservation/tableau.bord.html.php');
+}
 function show_mesreservations_encours(){
-    $reservations=find_all_reservation_cours();
+    $id_user=$_SESSION['userConnect']['id_user'];
+    $reservations=find_all_reservation_cours($id_user);
     $nbrPage=2;
     $total_records=count($reservations);
     $total_page=total_page($total_records,$nbrPage);
@@ -73,7 +87,7 @@ function show_mesreservations_encours(){
     $suivant=$page+1;
     $precedent=$page-1;
     $start_from=start_from($page,$nbrPage);
-    $reservations=find_all_reservation_cours('en cours',$start_from,$nbrPage);
+    $reservations=find_all_reservation_cours($id_user,'en cours',$start_from,$nbrPage);
     require(ROUTE_DIR.'views/reservation/mesreservations.encours.html.php');
 }
 function gerer_retour_vehicule(array $data){
@@ -88,6 +102,10 @@ function gerer_retour_vehicule(array $data){
         update_etat_vehicule_nom_etat(6,(int)$data['id_vehicule']);
         //  changer aussi l'etat de la reservation et le mettre a terminer
         update_reservation__annuler_by_id(5,(int)$data['id']);
+        //changer aussi l'etat du conducteur et le mettre a disponible
+        if (!empty($data['id_conducteur'])) {
+            update_conducteur_etat('normal',(int)$data['id_conducteur']);
+        }
         header("location:".'?controlleurs=reservation&views=facture&id_reservation='.$data['id']);
         exit;
     }else {
@@ -110,9 +128,21 @@ function show_traiter_reservation($id_reservation){
     require(ROUTE_DIR.'views/reservation/traiter.reservation.html.php');
 }
 function show_reservation_client($id_client){
-    $reserve_client=lister_reservation_client($id_client);
-   /*  var_dump($reserve_client);
-    die; */
+    $reservation_bien=lister_reservation_client($id_client);  
+    $nbrPage=5;
+    $total_records=count($reservation_bien);
+    $total_page=total_page($total_records,$nbrPage);
+    $get=$_GET['page'];
+    if (isset($get)) {
+      $page=$get;
+    }else {
+      $page=1;
+    }
+    $suivant=$precedent=0;
+    $suivant=$page+1;
+    $precedent=$page-1;
+    $start_from=start_from($page,$nbrPage);
+    $reservation_bien=lister_reservation_client($id_client,$start_from,$nbrPage);  
     require(ROUTE_DIR.'views/reservation/reservation.client.html.php');
 }
 function show_ajout_reservation($id_vehicule){
@@ -254,15 +284,32 @@ function add_user_reserve(array $post):void{
         $precedent=$page-1;
         $start_from=start_from($page,$nbrPage);
         $reservations = lister_reservation_by_client($_SESSION['userConnect']['id_user'],$start_from,$nbrPage);
+        if (isset($_POST['filtre'])) {
+            extract($_POST);
+            if (!empty($date)) {
+                $date=date_format(date_create($date),'Y-m-d');
+                $reservations = lister_reservation_by_client_filter_date((int)$_SESSION['userConnect']['id_user'],null,null,$date,$etat);
+                
+            }else {
+                
+                $reservations = lister_reservation_by_client_filter((int)$_SESSION['userConnect']['id_user'],null,null,$etat);
+                
+            }
+        }
         require(ROUTE_DIR.'views/reservation/mes.reservations.html.php');
     }
    
    function show_liste_reservations($post=null){
+
        if (isset($_POST['traiter'])) {
+          // var_dump((int)$_POST['conducteur']); die;
            if (isset($_POST['conducteur'])) {
                update_reservation_id_vehicule_id_conducteur_and_etat((int)$_POST['vehicule'],(int)$_POST['conducteur'],2,(int)$_GET['id_reservation']);
+               //changer aussi l'etat du conducteur et le mettre a indisponible
+                update_conducteur_etat('archiver',(int)$_POST['conducteur']);
            }else {
             update_reservation_id_vehicule_and_etat((int)$_POST['vehicule'],2,(int)$_GET['id_reservation']);
+        
            }
           //changer l'etat du vehicule a indisponible aprs avoir attribuer la vehicule
           update_etat_vehicule_nom_etat(7,(int)$_POST['vehicule']);
