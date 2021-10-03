@@ -1,12 +1,12 @@
 <?php 
          function valide_image(array $files,string $key,array &$arrayError,$target_file):void{
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-           if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"&& $imageFileType != "gif" ) {
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"&& $imageFileType != "gif" ) {
     
-              $arrayError[$key] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+              $arrayError[$key] = "Désolé, seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.";
         
-            }elseif ($files["image"]["size"] > 500000) {
-                $arrayError[$key] = "la tailee ne doit pas depasser 500kb.";
+            }elseif ($files["avatar"]["size"] > 500000) {
+                $arrayError[$key] = "la tailee ne doit pas dépasser 500kb.";
             }
           }
 ?>
