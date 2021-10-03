@@ -2,7 +2,7 @@
 
 <div class="container">
 <div class="row jjj">
-    <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations'?>"><i class="fa fa-arrow-circle-left  " style="color: #d2b100;" aria-hidden="true"></i></a>
+    <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=reservation.client&id_client=13'?>"><i class="fa fa-arrow-circle-left  " style="color: #d2b100;" aria-hidden="true"></i></a>
                         <div class="col-md-12 mr-2">
                             <h3 class="section-title font-weight-light text-white mb-4 mr-1">
                                 <span class="headline">Reservations par client</span>
@@ -13,24 +13,44 @@
         <table class="table table border ">
             <thead>
                 <tr>
-                    <th scope="col" class="text-warning">Nom & Prenom</th>
                     <th scope="col" class="text-warning">Type vehicule</th>
                     <th scope="col" class="text-warning">Vehicule</th>
                     <th scope="col" class="text-warning">Date</th>
+                    <th scope="col" class="text-warning">Etat</th>
                 </tr>
             </thead>
             <tbody>
-            <?php foreach($reserve_client as $client) ?>
+               
+            <?php foreach($reservation_bien as $client): ?>
                 <tr>
-                    <th class="text-white"><?=$client['nom_user'].' '.$client['prenom_user']?></th>
                     <td class="text-white"><?=$client['nom_type_vehicule']?></td>
                     <td class="text-white"><?=$client['nom_marque'].' '.$client['nom_modele']?></td>
-                    <td class="text-white"><?=$client['date_debut_location']?></td>
+                    <td class="text-white"><?=date_format(date_create($client['date_debut_location']),'Y-m-d').' & '.date_format(date_create($client['date_fin_location']),'Y-m-d')?></td>
+                    <th class="text-white"><?=$client['nom_etat']?></th>
                 </tr>
-            <?php ?>
+            <?php endforeach ?>
             </tbody>
         </table>
-</div>
+    </div>
+            <nav aria-label="Page navigation example ">
+                <ul class="pagination justify-content-center ">
+                    <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+                          <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=reservation.client&id_client='.(int)$_GET['id_client'].'&page='.$precedent ?>" tabindex="-1">
+                          <span aria-hidden="true" class="tt">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <?php for($i=1;$i<=$total_page;$i++): ?>
+                          <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=reservation.client&id_client='.(int)$_GET['id_client'].'&page='.$i ?>"><?=$i?></a></li>
+                    <?php endfor ?>
+                    <li class="page-item   <?= $_GET['page'] >= $total_page-1 ? 'disabled' : ""?>  " >
+                          <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=reservation.client&id_client='.(int)$_GET['id_client'].'&page='.$suivant ?>">
+                              <span aria-hidden="true" class="tt">&raquo;</span>
+                              <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 </div>
 <style>
     .jjj{
