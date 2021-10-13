@@ -21,7 +21,27 @@
     }
     function find_all_image_vehicule_by_id_($id_vehicule):array{
         $pdo=ouvrir_connection_db();
-        $sql="SELECT nom_image from image  where id_vehicule=? ";
+        $sql="SELECT * from image  where id_vehicule=? limit 1,1 ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_vehicule));
+        $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
+         // var_dump($biendispo);die();
+        fermer_connection_db($pdo);
+        return $vehicule_disponible;
+    }
+    function find_image_by_id($id_vehicule):array{
+        $pdo=ouvrir_connection_db();
+        $sql="SELECT * from image  where id_vehicule=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($id_vehicule));
+        $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
+         // var_dump($biendispo);die();
+        fermer_connection_db($pdo);
+        return $vehicule_disponible;
+    }
+    function find_all_image_vehicule_id_($id_vehicule):array{
+        $pdo=ouvrir_connection_db();
+        $sql="SELECT count(*) from image  where id_vehicule=? ";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($id_vehicule));
         $vehicule_disponible = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -81,6 +101,15 @@
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
+    function find_all_categorie_dispo():array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from categorie where etat=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array('normal'));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
     function find_all_modele($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
         $sql="select * from modele ";
@@ -89,6 +118,15 @@
         }
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($start,$parPage));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
+    function find_all_modele_dispo():array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from modele where etat=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array('normal'));
         $datas = $sth->fetchAll();
         fermer_connection_db($pdo);//fermeture
         return $datas;
@@ -132,6 +170,15 @@
         fermer_connection_db($pdo);//fermeture
         return $datas;
     }
+    function find_all_marque_dispo():array{
+        $pdo= ouvrir_connection_db();//ouvertur
+        $sql="select * from marque where etat=? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array('normal'));
+        $datas = $sth->fetchAll();
+        fermer_connection_db($pdo);//fermeture
+        return $datas;
+    }
     function find_all_option($start=null,$parPage=null):array{
         $pdo= ouvrir_connection_db();//ouvertur
         $sql="select * from option_vehicule";
@@ -169,8 +216,6 @@
                      VALUES (?,?,?,?)";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($categorie,$caution,$prix_jour,$prix_kilometre));
-       /*  var_dump($categories);
-        die; */
         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;
@@ -393,9 +438,8 @@
                   WHERE `id_categorie` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute($categories);
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;     
       }
 
       function update_marque(array $marques):int{
@@ -405,9 +449,8 @@
                   WHERE `id_marque` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute($marques);
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return  $sth -> rowCount() ;     
       }
       function update_modele(array $modeles):int{
         $pdo=ouvrir_connection_db();
@@ -416,9 +459,8 @@
                   WHERE `id_modele` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute($modeles);
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return  $sth -> rowCount() ;      
       }
       function update_option(array $options):int{
         $pdo=ouvrir_connection_db();
@@ -427,9 +469,8 @@
                   WHERE `id_option_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute($options);
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return  $sth -> rowCount() ;    
       }
 
       function find_all_vehicule_by_marque_modele_categorie_options(array $vehicule):array{
@@ -479,12 +520,13 @@
     }
     function count_reservation_now():array{
         $pdo=ouvrir_connection_db();
-        $sql=" SELECT COUNT(*) FROM reservation 
-                WHERE date_debut_location=? ";
+        $sql=" SELECT COUNT(*) FROM reservation re,etat e
+                WHERE re.id_etat=e.id_etat
+                    and nom_etat=?
+                 and date_reservation=? ";
                 $now=date_format(date_create(),'Y-m-d');
-              //  var_dump($now); die;
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array($now));
+        $sth->execute(array('en cours',$now));
         $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
         fermer_connection_db($pdo);
         return $filtreVehicule;
@@ -496,7 +538,7 @@
                 WHERE re.id_vehicule=v.id_vehicule
                     and tv.id_type_vehicule=re.id_type_vehicule
                     and re.id_type_vehicule=?
-                     and  date_debut_location=? ";
+                     and  date_reservation=? ";
                 $now=date_format(date_create(),'Y-m-d');
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array($id_type_vehicule,$now));
@@ -504,6 +546,20 @@
         fermer_connection_db($pdo);
         return $filtreVehicule;
     }
+    function vehicule_return_to_today():array{
+        $pdo=ouvrir_connection_db();
+        $sql=" SELECT COUNT(*) FROM reservation re,vehicule v,type_vehicule tv
+                WHERE re.id_vehicule=v.id_vehicule
+                    and tv.id_type_vehicule=re.id_type_vehicule
+                     and  date_fin_location=? ";
+                $now=date_format(date_create(),'Y-m-d');
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array($now));
+        $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+        fermer_connection_db($pdo);
+        return $filtreVehicule;
+    }
+    
 
     function archive_vehicule( $id_etat,int $id_vehicule):int{
         $pdo=ouvrir_connection_db();
@@ -512,24 +568,18 @@
                   WHERE `id_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($id_etat,$id_vehicule));
-       /*   var_dump($id_conducteur);
-         die; */
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ; 
       }
-      function archive_categorie(int $id_categorie):int{
+      function archive_categorie($etat,int $id_categorie):int{
         $pdo=ouvrir_connection_db();
         $sql="UPDATE `categorie` 
                 SET `etat` = ?
                   WHERE `id_categorie` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-         $sth->execute(array('archiver',$id_categorie));
-       /*   var_dump($id_conducteur);
-         die; */
-         $dernier_id = $pdo->lastInsertId();
+         $sth->execute(array($etat,$id_categorie));
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;     
       }
       function archive_marque(string $etat,int $id_marque):int{
         $pdo=ouvrir_connection_db();
@@ -538,9 +588,8 @@
                   WHERE `id_marque` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($etat,$id_marque));
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;       
       }
       function archive_modele(string $etat,int $id_modele):int{
         $pdo=ouvrir_connection_db();
@@ -549,9 +598,8 @@
                   WHERE `id_modele` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($etat,$id_modele));
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;    
       }
       function archive_option(string $etat,int $id_option_vehicule):int{
         $pdo=ouvrir_connection_db();
@@ -560,9 +608,8 @@
                   WHERE `id_option_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($etat,$id_option_vehicule));
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;    
       }
       function update_etat_vehicule_nom_etat(int $id_etat,int $id_vehicule):int{
         $pdo=ouvrir_connection_db();
@@ -571,9 +618,8 @@
                   WHERE `id_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($id_etat,$id_vehicule));
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;     
       }
       function update_voirure(array $vehicule):int{
         $pdo=ouvrir_connection_db();
@@ -583,19 +629,27 @@
                           WHERE `vehicule`.`id_vehicule` = ?; ";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute($vehicule);
-         $dernier_id = $pdo->lastInsertId();
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;     
       }
-      function update_image(array $images):int{
+      function update_image(string $images,int $id_vehicule):int{
         $pdo=ouvrir_connection_db();
         $sql="UPDATE `image` 
                 SET  `nom_image` = ?
-                          WHERE `vehicule`.`id_vehicule` = ?; ";
+                          WHERE `id_vehicule` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-         $sth->execute($images);
-         $dernier_id = $pdo->lastInsertId();
+         $sth->execute(array($images,$id_vehicule));
          fermer_connection_db($pdo);//fermeture
-         return $dernier_id ;     
+         return $sth -> rowCount() ;      
+      }
+      function update_vehicule_option_vehicule($id_option_vehicule,$id_vehicule):int{
+        $pdo=ouvrir_connection_db();
+        $sql="UPDATE `vehicule_option_vehicule` 
+                SET  `id_option_vehicule` = ?
+                          WHERE `id_vehicule_option_vehicule` = ?; ";
+         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+         $sth->execute(array($id_option_vehicule,$id_vehicule));
+         fermer_connection_db($pdo);//fermeture
+         return $sth -> rowCount() ;      
       }
 ?>

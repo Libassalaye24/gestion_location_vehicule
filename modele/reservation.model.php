@@ -76,8 +76,8 @@
             }
             function ajout_reservation_vehicule(array $reservations):int{
                 $pdo=ouvrir_connection_db();
-                $sql="INSERT INTO reservation (date_debut_location,date_fin_location,id_user,id_modele,id_marque,id_categorie,id_etat,id_type_vehicule)
-                 VALUES (?,?,?,?,?,?,?,?)";
+                $sql="INSERT INTO reservation (date_reservation,date_debut_location,date_fin_location,id_user,id_modele,id_marque,id_categorie,id_etat,id_type_vehicule)
+                 VALUES (?,?,?,?,?,?,?,?,?)";
                 $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 $sth->execute($reservations);
                 $dernier_id = $pdo->lastInsertId();
@@ -182,6 +182,21 @@
                   fermer_connection_db($pdo);
                   return  $reservation;   
             }
+            function find_reservation_by_id_reservation_traiter($id_reservation):array{
+                $pdo=ouvrir_connection_db();
+                $sql="SELECT * from reservation re,categorie ca,marque ma,modele mo,type_vehicule tv,vehicule v
+                        where re.id_categorie=ca.id_categorie
+                            and re.id_marque=ma.id_marque
+                            and re.id_vehicule=v.id_vehicule
+                            and re.id_type_vehicule=tv.id_type_vehicule
+                            and re.id_modele=mo.id_modele
+                            and re.id_reservation=?";
+                  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                  $sth->execute(array($id_reservation));
+                  $reservation = $sth->fetchAll();
+                  fermer_connection_db($pdo);
+                  return  $reservation;   
+            }
             function find_paiement($id_reservation):array{
                 $pdo=ouvrir_connection_db();
                 $sql="SELECT * from paiement pe,reservation re,mode_paiement mp,user u
@@ -203,11 +218,8 @@
                              WHERE `reservation`.`id_reservation` = ? ";
                  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                  $sth->execute(array($id_vehicule,$id_conducteur,$etat,$id_reservation));
-                /*  var_dump($sth->execute(array($id_vehicule,$id_conducteur,$etat,$id_reservation)));
-                 die; */
-                 $dernier_id = $pdo->lastInsertId();
                  fermer_connection_db($pdo);//fermeture
-                 return $dernier_id ;   
+                 return $sth->rowCount() ;   
             }
             function update_reservation_id_vehicule_and_etat($id_vehicule,$etat,$id_reservation):int{
                 $pdo=ouvrir_connection_db();
@@ -216,11 +228,8 @@
                              WHERE `reservation`.`id_reservation` = ? ";
                  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                  $sth->execute(array($id_vehicule,$etat,$id_reservation));
-                /*  var_dump($sth->execute(array($id_vehicule,$id_conducteur,$etat,$id_reservation)));
-                 die; */
-                 $dernier_id = $pdo->lastInsertId();
                  fermer_connection_db($pdo);//fermeture
-                 return $dernier_id ;   
+                 return $sth->rowCount() ;   
             }
             function update_reservation__annuler_by_id(int $etat,int $id_reservation):int{
                 $pdo=ouvrir_connection_db();
@@ -229,9 +238,8 @@
                              WHERE `reservation`.`id_reservation` = ? ";
                  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                  $sth->execute(array($etat,$id_reservation));
-                 $dernier_id = $pdo->lastInsertId();
                  fermer_connection_db($pdo);//fermeture
-                 return $dernier_id ;   
+                 return $sth->rowCount();   
             }
             function update_reservation_date_retour_reel_kilometre($kmt,$date_retour,$id_reservation){
                 $pdo=ouvrir_connection_db();
@@ -239,10 +247,23 @@
                         SET `kilometre_parcourus` = ?,`date_retour_reel` = ?
                              WHERE `reservation`.`id_reservation` = ? ";
                  $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                var_dump( $sth->execute(array($kmt,$date_retour,$id_reservation)));
-                 $dernier_id = $pdo->lastInsertId();
+                 $sth->execute(array($kmt,$date_retour,$id_reservation));
                  fermer_connection_db($pdo);//fermeture
-                 return $dernier_id ;   
+                 return $sth->rowCount() ;   
+            }
+            function update_paiement_ajout_montant($montant,$ide_reservation){
+                $pdo=ouvrir_connection_db();
+                $sql="UPDATE `paiement` 
+                        SET  :montant_paiement
+                             WHERE :id_reservation ";
+                 $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                 $sth->bindParam(':montant_paiement', $montant_paiement);
+                 $sth->bindParam(':id_reservation', $id_reservation);
+                 $montant_paiement=$montant;
+                 $id_reservation=$ide_reservation;
+                 $sth->execute();
+                 fermer_connection_db($pdo);//fermeture
+                 return $sth->rowCount() ;   
             }
 
             function insert_into_paiement_caution($montant,int $id_reservation,int $id_mode_paiement){
@@ -254,6 +275,21 @@
                 $dernier_id = $pdo->lastInsertId();
                 fermer_connection_db($pdo);
                 return$dernier_id;
+            }
+            function count_reservation_annulee_to_now():array{
+                $pdo=ouvrir_connection_db();
+                $sql=" SELECT COUNT(*) FROM reservation re,vehicule v,type_vehicule tv,etat e
+                        WHERE re.id_vehicule=v.id_vehicule
+                            and tv.id_type_vehicule=re.id_type_vehicule
+                            and re.id_etat=e.id_etat
+                            and e.nom_etat=?
+                             and  date_reservation=? ";
+                        $now=date_format(date_create(),'Y-m-d');
+                $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array('annuler',$now));
+                $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
+                fermer_connection_db($pdo);
+                return $filtreVehicule;
             }
           
             

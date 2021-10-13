@@ -2,8 +2,8 @@
 
 function insert_conducteur(array $conducteurs):int{
     $pdo= ouvrir_connection_db();
-    $sql="INSERT INTO `conducteur` (`nom_conducteur`, `prenom_conducteur`, `numero_conducteur`, `telephone_conducteur`, `id_adresse`, `id_permis`,`etat`)
-    VALUES (?, ?, ?, ?, ?, ?,?)";
+    $sql="INSERT INTO `conducteur` (`nom_conducteur`, `prenom_conducteur`, `numero_conducteur`, `telephone_conducteur`, `id_adresse`, `id_permis`,`etat`,nom_image)
+    VALUES (?, ?, ?, ?, ?, ?,?,?)";
      $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->execute($conducteurs);
   $dernier_id = $pdo->lastInsertId();
@@ -76,7 +76,8 @@ function find_conducteur_by_id( $id_conducteur):array{
             SET `nom_conducteur` = ?,
              `prenom_conducteur` = ?,
               `telephone_conducteur` = ?, 
-              `id_permis` = ? 
+              `id_permis` = ?
+              `nom_image` = ?  
               WHERE `id_conducteur` = ?";
      $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
      $sth->execute($conducteurs);
@@ -92,5 +93,25 @@ function find_conducteur_by_id( $id_conducteur):array{
      $sth->execute(array($etat,$id_conducteur));
      fermer_connection_db($pdo);//fermeture
      return $sth->rowCount() ;     
+  }
+  function count_conducteur_dispo():array{
+    $pdo= ouvrir_connection_db();
+    $sql="SELECT count(*) from conducteur 
+            where etat=? ";
+    $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array('normal'));
+    $conducteur = $sth->fetchAll(PDO::FETCH_ASSOC);
+    fermer_connection_db($pdo);
+    return $conducteur;
+  }
+  function find_conducteur_dispo():array{
+    $pdo= ouvrir_connection_db();
+    $sql="SELECT * from conducteur 
+            where etat=? ";
+    $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array('normal'));
+    $conducteur = $sth->fetchAll(PDO::FETCH_ASSOC);
+    fermer_connection_db($pdo);
+    return $conducteur;
   }
 ?>
