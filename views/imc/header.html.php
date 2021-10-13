@@ -5,12 +5,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="<?= WEB_ROUTE.'css/style.css' ?>"> 
-   
    </head>
   <body>
       
@@ -87,11 +86,7 @@
             
             </li>
           </ul>
-          <ul class="navbar-nav mr-o ">
-            <li class="nav-item">
-              <a class="nav-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules'?>">Archives Vehicules</a>
-            </li>
-          </ul>
+         
           <?php endif ?>
           <?php if(est_responsable()): ?>
             <li class="nav-item">
@@ -114,7 +109,7 @@
                 role="button"
                 aria-haspopup="true"
                 aria-expanded="false"
-                ><?=est_connect() ? $_SESSION['userConnect']['prenom_user'].' '.$_SESSION['userConnect']['nom_user'] : "Utilisateur" ?></a
+                ><?=est_connect() ? $_SESSION['userConnect']['prenom_user'].' '.$_SESSION['userConnect']['nom_user'] : " Utilisateur" ?></a
               >
               <?php if(!est_connect()): ?>
                 <div class="dropdown-menu ">
@@ -142,7 +137,7 @@
         } */
         @media only screen and (max-width: 992px) {
           .navbar{
-            background-image: url("https://mapauto.sn/img/desktop_navbar_bg.jpg");
+            background-image: url("<?=WEB_ROUTE.'img/nav.jpg'?>");
         } 
       } 
         @media only screen and (max-width: 768px) {
@@ -154,7 +149,7 @@
         }
         @media only screen and (min-width: 992px) {
           .navbar{
-            background-image: url("https://mapauto.sn/img/desktop_navbar_bg.jpg");
+            background-image: url(<?=WEB_ROUTE.'img/nav.jpg'?>);
             position: fixed;
             top: 0;
             position: fixed;
@@ -173,10 +168,10 @@
         .navbar a{
             color: #d2b100 !important;
         }
-       /*  .navbar a:hover:not(.logo){
+        .dropdown-menu a:hover{
             color: #000 !important;
             background: #d2b100;
-        } */
+        }
         body{
             background: #000;
         }

@@ -4,14 +4,14 @@
         unset($_SESSION['arrayError']);
     }
   require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
-<div class="container">
+<div class="container" style="margin-top: -4%;">
           <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
               <input type="hidden" name="action" value="<?= isset($voiture[0]['id_vehicule']) ? "edit.voiture" : "add.voiture" ?>">
               <input type="hidden" name="id_vehicule" value="<?= isset($voiture[0]['id_vehicule']) ? $voiture[0]['id_vehicule'] : "" ?>">
             <div class="card text-left group shadow mb-4">
                 <div class="card-body">
-                     <div class="row jjjj">
+                     <div class="row ">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
                                 <span class="headline"><?= isset($voiture[0]['id_vehicule']) ? "Modifier voiture" : "Ajout Voiture" ?></span>
@@ -87,13 +87,13 @@
                         <div class="col-md-2">
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label text-warning" >
-                                    <input class="form-check-input" type="checkbox"  <?php  isset($_SESSION['post']['options'][$i]) ? 'checked' : "" ?>    name="options[]"  id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
+                                    <input class="form-check-input" type="checkbox"   <?php   //$optionsv['id_option_vehicule'] =  $option['id_option_vehicule']  ? 'checked' : "" ; ?>    name="options[]"  id="" value="<?=$option['id_option_vehicule']?>"> <?=$option['nom_option_vehicule']?>
                                 </label>
                             </div>
                         </div>
                         <?php $i++;?>
                        
-                        <?php endforeach?>
+                        <?php endforeach;  $images=find_all_image_vehicule_id_((int)$_GET['id_vehicule']);?>
                        
                         
                      </div>
@@ -102,14 +102,27 @@
                         <div class="col-md-5">
                            <div class="form-group">
                              <label for="" class="text-warning">Cliquer pour ajouter des images</label>
-                                <input type="file" value="" class="form-control-file" name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
+                             <?php if(isset($voiture[0]['id_marque'])): ?>
+                                <?php for($i=0;$i<$images[0]["count(*)"];$i++): ?>
+                                    <input type="file" value="" class="form-control-file mb" name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId"> 
+                                    <?php if($i!=$images[0]["count(*)"]-1): ?>
+                                        <style>
+                                            .mb{
+                                                margin-bottom: 2%;
+                                            }
+                                        </style>
+                                     <?php endif ?>
+                                <?php endfor ?>
+                             <?php else: ?>
+                                <input type="file" value="" class="form-control-file"  name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
+                             <?php endif ?>
                              <small id="fileHelpId" class="form-text text-danger">
-                                 <?=$arrayError['avatar[]'] ? $arrayError['avatar[]'] : "" ?>
+                                 <?=$arrayError['avatar'] ? $arrayError['avatar'] : "" ?>
                              </small>
                            </div>
                            
                         </div>
-                        <div class="col-md-2 m " id="">
+                        <div class="col-md-2 m <?= isset($voiture[0]['id_marque']) ? 'd-none': '' ?>" id="">
                             <button type="button"  value="+" id="button" onclick="addField()" class="btn btn-warning ">+</button> <br>                       
                         </div>
                      </div>
@@ -117,8 +130,9 @@
                             <div id="fields">
                             </div>
                         </div>
+        
                      
-                       <div class="row mt-3 ">
+                       <div class="row mt-2 ">
                          <div class="col-md-6 ">
                             <button type="submit" name="inscription" class="btn btn-warning "> <?= isset($voiture[0]['id_vehicule']) ? "Modifier " : "Ajouter" ?></button>
                          </div>
@@ -130,6 +144,14 @@
           </form>
 </div>
 <style>
+     #preview{
+       margin-top: 2%;
+     width: 50px;
+     display: inline-block;
+   }
+   #preview img{
+     width: 100%;
+   }
     .group{
         margin-top: 21%;
         background-color: #000;

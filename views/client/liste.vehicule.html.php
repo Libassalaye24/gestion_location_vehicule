@@ -66,13 +66,17 @@
  
             </a>
             <div class="card-body ">
-              <h5 class="card-title">
-                  <p class=" text-white"> 
-                  <?=$vehicule['nom_categorie'].' '.$vehicule['nom_marque'].' '.$vehicule['nom_modele']?>
-                 </p>
-              
-                <span class="badge badge-warning"><?=$vehicule['prix_location_jour'].' '.'FCFA'?></span>
-              </h5>
+                    <a class="card-title text-white" style="text-decoration: none;">
+                      <?=strtoupper($vehicule['nom_categorie'])?>
+                   </a> <br>
+                  <a class=" font-weight-light font-italic text-warning text-decoration-none" title="Peugeot 508">
+                      <?=ucfirst($vehicule['nom_marque']).' '.ucfirst($vehicule['nom_modele'])?>	
+                  </a> <br>
+                  <span style="font-size: .6rem;">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  </span>
               <hr />
                <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-secondary float-right ml-3">Reserver</a>
           

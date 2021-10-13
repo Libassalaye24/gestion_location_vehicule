@@ -1,6 +1,22 @@
 <?php  require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 
 <div class="container jjjj">
+  <?php if(isset($_SESSION['valide_reservation'])): ?>
+    <div class="alert alert-success" id="div1"  role="alert">
+      <strong><?= $_SESSION['valide_reservation']?></strong>
+    </div>
+  <?php endif ?>
+  <style>
+    .alert{
+      animation: fadeIn 2s ease-in;
+    }
+  </style>
+  <script>
+        function showDiv1() {
+          document.getElementById("div1").style.visibility = "hidden";
+        }
+        setTimeout("showDiv1()", 10000);
+  </script>
     <div class="row ">
         <div class="col-md-8">
           <h3 class="section-title font-weight-light text-white mb-4">
@@ -72,20 +88,22 @@
                         </span>
                       <?php elseif($reserve['nom_etat']=='annuler'): ?>
                         <span class="badge badge-danger">
-                            <?= ($reserve['nom_etat']);  ?>
+                            Etat: <?= ($reserve['nom_etat']);  ?>
                           </span>
                         <?php elseif($reserve['nom_etat']=='terminer' || $reserve['nom_etat']=='valider'): ?>
                         <span class="badge badge-success ">
                             <?= ($reserve['nom_etat']);  ?>
                           </span>
                       <?php endif ?> 
-                      <span class="badge badge-warning">
-                          <?= ($prix).' '.'FCFA';  ?>
-                      </span>
+                     
                     </h5>
-                    <hr /><?php $reserve['date_debut_location']=date_format(date_create($reserve['date_debut_location']),'d-m-Y') ?>
+                   <?php $reserve['date_debut_location']=date_format(date_create($reserve['date_debut_location']),'d-m-Y') ?>
                     <span class="float-left btn btn-sm text-center badge badge-warning">
-                        <?='Reserver le: '.$reserve['date_debut_location'];  ?>
+                       <i class="fa fa-check-circle" aria-hidden="true"></i> <?='date debut: '.$reserve['date_debut_location'];  ?>
+                        <?='date fin: '.$reserve['date_debut_location'];  ?>
+                        <?php if(!is_null($reserve['id_conducteur'])): ?><br>
+                          <i class="fa fa-check-circle" aria-hidden="true"></i>  <?='Reservation avec chauffeur' ?>
+                        <?php endif ?>
                     </span>
                     <?php if($reserve['nom_etat']=='valider'): ?>
                     <a href="<?= WEB_ROUTE.'?controlleurs=reservation&views=annuler.reservation&id_reservation='.$reserve['id_reservation']?>" class="btn btn-sm btn-outline-danger float-right">
@@ -132,4 +150,7 @@
     }
     
  </style>
-<?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
+<?php  if (isset( $_SESSION['valide_reservation'])) {
+            unset( $_SESSION['valide_reservation']);
+        }
+require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

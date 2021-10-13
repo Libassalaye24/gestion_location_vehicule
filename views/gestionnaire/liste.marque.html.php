@@ -36,11 +36,11 @@
                 <td class="text-white"><?=$marque['etat']?></td>
                 <td class="text-white ">
                     <?php if($marque['etat']=='normal'): ?>
-                        <button type="submit" name="archiver" class="btn text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Archiver</button>
+                        <button type="submit" name="archiver" class="btn w text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Archiver</button>
                     <?php else: ?>
-                        <button type="submit" name="desarchiver" class="btn text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Désarchiver</button>
+                        <button type="submit" name="desarchiver" class="btn w text-secodary border-secondary active"><i class="fas fa-file-archive archive"></i>Désarchiver</button>
                     <?php endif ?>
-                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.marque&id_marque='.$marque['id_marque']?>" class="btn text-warning border-warning active" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
+                    <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.marque&id_marque='.$marque['id_marque']?>" class="btn text-warning border-warning active w" role="button"><i class="fas fa-edit edit "></i>Modifier</a>
                 </td>
                 </form>
                 </tr>
@@ -70,7 +70,7 @@
 </div>
 <style>
      .jjj{
-        margin-top: 20%;
+        margin-top: 15%;
     }
     .section-title::after {
     content: ' ';

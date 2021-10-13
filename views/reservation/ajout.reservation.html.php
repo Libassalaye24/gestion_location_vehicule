@@ -94,12 +94,11 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                      </div>
                      <?php if($vehicule[0]['id_type_vehicule']==1): ?>
                      <div class="row">
-                             <div class="form-check ml-3">
-                                 <label class="form-check-label text-warning">
-                                 <input type="radio" class="form-check-input" name="chauffeur" id="chauffeur"  >
-                                        Si un chauffeur est necessaire cochez!
-                               </label>
-                             </div>                        
+                            <div class="form-check form-check-inline ml-3">
+                                <label class="form-check-label text-white">
+                                    <input class="form-check-input" type="checkbox" class="" name="chauffeur" id="" value="checkedValue">  Si un chauffeur est necessaire cochez!
+                                </label>
+                            </div>                  
                      </div>
                      <?php endif ?>
                                        

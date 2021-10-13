@@ -21,10 +21,10 @@
                         <div class="card-body ">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <p class="text-white">Date debut location : <?=date_format(date_create($reservations[0]['date_debut_location']),'Y-m-d')?></p>
+                                            <p class="text-white">Date debut location : <?=date_format(date_create($reservations[0]['date_debut_location']),'d-m-Y')?></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <p class="text-white">Date fin location : <?= date_format(date_create($reservations[0]['date_fin_location']),'Y-m-d') ?></p>
+                                            <p class="text-white">Date fin location : <?= date_format(date_create($reservations[0]['date_fin_location']),'d-m-Y') ?></p>
                                         </div>
                                         <div class="col-md-4">
                                              <p class="text-white">Type Vehicule : <?=$reservations[0]['nom_type_vehicule']?></p>
@@ -44,7 +44,11 @@
                                          $date1=date_create($reservations[0]['date_fin_location']);
                                          $date2=date_create($reservations[0]['date_debut_location']);
                                          $jr= difference_date($date1,$date2);
-                                         $prix = intval($jr)*intval($reservations[0]['prix_location_jour']);
+                                         if(is_null($reservations[0]['id_conducteur'])){
+                                            $prix = intval($jr)*intval($reservations[0]['prix_location_jour']);
+                                         }else {
+                                            $prix = intval($jr)*intval($reservations[0]['prix_location_jour'])+intval($driver[0]['prix_conducteur']);
+                                         }
                                          ?>
                                     </div>
                                     <div class="row">
@@ -54,10 +58,17 @@
                                         <div class="col-md-4">
                                             <p class="text-white">Nbrs jours : <?= $jr ?></p>
                                         </div>
-                                        <div class="col-md-4">
+                                        <?php if(!is_null($reservations[0]['id_conducteur'])):?>
+                                            <div class="col-md-4">
+                                                 <p class="text-white">Prix conducteur : <?= $driver[0]['prix_conducteur'].' FCFA' ?></p>
+                                            </div>
+                                        <?php endif ?>     
+                                      
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
                                             <p class="text-white">Prix total : <?= $prix.' '.'FCFA' ?></p>
                                         </div>
-                                       
                                     </div>
                          </div>
               </div>

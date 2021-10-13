@@ -31,18 +31,23 @@
             </thead>
             <tbody>
                 <?php foreach($categories as $categorie): ?>
-                <tr>
-                <td class="text-white"><?=$categorie['nom_categorie']?></td>
-                <td class="text-white"><?=$categorie['etat']?></td>
-                <td class="text-white">
-                <?php if($categorie['etat']=='archiver'):?>
-                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=desarchiver.categorie&id_categorie='.$categorie['id_categorie']?>" role="button"><i class="fas fa-file-archive archive "></i>Désarchiver</a>
-                <?php else :?>  
-                    <a name="" id="" class="btn border-secondary text-secondary " href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archiver.categorie&id_categorie='.$categorie['id_categorie']?>" role="button"><i class="fas fa-file-archive archive "></i>Archiver</a>
-                <?php endif ?>  
-                    <a name=""  id="" class=" btn border-warning text-warning"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.categorie&id_categorie='.$categorie['id_categorie']?>" ><i class="fas fa-edit edit "></i>Modifier</a>
-                </td>
-                </tr>
+                    <form action="" method="post">
+                        <input type="hidden" name="controlleurs" value="vehicule">
+                        <input type="hidden" name="action" value="desarchiver.categorie">
+                        <input type="hidden" name="id_categorie" value="<?=$categorie['id_categorie']?>">
+                    <tr>
+                        <td class="text-white"><?=$categorie['nom_categorie']?></td>
+                        <td class="text-white"><?=$categorie['etat']?></td>
+                        <td class="text-white">
+                        <?php if($categorie['etat']=='archiver'):?>
+                            <button type="submit" name="desarchiver" class="btn border-secondary text-secondary w"><i class="fas fa-file-archive archive"></i>Desarchiver</button>
+                        <?php else :?>  
+                            <button type="submit" name="archiver" class="btn border-secondary text-secondary w"><i class="fas fa-file-archive archive"></i>archiver</button>
+                        <?php endif ?>  
+                            <a name=""  id="" class=" btn border-warning text-warning w"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.categorie&id_categorie='.$categorie['id_categorie']?>" ><i class="fas fa-edit edit "></i>Modifier</a>
+                        </td>
+                    </tr>
+                    </form>
                 <?php endforeach ?>
                
             </tbody>

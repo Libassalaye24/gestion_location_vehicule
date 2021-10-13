@@ -11,7 +11,7 @@
 <div class="wrapper fadeInDown mt">
   <div id="formContent shadow-lg   ">
     <!-- Tabs Titles -->
-<div class="card mt-5 w-75 col-md-12  mb-3 ml-auto mr-auto text-left" style="background:#191919" >
+<div class="card mt-5 w-75 col-md-8  mb-3 ml-auto mr-auto text-left" style="background:#191919" >
   <div class="card-body    ">
 
  
@@ -52,7 +52,7 @@
           <div class="col-md-4 ">
           <button type="submit" class="btn btn-warning " name="connexion">Se connecter</button>
           </div>
-          <div class="col-md-6 mr-5 mt-2">
+          <div class="col-md-6 mt-2 ml-auto">
             <a href="<?=WEB_ROUTE.'?controlleurs=security&views=inscription'?>">S'incrire ??</a>
           </div>
         </div>

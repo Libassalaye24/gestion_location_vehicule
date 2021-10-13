@@ -3,11 +3,12 @@
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
   }
+  //var_dump($arrayError); die;
  /* var_dump($driver);
  die; */
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
-          <form action="" method="post">
+          <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
               <input type="hidden" name="action" value="<?=!isset($driver[0]['id_conducteur']) ?'add.conducteur': 'edit.conducteur' ?>">
               <input type="hidden" name="id" value="<?=isset($driver[0]['id_conducteur']) ? $driver[0]['id_conducteur'] : ""; ?>">
@@ -15,7 +16,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
               <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
-                    <div class="row jjjj">
+                    <div class="row jjj">
                       <a style="color:#d2b100" class="ml-3" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.conducteur'?>"><i class="fa fa-arrow-left " aria-hidden="true"></i></a>
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
@@ -25,11 +26,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             </h3 >
                         </div>
                     </div>
-                    <?php if(isset($arrayError['loginExist'])): ?>
-                       <!--  <div class="alert alert-danger" role="alert">
-                            <?=$arrayError['loginExist']?>
-                        </div> -->
-                    <?php endif ?>
+                   
                     <div class="row">                     
                         <div class="col-md-6">
                             <div class="form-group">
@@ -67,11 +64,14 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                            <div class="form-group">
                              <label for="" class="text-warning">Type de Permis</label>
                              <select class="form-control bg" name="permis" id="">
-                               <option value="<?=isset($driver[0]['id_permis']) ? $driver[0]['id_permis'] : "" ?>"><?=isset($driver[0]['id_permis']) ? $driver[0]['type_permis'] : "" ?></option>
+                               <option value="<?=isset($driver[0]['id_permis']) ? $driver[0]['id_permis'] : "0" ?>"><?=isset($driver[0]['id_permis']) ? $driver[0]['type_permis'] : "" ?></option>
                                 <?php foreach($permis as $permi): ?>
                                <option value="<?=$permi['id_permis']?>"><?=$permi['type_permis']?></option>
                               <?php endforeach ?>
                              </select>
+                             <small id="helpId" class="form-text text-danger">
+                                    <?= isset($arrayError['permis']) ? $arrayError['permis'] :"" ?>
+                             </small>
                            </div>
                         </div>
                         
@@ -120,20 +120,49 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              </div>
                          </div>
                      </div>
+                     <?php if(!isset($_GET['id_conducteur'])):?>
                        <div class="row">
                          <div class="col-md-6">
-                            <button type="submit" name="add.conducteur" class="btn btn-warning"> <?=isset($driver[0]['id_conducteur']) ? 'Modifier' : "S'inscrire"; ?></button>
-                         </div>
+                              <div class="form-group">
+                                <label for=""></label>
+                                <input type="file" class="form-control-file"  onchange="handleFiles(files)" id="upload" multiple name="avatar" id="" placeholder="" aria-describedby="fileHelpId">
+                                <small id="fileHelpId" class="form-text text-danger">
+                                 <?=$arrayError['avatar'] ? $arrayError['avatar'] : "" ?>
+                               </small>
+                              </div>
+                         </div>   
                          <div class="col-md-6">
-                           <a name="" id="" class=" text-primary " href="#" >Se connecter en tant que client !!</a>
-                         </div>
-                     </div>
+                            <div>
+                             
+                              <label for="upload">
+                                  <span id="preview"></span>
+                              </label>
+                            </div>
+                         </div> 
+                        </div>
+                      <?php endif ?>
+   </form>
+
+                        <div class="row">
+                          <div class="col-12 ">
+                              <button type="submit" name="add.conducteur" class="btn btn-warning  "> <?=isset($driver[0]['id_conducteur']) ? 'Modifier' : "Ajouter"; ?></button>
+                          </div>
+                        </div>
+
                 </div>
                 
             </div>
           </form>
 </div>
 <style>
+     #preview{
+       margin-top: 2%;
+     width: 50px;
+     display: inline-block;
+   }
+   #preview img{
+     width: 100%;
+   }
     .group{
         margin-top: 21%;
         background-color: #000;

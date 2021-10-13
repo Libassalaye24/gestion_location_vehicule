@@ -18,9 +18,11 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                            <form action="" method="post">
                                <input type="hidden" name="controlleurs" value="reservation">
                                <input type="hidden" name="action" value="annuler.reservation">
+                               <input type="hidden" name="id_type_vehicule" value="<?=(int)$reserva[0]['id_type_vehicule']?>">
+                               <input type="hidden" name="id_conducteur" value="<?=isset($reserva[0]['id_conducteur']) ? (int)$reserva[0]['id_conducteur'] : ""?>">
                                <input type="hidden" name="id_reservation" value="<?=$id_reservation?>">
                                <input type="hidden" name="id_vehicule" value="<?=(int)$reserva[0]['id_vehicule']?>">
-                               <?php //var_dump((int)$reserva[0]['id_vehicule']); die;?>
+                               <?php //var_dump($reserva); die;?>
                                <button type="submit" name="oui" class="btn btn-success">Oui</button>
                            </form>
                         </div>

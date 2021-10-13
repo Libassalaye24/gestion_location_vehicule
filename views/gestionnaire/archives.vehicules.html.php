@@ -3,12 +3,17 @@
 
 <div class="container">
    <div class="row jjjj">
-     
-     <div class="col">
-       <h5 class="section-title font-weight-light text-white mb-4">
-         <span class="headline">Liste Vehicules archives</span>
-       </h5 >
+    
+     <div class="col-md-4">
+       <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicules'?>" style="color: #fff;text-decoration:none;" ><i class="fa fa-arrow-left mr-2" style="color: #d2b100;" aria-hidden="true"></i>Liste Vehicules </a>
      </div>
+      <div class="col-md-8">
+            <h5 class="section-title font-weight-light text-white mb-4">
+                <span class="headline">
+                   Liste Vehicules archives
+                </span>
+            </h5 >
+        </div>
      
    </div>
   

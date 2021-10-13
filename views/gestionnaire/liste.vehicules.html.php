@@ -78,8 +78,8 @@
                 <td class="text-white"><?=$vehicule['nom_categorie']?></td>
                 <td class="text-white"><?=$vehicule['immatriculation_vehicule']?></td>
                 <td>
-                  <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.vehicule&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit edit"></i>Modifier</a>
-                  <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.vehicules&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-danger "><i class="fas fa-file-archive archive "></i>Archiver</a>
+<!--                   <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=edit.vehicule&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit edit"></i>Modifier</a>
+ -->                  <a href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archive.vehicules&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-danger "><i class="fas fa-file-archive archive "></i>Archiver</a>
                 </td>
               </tr>
               <?php endforeach ?>
@@ -116,7 +116,7 @@
     color: red;
   }
     .jjjj{
-        margin-top: 20%;
+        margin-top: 15%;
    
     
     }

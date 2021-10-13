@@ -19,9 +19,9 @@
          <table class="table table-bordered table-sm">
             <thead>
                 <tr>
-                <th scope="col" class="text-white">Options</th>
-                <th scope="col" class="text-white">Etat</th>
-                <th scope="col" class="text-white">Action</th>
+                <th scope="col" class="text-warning">Options</th>
+                <th scope="col" class="text-warning">Etat</th>
+                <th scope="col" class="text-warning">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,7 +69,7 @@
 </div>
 <style>
      .jjj{
-        margin-top: 20%;
+        margin-top: 15%;
     }
     .section-title::after {
     content: ' ';

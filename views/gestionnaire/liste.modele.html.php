@@ -72,7 +72,7 @@
 </div>
 <style>
      .jjj{
-        margin-top: 20%;
+        margin-top: 15%;
     }
     .section-title::after {
     content: ' ';
