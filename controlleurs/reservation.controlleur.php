@@ -13,9 +13,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_GET['views']=='mesreservations.encours') {
             show_mesreservations_encours();
         }elseif ($_GET['views']=='retour.location') {
-            $reservations = find_reservation_by_id_reservation($_GET['id_reservation']);
-            $id_reservation=$_GET['id_reservation'];
-            require(ROUTE_DIR.'views/reservation/retour.location.html.php');
+            show_retour_location();
         }elseif ($_GET['views']=='ajout.reservation') {
             show_ajout_reservation($_GET['id_vehicule']);
         }elseif ($_GET['views']=='reservation.client') {
@@ -28,10 +26,12 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
            }
         }elseif ($_GET['views']=='facture') {
             $paiement=find_paiement((int)$_GET['id_reservation']);
+            $driver=find_all_conducteur();
             $reservations = find_reservation_by_id_reservation((int)$_GET['id_reservation']);
             require(ROUTE_DIR.'views/reservation/facture.html.php');
           
         }elseif ($_GET['views'] == 'tableau.bord') {
+            //require(ROUTE_DIR.'views/reservation/dasboard.html.php');
             show_dashboard();
         }
         
@@ -68,8 +68,17 @@ function show_dashboard(){
     $reserveNow=count_reservation_now();
     $veh_louer_now =count_location_vehicule_to_now(2);
     $cam_louer_now =count_location_vehicule_to_now(1);
-  //  var_dump($vtrDispo); die;
-    require_once(ROUTE_DIR.'views/reservation/tableau.bord.html.php');
+    $conducteur_dispo=count_conducteur_dispo();
+    $drivers=find_conducteur_dispo();
+    $reserve_annuler=count_reservation_annulee_to_now();
+    $vehicule_returned_now=vehicule_return_to_today();
+    require_once(ROUTE_DIR.'views/reservation/dasboard.html.php');
+}
+function show_retour_location(){
+    $reservations = find_reservation_by_id_reservation_traiter($_GET['id_reservation']);
+    $driver=find_all_conducteur();
+    $id_reservation=$_GET['id_reservation'];
+    require(ROUTE_DIR.'views/reservation/retour.location.html.php');
 }
 function show_mesreservations_encours(){
     $id_user=$_SESSION['userConnect']['id_user'];
@@ -106,6 +115,8 @@ function gerer_retour_vehicule(array $data){
         if (!empty($data['id_conducteur'])) {
             update_conducteur_etat('normal',(int)$data['id_conducteur']);
         }
+        //inserer le montant de la reservation dans la table paiement
+        
         header("location:".'?controlleurs=reservation&views=facture&id_reservation='.$data['id']);
         exit;
     }else {
@@ -122,7 +133,8 @@ function show_confirm_annuler_reservation(){
 
 function show_traiter_reservation($id_reservation){
     $reservation=find_reservation_by_id_reservation($id_reservation);
-   // var_dump($reservation); die;
+    //if (!is_null($reservation[0]['id_conducteur'])) {
+       $driver=find_all_conducteur();
     $conducteurs=find_all_conducteur_by_permis();
     $vehicule=find_all_vehicule_by_marque_modele_categorie($reservation[0]['nom_categorie'],$reservation[0]['nom_marque'],$reservation[0]['nom_modele']);
     require(ROUTE_DIR.'views/reservation/traiter.reservation.html.php');
@@ -163,8 +175,8 @@ function add_user_reserve(array $post):void{
     valide_field_mail($login,'login',$arrayError);
     valide_user_name($nom,'nom',$arrayError);
     valide_user_name($prenom,'prenom',$arrayError);
-    validefield($pays,'pays',$arrayError);
-    validefield($ville,'ville',$arrayError);
+    //validefield($pays,'pays',$arrayError);
+    //validefield($ville,'ville',$arrayError);
     validefield1($rue,'rue',$arrayError);
     validefield2($code_postal,'code_postal',$arrayError);
     valide_user_name($date_debut,'date_debut',$arrayError);
@@ -188,7 +200,8 @@ function add_user_reserve(array $post):void{
         exit;
      }
     if (form_valid($arrayError)) {
-        if (isset($post['chauffeur'])) {
+        if (!empty($chauffeur)) {
+            die('entre');
             $_SESSION['chauffeur'] = $post['chauffeur'];
         }
         $adresse=[
@@ -215,6 +228,7 @@ function add_user_reserve(array $post):void{
           $date_debut=date_format(date_create($date_debut),'Y-m-d H:i:s');
           $date_fin=date_format(date_create($date_fin),'Y-m-d H:i:s');
             $reservations=[
+                date_format(date_create(),'Y-m-d'),
                 $date_debut,
                 $date_fin,
                 $id_user,
@@ -242,10 +256,16 @@ function add_user_reserve(array $post):void{
    // $date_fin=date_create($date_fin);
    // compare_date($date_fin,$date_debut,'date_debut',$arrayError);
     if (form_valid($arrayError)) {
-        
+        if ($chauffeur==true) {
+           // die('djwj');
+            $_SESSION['chauffeur'] = 1;
+        }else {
+            $_SESSION['chauffeur']="";
+        }
           $date_debut=date_format(date_create($date_debut),'Y-m-d H:i:s');
           $date_fin=date_format(date_create($date_fin),'Y-m-d H:i:s');
             $reservations=[
+                date_format(date_create(),'Y-m-d'),
                 $date_debut,
                 $date_fin,
                 $_SESSION['userConnect']['id_user'],
@@ -256,7 +276,8 @@ function add_user_reserve(array $post):void{
                 $_SESSION['id_type_vehicule']
             ];
             ajout_reservation_vehicule($reservations);
-            header('location:'.WEB_ROUTE);
+            $_SESSION['valide_reservation'] = 'Success Votre reservation est en cours de validation';
+            header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations');
             exit;
     }else {
         $_SESSION['arrayError']=$arrayError;
@@ -265,7 +286,11 @@ function add_user_reserve(array $post):void{
   }
     function show_mes_reservations(){
         if (isset($_POST['oui'])) {
-         
+            if ($_POST['id_type_vehicule']==1) {
+               if (!empty($_POST['id_conducteur'])) {
+                update_conducteur_etat('normal',(int)$_POST['id_conducteur']);
+               }
+            }
             update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
             update_etat_vehicule_nom_etat(6,$_POST['id_vehicule']);
         }
@@ -300,21 +325,28 @@ function add_user_reserve(array $post):void{
     }
    
    function show_liste_reservations($post=null){
-
+    $arrayError=[];
        if (isset($_POST['traiter'])) {
-          // var_dump((int)$_POST['conducteur']); die;
-           if (isset($_POST['conducteur'])) {
-               update_reservation_id_vehicule_id_conducteur_and_etat((int)$_POST['vehicule'],(int)$_POST['conducteur'],2,(int)$_GET['id_reservation']);
-               //changer aussi l'etat du conducteur et le mettre a indisponible
-                update_conducteur_etat('archiver',(int)$_POST['conducteur']);
+        controle_traiter_reservation($_POST['vehicule'],'vehicule',$arrayError);
+          
+           if (form_valid($arrayError)) {
+
+                if (isset($_POST['conducteur'])) {
+                    update_reservation_id_vehicule_id_conducteur_and_etat((int)$_POST['vehicule'],(int)$_POST['conducteur'],2,(int)$_GET['id_reservation']);
+                    //changer aussi l'etat du conducteur et le mettre a indisponible
+                    update_conducteur_etat('archiver',(int)$_POST['conducteur']);
+                }else {
+                  update_reservation_id_vehicule_and_etat((int)$_POST['vehicule'],2,(int)$_GET['id_reservation']);
+                }
+                    //changer l'etat du vehicule a indisponible aprs avoir attribuer la vehicule
+                    update_etat_vehicule_nom_etat(7,(int)$_POST['vehicule']);
+                    //inserer la caution dans la table paiement apres valider la reservation
+                    insert_into_paiement_caution((int)$_POST['caution'],(int)$_GET['id_reservation'],1);
            }else {
-            update_reservation_id_vehicule_and_etat((int)$_POST['vehicule'],2,(int)$_GET['id_reservation']);
-        
+                $_SESSION['arrayError']=$arrayError;
+                header('location:'.WEB_ROUTE.'?controlleurs=reservation&views=traiter.reservation&id_reservation='.$_GET['id_reservation']);
            }
-          //changer l'etat du vehicule a indisponible aprs avoir attribuer la vehicule
-          update_etat_vehicule_nom_etat(7,(int)$_POST['vehicule']);
-          //inserer la caution dans la table paiement apres valider la reservation
-          insert_into_paiement_caution((int)$_POST['caution'],(int)$_GET['id_reservation'],1);
+
        }elseif (isset($_POST['annuler'])) {
            //annuler la reservation
           update_reservation__annuler_by_id(3,(int)$_GET['id_reservation']);
