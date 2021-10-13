@@ -11,11 +11,14 @@
             $arrayError[$key]='Champs Obligatoire';
         }
     }
-    function validefield($valeur,string $key,array &$arrayError){
-        if (empty($valeur)) {
+    function controle_traiter_reservation( $number,string $key,array &$arrayError):void{
+        if (est_vide($number)) {
+            $arrayError[$key]='veillez selectionner un vehicule';
+        }
+    }
+    function pays_ville($valeur,string $key,array &$arrayError){
+        if (empty($valeur)){
             $arrayError[$key]='Champs Obligatoire';
-        }elseif (est_numeric($valeur)) {
-            $arrayError[$key]='saisir des valeurs';
         }
     }
     function validefield1($valeur,string $key,array &$arrayError){
@@ -23,6 +26,13 @@
             $arrayError[$key]='Champs Obligatoire';
         }elseif (!est_numeric($valeur)) {
             $arrayError[$key]='saisir des entiers';
+        }
+    }
+    function validefield($valeur,string $key,array &$arrayError){
+        if (empty($valeur)) {
+            $arrayError[$key]='Champs Obligatoire';
+        }elseif (est_numeric($valeur)) {
+            $arrayError[$key]='Veillez saisir des lettres';
         }
     }
     function validefield2($valeur,string $key,array &$arrayError){
@@ -56,7 +66,7 @@
         }elseif (!est_numeric($number)) {
             $arrayError[$key]='Veillez Saisir des nombres';
         }elseif (!valide_number($number,$pattern4)) {
-            $arrayError[$key]='Le numero n\'est pas bon';
+            $arrayError[$key]='Le numero n\'est pas valide';
         }
     }
     function valide_email(string $number):bool{
@@ -168,6 +178,10 @@ function get_element_to_display(array $array, int $page, int $nombreElement): ar
 function difference_date(DateTime $date1,DateTime $date2):string{
     $diff=date_diff($date1,$date2);
     return $diff -> format("%d");
+}
+function difference_date_heure(DateTime $date1,DateTime $date2):string{
+    $diff=date_diff($date1,$date2);
+    return $diff -> format("%h");
 }
 function compare_date(DateTime $date_fin,DateTime $date_debut,string $key,array &$arrayError):void{
     $date=date_create(); 
