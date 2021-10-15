@@ -21,19 +21,9 @@ function update_adresse(array $adresses):int{
               `code_postal` = ? 
               WHERE `id_adresse` = ?";
      $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    /*  var_dump( $sth->execute([
-         15,
-         'Diamniadio',
-         'senegal',
-         12400,
-         1
-     ]));
-     die; */
-   
     $sth->execute($adresses);
-     $dernier_id = $pdo->lastInsertId();
      fermer_connection_db($pdo);//fermeture
-     return $dernier_id ;     
+     return $sth->rowCount() ;   
   }
     
 ?>

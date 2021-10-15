@@ -55,7 +55,8 @@
                 $sql=" SELECT * FROM reservation re,user u,etat e
                        WHERE re.id_user=u.id_user
                         and re.id_etat=e.id_etat
-                        and e.nom_etat like ? ";
+                        and e.nom_etat like ? 
+                            ";
                         if(!is_null($date)) {
                             $sql.= 'and re.date_debut_location like ?';
                             $params[]=$date;

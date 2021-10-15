@@ -292,6 +292,18 @@
          fermer_connection_db($pdo);//fermeture
          return $dernier_id ;
     }
+    function update_camion(array $vehicules):int{
+        $pdo= ouvrir_connection_db();
+        $sql="UPDATE  `vehicule`
+                  SET  `kilometrage_vehicule` = ?,`volume_m3` = ?,`charge_maximale_kg` = ?,`longueur` = ?,`largeur` = ?,`hauteur` = ?,
+                   `id_categorie` = ?,`id_modele` = ?, `id_marque` = ? 
+                   WHERE `vehicule`.`id_vehicule` = ? ";
+        $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute($vehicules);
+        $dernier_id = $pdo->lastInsertId();
+         fermer_connection_db($pdo);//fermeture
+         return $dernier_id ;
+    }
 
     function find_categorie_by_id( $id_categorie):array{
         $pdo= ouvrir_connection_db();
@@ -636,7 +648,7 @@
         $pdo=ouvrir_connection_db();
         $sql="UPDATE `image` 
                 SET  `nom_image` = ?
-                          WHERE `id_vehicule` = ?";
+                          WHERE `id_image` = ?";
          $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
          $sth->execute(array($images,$id_vehicule));
          fermer_connection_db($pdo);//fermeture

@@ -10,21 +10,35 @@ function insert_conducteur(array $conducteurs):int{
   fermer_connection_db($pdo);//fermeture
   return $dernier_id ;
 }
+function insert_conducteurni(array $conducteurs):int{
+  $pdo= ouvrir_connection_db();
+  $sql="INSERT INTO `conducteur` (`nom_conducteur`, `prenom_conducteur`, `numero_conducteur`, `telephone_conducteur`, `id_adresse`, `id_permis`,`etat`)
+  VALUES (?, ?, ?, ?, ?, ?,?)";
+   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+$sth->execute($conducteurs);
+$dernier_id = $pdo->lastInsertId();
+fermer_connection_db($pdo);//fermeture
+return $dernier_id ;
+}
 
 function find_all_conducteur():array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur ";
+  $sql="select * from conducteur c,permis p
+         where c.id_permis=p.id_permis
+         and etat=?";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->execute();
+  $sth->execute(array('normal'));
   $conducteurs = $sth->fetchAll();
   fermer_connection_db($pdo);//fermeture
   return $conducteurs;
 }
-function find_all_conducteur_pagi($start,$nbrPage):array{
+function find_all_conducteur_pagi(string $etat,$start,$nbrPage):array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur limit $start,$nbrPage ";
+  $sql="select * from conducteur c,permis p
+           where c.id_permis=p.id_permis
+           and etat=? limit $start,$nbrPage ";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->execute();
+  $sth->execute(array($etat));
   $conducteurs = $sth->fetchAll();
   fermer_connection_db($pdo);//fermeture
   return $conducteurs;
@@ -41,7 +55,7 @@ function find_all_conducteur_by_permis():array{
 }
 function find_all_conducteur_archiver():array{
   $pdo= ouvrir_connection_db();//ouvertur
-  $sql="select * from conducteur where etat=?";
+  $sql="select * from conducteur c,permis p where  c.id_permis=p.id_permis and etat=?";
   $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->execute(array('archiver'));
   $conducteurs = $sth->fetchAll();
@@ -77,10 +91,17 @@ function find_conducteur_by_id( $id_conducteur):array{
              `prenom_conducteur` = ?,
               `telephone_conducteur` = ?, 
               `id_permis` = ?
-              `nom_image` = ?  
               WHERE `id_conducteur` = ?";
      $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
      $sth->execute($conducteurs);
+     fermer_connection_db($pdo);//fermeture
+     return $sth->rowCount() ;     
+  }
+  function update_conducteur_avatar(string $nom_image,int $id_conducteur):int{
+    $pdo=ouvrir_connection_db();
+    $sql="UPDATE `conducteur` SET `nom_image` = ? WHERE `conducteur`.`id_conducteur` = ?; ";
+     $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array($nom_image,$id_conducteur)); 
      fermer_connection_db($pdo);//fermeture
      return $sth->rowCount() ;     
   }
