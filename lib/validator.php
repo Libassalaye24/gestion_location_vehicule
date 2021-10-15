@@ -146,7 +146,7 @@
             $arrayError[$key] = 'Champs obligatoire';
         }elseif (!est_numeric($valeur)) {
             $arrayError[$key] = 'saisir des entiers';
-        }elseif ($valeur<1) {
+        }elseif ($valeur<=1) {
             $arrayError[$key] = 'sasir une valeur superieur a 0';
         }
     }
