@@ -9,10 +9,14 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         show_details_vehicule($_GET['id_vehicule']);
       }elseif ($_GET['views'] == 'ajout.voiture') {
        show_ajout_voiture();
-      }elseif ($_GET['views'] == 'ajout.camion') {
+      }elseif ($_GET['views'] == 'add.vehicule') {
+        show_add_vehicule();
+  
+       }elseif ($_GET['views'] == 'ajout.camion') {
         show_ajout_camion();
        }elseif ($_GET['views'] == 'liste.vehicules') {
-        liste_vehicule($_GET['page']);
+        $get=$_GET['page'];
+        liste_vehicule($get);
        }elseif ($_GET['views'] == 'liste.marque') {
          show_liste_marque();
       }elseif ($_GET['views'] == 'liste.modele') {
@@ -22,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
       }elseif ($_GET['views'] == 'liste.option') {
         show_liste_option(); 
       }elseif ($_GET['views'] == 'liste.conducteur') {
-        show_liste_conducteur();
+        $get=$_GET['page'];
+        show_liste_conducteur($get);
       }elseif ($_GET['views'] == 'ajout.conducteur') {
         show_ajout_conducteur();
       }elseif ($_GET['views'] == 'ajout.marque') {
@@ -62,6 +67,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
           show_ajout_camion(1,$_GET['id_vehicule']);
         }
        
+      }elseif ($_GET['views'] == 'archives.driver') {
+        $get = $_GET['page'];
+           show_liste_conducteur_archiver($get);
       }
 
     }else {
@@ -87,7 +95,10 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
              add_camion($_POST,$_FILES);
            }
                 
-      }elseif ($_POST['action'] == 'add.categorie') {
+      }elseif ($_POST['action'] == 'add.vehicule') {
+        //add_categorie($_POST);    
+            
+       }elseif ($_POST['action'] == 'add.categorie') {
             add_categorie($_POST);          
       }elseif ($_POST['action'] == 'add.conducteur') {
             add_conducteur($_POST);
@@ -102,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
       }elseif ($_POST['action'] == 'filtre_vehicule') {
           liste_vehicule();
       }elseif ($_POST['action'] == 'archive.driver') {
+      //  $get = $_GET['page'];
         show_liste_conducteur();
       }elseif ($_POST['action'] == 'edit.categorie') {
         add_categorie($_POST);     
@@ -125,6 +137,8 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         show_liste_option();
       }elseif ($_POST['action'] == 'edit.voiture') {
           add_voiture($_POST,$_FILES);
+      }elseif ($_POST['action'] == 'edit.camion') {
+        add_camion($_POST,$_FILES);
       }elseif ($_POST['action'] == 'desarchive.vehicule') {
         show_liste_vehicule_archiver();
       }elseif ($_POST['action'] == 'desarchiver.conducteur') {
@@ -135,6 +149,23 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
     }
 }
 
+
+function show_add_vehicule($get=null){
+  if(isset($_POST['vehicule'])){
+    $post=$_POST;
+  }
+  $marques=find_all_marque();
+  $modeles=find_all_modele();
+  $options=find_all_option();
+  $categories=find_all_categorie();
+  $type_vehicule=find_all_type_vehicule();
+ /*  $model=find_all_modele_by_id((int)$_SESSION['post']['modele']);
+  $marque=find_marque_by_id((int)$_SESSION['post']['marque']);
+  $categorie=find_categorie_by_id((int)$_SESSION['post']['categorie']);
+  $voiture=find_vehicule_by_id((int)$get); */
+//  $image = find_all_image_vehicule_by_id_((int)$_GET['id_vehicule']);
+  require_once(ROUTE_DIR.'views/gestionnaire/add.vehicule.html.php');  
+}
 
 function show_liste_vehicule_archiver($get=null){
   if (isset($_POST['desarchiver'])) {
@@ -223,9 +254,24 @@ function show_ajout_option($id_option=null){
   $option=find_option_by_id($id_option);
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.option.html.php');
 }
-function show_liste_conducteur_archiver(){
-  $conductArchive=find_all_conducteur_archiver();
-  require_once(ROUTE_DIR.'views/gestionnaire/liste.archives.html.php'); 
+function show_liste_conducteur_archiver($get=null){
+  $conducteurs=find_all_conducteur_archiver();
+  $nbrPage=5;
+  $total_records=count($conducteurs);
+ // $total_page=total_page($total_records,$nbrPage);
+  $total_page=ceil($total_records/$nbrPage);
+//  $get=$_GET['page'];
+  if (isset($get)) {
+    $page=$get;
+  }else {
+    $page=1;
+  }
+  $suivant=$precedent=0;
+  $suivant=$page+1;
+  $precedent=$page-1;
+  $start_from=start_from($page,$nbrPage);
+  $conducteurs=find_all_conducteur_pagi('archiver',$start_from,$nbrPage);
+  require_once(ROUTE_DIR.'views/gestionnaire/archives.driver.html.php'); 
 }
 
 function liste_vehicule($get=null){
@@ -243,6 +289,7 @@ function liste_vehicule($get=null){
     $vehicule_disponible=find_bien_disponible();
     $total_records=count($vehicule_disponible);
     $total_page=total_page($total_records,$nbrPage);
+  
     if (isset($get)) {
       $page=$get;
     }else {
@@ -297,9 +344,9 @@ function show_ajout_camion($nbre=1,$get=null){
   $options=find_all_option();
   $categories=find_all_categorie();
   $type_vehicule=find_all_type_vehicule();
-  $model=find_all_modele_by_id((int)$_SESSION['post1']['modele']);
-  $marque=find_marque_by_id((int)$_SESSION['post1']['marque']);
-  $categorie=find_categorie_by_id((int)$_SESSION['post1']['categorie']);
+//  $model=find_all_modele_by_id((int)$_SESSION['post1']['modele']);
+ // $marque=find_marque_by_id((int)$_SESSION['post1']['marque']);
+//  $categorie=find_categorie_by_id((int)$_SESSION['post1']['categorie']);
   $voiture=find_vehicule_by_id((int)$get);
   $_SESSION['nbr_image']=$nbre;
   require_once(ROUTE_DIR.'views/gestionnaire/ajout.camion.html.php');  
@@ -410,7 +457,7 @@ function show_liste_option(){
   $options=find_all_option($start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.option.html.php'); 
 }
-function show_liste_conducteur(){
+function show_liste_conducteur($get=null){
   if (isset($_POST['oui'])) {
     $etat='archiver';
     archive_conducteur($etat,(int)$_GET['id_conducteur']);
@@ -423,7 +470,7 @@ function show_liste_conducteur(){
   $total_records=count($conducteurs);
  // $total_page=total_page($total_records,$nbrPage);
   $total_page=ceil($total_records/$nbrPage);
-  $get=$_GET['page'];
+//  $get=$_GET['page'];
   if (isset($get)) {
     $page=$get;
   }else {
@@ -433,7 +480,7 @@ function show_liste_conducteur(){
   $suivant=$page+1;
   $precedent=$page-1;
   $start_from=start_from($page,$nbrPage);
-  $conducteurs=find_all_conducteur_pagi($start_from,$nbrPage);
+  $conducteurs=find_all_conducteur_pagi('normal',$start_from,$nbrPage);
   require_once(ROUTE_DIR.'views/gestionnaire/liste.conducteur.html.php'); 
 }
 /* function show_liste_conducteur_ar($id_conducteur){
@@ -603,8 +650,8 @@ function show_liste_conducteur(){
       valide_user_name($nom,'nom',$arrayError);
       valide_user_name($nom,'prenom',$arrayError);
       valide_field_number($telephone,VALIDE_NUMBER,'numero',$arrayError);
-      //pays_ville($pays,'pays',$arrayError);
-     // pays_ville($ville,'ville',$arrayError);
+      validefield($pays,'pays',$arrayError);
+      validefield($ville,'ville',$arrayError);
       validefield1($rue,'rue',$arrayError);
       validefield2($code_postal,'code_postal',$arrayError);
       if ($permis=="0") {
@@ -612,11 +659,12 @@ function show_liste_conducteur(){
         $_SESSION['arrayError'] = $arrayError;
       }
       $target_dir = UPLOAD_DIR;
-     $target_file = $target_dir . basename($_FILES["avatar"]["name"]);
-     valide_image($_FILES,'avatar',$arrayError,$target_file);
+    $target_file = $target_dir . basename($_FILES["avatar"]["name"]);
+   //  valide_image($_FILES,'avatar',$arrayError,$target_file);
       if (form_valid($arrayError)) {
        
         if (!empty($data['id'])) {
+        
           $file_name=$_FILES["avatar"]["name"];
           $file_name_tmp=$_FILES["avatar"]["tmp_name"];
           $adresse=[
@@ -633,14 +681,22 @@ function show_liste_conducteur(){
             $prenom,
             $telephone,
             $permis,
-            $file_name,
-            $data['id']
+            (int)$data['id']
           ];
-          if (!file_exists(UPLOAD_DIR .$file_name)) {
-            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
-          }
           update_conducteur($conducteurs);
+          if (empty($_FILES["avatar"]["name"])) {
+            die('yeryef');
+         
+          }else {
+          //  die('entre image');
+            if (!file_exists(UPLOAD_DIR .$file_name)) {
+              move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+             }
+            update_conducteur_avatar($file_name, (int)$data['id']);
+          }
+         
         }else {
+          //die('ewu');
           $file_name=$_FILES["avatar"]["name"];
           $file_name_tmp=$_FILES["avatar"]["tmp_name"];
           $adresse=[
@@ -653,20 +709,38 @@ function show_liste_conducteur(){
         
           $id_adresse=insert_adresse($adresse);
         
-          $conducteurs=[
-            $nom,
-            $prenom,
-            genere_reference(),
-            $telephone,
-            $id_adresse,
-            $permis,
-            'normal',
-            $file_name
-          ];
-          if (!file_exists(UPLOAD_DIR .$file_name)) {
-            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+          if (empty($_FILES['avatar']['name'])) {
+          
+            $conducteurs=[
+              $nom,
+              $prenom,
+              genere_reference(),
+              $telephone,
+              $id_adresse,
+              $permis,
+              'normal'
+            ];
+            if (!file_exists(UPLOAD_DIR .$file_name)) {
+              move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+            }
+            insert_conducteurni($conducteurs);
+          }else {
+            //die('test');
+            $conducteurs=[
+              $nom,
+              $prenom,
+              genere_reference(),
+              $telephone,
+              $id_adresse,
+              $permis,
+              'normal',
+              $file_name
+            ];
+            if (!file_exists(UPLOAD_DIR .$file_name)) {
+              move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+            }
+            insert_conducteur($conducteurs);
           }
-          insert_conducteur($conducteurs);
           
         }
         header("location:".'?controlleurs=vehicule&views=liste.conducteur');
@@ -688,7 +762,7 @@ function show_liste_conducteur(){
     function add_voiture(array $post,array $files):void{
       $arrayError=[];
       extract($post);
-      validefield1($kmt,'kmt',$arrayError);
+    //  validefield1($kmt,'kmt',$arrayError);
       if ($categorie=='0') {
         $arrayError['o'] = 'Veillez selectionner';
         $_SESSION['arrayError'] = $arrayError;
@@ -712,14 +786,14 @@ function show_liste_conducteur(){
   */
       if (form_valid($arrayError)) {
           if (!empty($post['id_vehicule'])) {
-            /* $vehicules=[
-              $kmt,
+            $vehicules=[
+              (int)$kmt,
               $categorie,
               $modele,
               $marque,
               (int)$post['id_vehicule']
             ];
-            update_voirure($vehicules);*/
+            update_voirure($vehicules);
 
             foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
               $file_name=$files["avatar"]["name"][$key];
@@ -727,33 +801,31 @@ function show_liste_conducteur(){
              $ext=pathinfo($file_name,PATHINFO_EXTENSION);
               if (!file_exists(UPLOAD_DIR .$file_name)) {
                 move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
-              }else {
-                $file_name=str_replace('.','-',basename($file_name,$ext));
-                $newfilename=$file_name.time().".".$ext;
-                move_uploaded_file($file_name_tmp, UPLOAD_DIR.$newfilename);
               }
             }
+           $image= find_image_by_id((int)$post['id_vehicule']);
+           foreach ($image as $imd){
             foreach ($files['avatar']['name'] as $file) {
-              /* $image=[
+              $image=[
                  $file,
                  (int)$post['id_vehicule']
-              ]; */
+              ];
              //var_dump($files['avatar']); die;
-              update_image($file,(int)$post['id_vehicule']);
+              update_image($file,(int)$imd['id_image']);
             } 
-            
+          } 
           //  var_dump($idoptionv);die;
-           // foreach ($options as $opv) {
-             /*  $option=[
+            foreach ($options as $opv) {
+              $option=[
                  $opv,
                  (int)$post['id_vehicule'],
                  
-              ]; */
+              ];
             //  var_dump($opv);die;
-             // update_vehicule_option_vehicule($opv,(int)$post['id_vehicule']);
+              update_vehicule_option_vehicule($opv,(int)$post['id_vehicule']);
              
              
-           // }
+            }
             
           }else {
             $extension=array("jpeg","jpg","png","gif");
@@ -803,9 +875,16 @@ function show_liste_conducteur(){
         header("location:".'?controlleurs=vehicule&views=liste.vehicules');
         exit;
       }else {
-        $_SESSION['arrayError'] = $arrayError;
-        header("location:".'?controlleurs=vehicule&views=ajout.voiture');
-        exit;
+        if (!empty($post['id_vehicule'])) {
+          $_SESSION['arrayError'] = $arrayError;
+          header("location:".'?controlleurs=vehicule&views=edit.vehicule&id_vehicule='.$post['id_vehicule']);
+          exit;
+        }else {
+          $_SESSION['arrayError'] = $arrayError;
+          header("location:".'?controlleurs=vehicule&views=ajout.voiture');
+          exit;
+        }
+     
       }
     }
 
@@ -816,10 +895,10 @@ function show_liste_conducteur(){
       validefield1($longueur,'longueur',$arrayError);
       validefield1($largeur,'largeur',$arrayError);
       validefield1($hauteur,'hauteur',$arrayError);
-      valide_prix_categorie($nbre_image,'nbre_image',$arrayError);
-      valide_prix_categorie($volume,'volume',$arrayError);
+//      valide_prix_categorie($nbre_image,'nbre_image',$arrayError);
+ //     valide_prix_categorie($volume,'volume',$arrayError);
       valide_prix_categorie($charge,'charge',$arrayError);
-      $target_file = UPLOAD_DIR . basename($_FILES["fileToUpload"]["name"]);
+//      $target_file = UPLOAD_DIR . basename($_FILES["fileToUpload"]["name"]);
     //  valide_image($files,'avatar',$arrayError,$target_file);
       if ($categorie=='0') {
         $arrayError['o'] = 'Veillez selectionner';
@@ -835,48 +914,94 @@ function show_liste_conducteur(){
       }
       if (form_valid($arrayError)) {
        
-        $vehicules=[
-          genere_reference(),
-          genere_matriculation(),
-          $kmt,
-          $volume,
-          $charge,
-          $longueur,
-          $largeur,
-          $hauteur,
-          $categorie,
-          $modele,
-          $marque,
-          1,
-          6
-        ];
-        $id_vehicule= insert_camion_vehicule($vehicules); 
-      
-        foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
-          $file_name=$files["avatar"]["name"][$key];
-          $file_name_tmp=$files["avatar"]["tmp_name"][$key];
-         $ext=pathinfo($file_name,PATHINFO_EXTENSION);
-          if (!file_exists(UPLOAD_DIR .$file_name)) {
-            move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
-          }
-        }
-        foreach ($files['avatar']['name'] as $file) {
-          $image=[
-             $file,
-             $id_vehicule
+        if (!empty($id_camion)) {
+          $vehicules=[
+            $kmt,
+            $volume,
+            $charge,
+            $longueur,
+            $largeur,
+            $hauteur,
+            $categorie,
+            $modele,
+            $marque,
+            (int)$id_camion
           ];
+          $id_vehicule= update_camion($vehicules); 
+
+            if (!empty($files['avatar'])) {
+             // var_dump($files); die('libasse');
+              foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
+                $file_name=$files["avatar"]["name"][$key];
+                $file_name_tmp=$files["avatar"]["tmp_name"][$key];
+              $ext=pathinfo($file_name,PATHINFO_EXTENSION);
+                if (!file_exists(UPLOAD_DIR .$file_name)) {
+                  move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+                }
+              }
+            $image= find_image_by_id((int)$id_camion);
+            foreach ($image as $imd){
+              foreach ($files['avatar']['name'] as $file) {
+                $image=[
+                  $file,
+                  (int)$post['id_vehicule']
+                ];
+                update_image($file,(int)$imd['id_image']);
+              } 
+            } 
+            }
+        }else {
+          $vehicules=[
+            genere_reference(),
+            genere_matriculation(),
+            $kmt,
+            $volume,
+            $charge,
+            $longueur,
+            $largeur,
+            $hauteur,
+            $categorie,
+            $modele,
+            $marque,
+            1,
+            6
+          ];
+          $id_vehicule= insert_camion_vehicule($vehicules); 
+        
+          foreach ($files["avatar"]["tmp_name"] as $key => $value ) {
+            $file_name=$files["avatar"]["name"][$key];
+            $file_name_tmp=$files["avatar"]["tmp_name"][$key];
+           $ext=pathinfo($file_name,PATHINFO_EXTENSION);
+            if (!file_exists(UPLOAD_DIR .$file_name)) {
+              move_uploaded_file($file_name_tmp, UPLOAD_DIR.$file_name);
+            }
+          }
+          foreach ($files['avatar']['name'] as $file) {
+            $image=[
+               $file,
+               $id_vehicule
+            ];
+           
+            insert_image($image);
+          }
          
-          insert_image($image);
         }
-       
         header("location:".'?controlleurs=vehicule&views=liste.vehicules');
         exit;
       }else {
-        $_SESSION['arrayError'] = $arrayError;
-        header("location:".'?controlleurs=vehicule&views=ajout.camion');
-        exit;
+        if (!empty($id_camion)) {
+          $_SESSION['arrayError'] = $arrayError;
+          header("location:".'?controlleurs=vehicule&views=edit.vehicule&id_vehicule='.$id_camion);
+          exit;
+        }else {
+           $_SESSION['arrayError'] = $arrayError;
+          header("location:".'?controlleurs=vehicule&views=ajout.camion');
+          exit;
+        }
+       
       }
     }
 
+  
 
 ?>

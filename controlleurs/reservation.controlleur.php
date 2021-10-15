@@ -8,6 +8,9 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
         }elseif ($_GET['views']=='annuler.reservation') {
             $id_reservation=(int)$_GET['id_reservation'];
             show_confirm_annuler_reservation();
+        }elseif ($_GET['views']=='list') {
+            $tab = find_all_categorie();
+            require(ROUTE_DIR.'views/responsable_reservation/list.html.php');
         }elseif ($_GET['views']=='liste.reservations') {
             show_liste_reservations();
         }elseif ($_GET['views']=='mesreservations.encours') {
@@ -42,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
 }elseif ($_SERVER['REQUEST_METHOD']=='POST') {
     if (isset($_POST['action'])) {
         if ($_POST['action']=='add.reservation') {
+            $_SESSION['reserve'] = $_POST;
             if (isset($_POST['inscription'])) {
                   add_user_reserve($_POST);
             }else {
@@ -175,8 +179,8 @@ function add_user_reserve(array $post):void{
     valide_field_mail($login,'login',$arrayError);
     valide_user_name($nom,'nom',$arrayError);
     valide_user_name($prenom,'prenom',$arrayError);
-    //validefield($pays,'pays',$arrayError);
-    //validefield($ville,'ville',$arrayError);
+    validefield($pays,'pays',$arrayError);
+    validefield($ville,'ville',$arrayError);
     validefield1($rue,'rue',$arrayError);
     validefield2($code_postal,'code_postal',$arrayError);
     valide_user_name($date_debut,'date_debut',$arrayError);
@@ -200,10 +204,12 @@ function add_user_reserve(array $post):void{
         exit;
      }
     if (form_valid($arrayError)) {
-        if (!empty($chauffeur)) {
-            die('entre');
-            $_SESSION['chauffeur'] = $post['chauffeur'];
-        }
+        if ($chauffeur==true) {
+           //  die('djwj');
+             $_SESSION['chauffeur'] = 1;
+         }else {
+             $_SESSION['chauffeur']="";
+         }
         $adresse=[
             (int)$rue,
             $ville,
@@ -257,7 +263,7 @@ function add_user_reserve(array $post):void{
    // compare_date($date_fin,$date_debut,'date_debut',$arrayError);
     if (form_valid($arrayError)) {
         if ($chauffeur==true) {
-           // die('djwj');
+            die('djwj');
             $_SESSION['chauffeur'] = 1;
         }else {
             $_SESSION['chauffeur']="";
@@ -370,9 +376,7 @@ function add_user_reserve(array $post):void{
              $encours_reservation=find_all_reservation_by_date_or_etat_paginate('en cours',null,$start_from,$nbrPage);
         }else {
             extract($post);
-          /*  $_SESSION['date']=$date;
-           var_dump( $_SESSION['date']);
-           die; */
+     
            if ($date==null) {
             $encours_reservation=find_all_reservation_by_date_or_etat_paginate($etat_reservation);
             $nbrPage=5;
