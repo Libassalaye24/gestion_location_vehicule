@@ -21,7 +21,7 @@
         </a>
     </div>
     <div class="row mt-5">
-         <table class="table border bordered table-sm ml-auto mr-auto ">
+         <table class="table border table-bordered  table-sm ml-auto mr-auto ">
             <thead>
                 <tr>
                 <th scope="col" class="text-warning">Nom Categorie</th>
@@ -56,7 +56,7 @@
     
     <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
-            <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?> ">
+            <li class="page-item <?= empty($page) || ($page==1) ? 'disabled' : ""?> ">
                  <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$precedent ?>" tabindex="-1">
                  <span aria-hidden="true" class="tt">&laquo;</span>
                  <span class="sr-only">Previous</span>
@@ -65,7 +65,7 @@
             <?php for($i=1;$i<=$total_page;$i++): ?>
                  <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$i ?>"><?=$i?></a></li>
             <?php endfor ?>
-            <li class="page-item  <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  ">
+            <li class="page-item  <?=$page > $total_page-1 ? 'disabled' : ""?>  ">
                  <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=liste.categorie&page='.$suivant ?>">
                       <span aria-hidden="true" class="tt">&raquo;</span>
                       <span class="sr-only">Next</span>
@@ -96,7 +96,7 @@ $("#.LienModal").click(function(){
 </div>
 <style>
      .jjj{
-        margin-top: 20%;
+        margin-top: 14%;
     }
     .section-title::after {
     content: ' ';

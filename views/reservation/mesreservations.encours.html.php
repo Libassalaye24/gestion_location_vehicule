@@ -41,7 +41,7 @@
  </div> 
         <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
-            <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+            <li class="page-item <?= empty($page) || ($page==1) ? 'disabled' : ""?>">
                  <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mesreservations.encours&page='.$precedent ?>" tabindex="-1">
                  <span aria-hidden="true" class="tt">&laquo;</span>
                  <span class="sr-only">Previous</span>

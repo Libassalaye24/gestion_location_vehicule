@@ -80,7 +80,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
     </div>
           <nav aria-label="Page navigation example ">
                 <ul class="pagination justify-content-center ">
-                    <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+                    <li class="page-item <?= empty($page) || ($page==1) ? 'disabled' : ""?>">
                           <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$precedent ?>" tabindex="-1">
                           <span aria-hidden="true" class="tt">&laquo;</span>
                           <span class="sr-only">Previous</span>
@@ -89,7 +89,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                     <?php for($i=1;$i<=$total_page;$i++): ?>
                           <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$i ?>"><?=$i?></a></li>
                     <?php endfor ?>
-                    <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  " >
+                    <li class="page-item   <?=$page > $total_page-1 ? 'disabled' : ""?>  " >
                           <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=liste.reservations&page='.$suivant ?>">
                               <span aria-hidden="true" class="tt">&raquo;</span>
                               <span class="sr-only">Next</span>

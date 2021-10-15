@@ -106,7 +106,7 @@
                         <?php endif ?>
                     </span>
                     <?php if($reserve['nom_etat']=='valider'): ?>
-                    <a href="<?= WEB_ROUTE.'?controlleurs=reservation&views=annuler.reservation&id_reservation='.$reserve['id_reservation']?>" class="btn btn-sm btn-outline-danger float-right">
+                    <a href="<?= WEB_ROUTE.'?controlleurs=reservation&views=annuler.reservation&id_reservation='.$reserve['id_reservation']?>" class="btn btn-sm btn-outline-danger mt-2 float-right">
                         Annuler
                     </a>
                     <?php endif ?>
@@ -118,7 +118,7 @@
               </div> 
                 <nav aria-label="Page navigation example ">
                 <ul class="pagination justify-content-center ">
-                      <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+                      <li class="page-item <?= empty($page) || ($page==1) ? 'disabled' : ""?>">
                             <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations&page='.$precedent ?>" tabindex="-1">
                               <span aria-hidden="true" class="tt">&laquo;</span>
                               <span class="sr-only">Previous</span>
@@ -127,7 +127,7 @@
                       <?php for($i=1;$i<=$total_page;$i++): ?>
                             <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations&page='.$i ?>"><?=$i?></a></li>
                       <?php endfor ?>
-                      <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'd-none' : ""?>  " >
+                      <li class="page-item   <?=$page > $total_page-1 ? 'd-none' : ""?>  " >
                             <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mes.reservations&page='.$suivant ?>">
                                 <span aria-hidden="true" class="tt">&raquo;</span>
                                 <span class="sr-only">Next</span>

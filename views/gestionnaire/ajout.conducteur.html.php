@@ -3,15 +3,13 @@
     $arrayError=$_SESSION['arrayError'];
     unset($_SESSION['arrayError']);
   }
-  //var_dump($arrayError); die;
- /* var_dump($driver);
- die; */
+
 require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
 <div class="container">
           <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="<?=!isset($driver[0]['id_conducteur']) ?'add.conducteur': 'edit.conducteur' ?>">
               <input type="hidden" name="id" value="<?=isset($driver[0]['id_conducteur']) ? $driver[0]['id_conducteur'] : ""; ?>">
+              <input type="hidden" name="action" value="<?=!isset($driver[0]['id_conducteur']) ?'add.conducteur': 'edit.conducteur' ?>">
               <input type="hidden" name="id_adresse" value="<?=isset($driver[0]['id_adresse']) ? $driver[0]['id_adresse'] : ""; ?>">
               <div class="card text-left group shadow mb-4">
                 <img class="card-img-top" src="holder.js/100px180/" alt="">
@@ -120,14 +118,13 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                              </div>
                          </div>
                      </div>
-                     <?php if(!isset($_GET['id_conducteur'])):?>
+                     <?php //if(!isset($_GET['id_conducteur'])):?>
                        <div class="row">
                          <div class="col-md-6">
                               <div class="form-group">
                                 <label for=""></label>
-                                <input type="file" class="form-control-file"  onchange="handleFiles(files)" id="upload" multiple name="avatar" id="" placeholder="" aria-describedby="fileHelpId">
+                                <input type="file" class="form-control-file"  onchange="handleFiles(files)" id="upload"  name="avatar" id="" placeholder="" aria-describedby="fileHelpId">
                                 <small id="fileHelpId" class="form-text text-danger">
-                                 <?=$arrayError['avatar'] ? $arrayError['avatar'] : "" ?>
                                </small>
                               </div>
                          </div>   
@@ -140,7 +137,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             </div>
                          </div> 
                         </div>
-                      <?php endif ?>
+                      <?php //endif ?>
    </form>
 
                         <div class="row">

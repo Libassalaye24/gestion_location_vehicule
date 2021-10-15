@@ -23,6 +23,7 @@
       <table class="table table-bordered table-sm ">
             <thead>
               <tr>
+                <th scope="col" class="text-warning">Avatar</th>
                 <th scope="col" class="text-warning">Type </th>
                 <th scope="col" class="text-warning">Marque</th>
                 <th scope="col" class="text-warning">Modele</th>
@@ -38,6 +39,8 @@
                     <input type="hidden" name="action" value="desarchive.vehicule">
                     <input type="hidden" name="id_vehicule" value="<?=$vehicule['id_vehicule']?>">
               <tr>
+              <?php $image=find_image_vehicule_by_id($vehicule['id_vehicule']) ?>
+                 <th scope="row" class="text-white"><img class="rounded" style="width: 35px;height:35px;" src="<?=WEB_ROUTE.'img/uploads/vehicule/'.$image[0]['nom_image']?>" alt="" srcset=""></th>
                 <th scope="row" class="text-white"><?=$vehicule['nom_type_vehicule']?></th>
                 <td class="text-white"><?=$vehicule['nom_marque']?></td>
                 <td class="text-white"><?=$vehicule['nom_modele']?></td>
@@ -56,7 +59,7 @@
       
  <nav aria-label="Page navigation example ">
         <ul class="pagination justify-content-center ">
-            <li class="page-item <?= empty($_GET['page']) || ($_GET['page']==1) ? 'disabled' : ""?>">
+            <li class="page-item <?= empty($page) || ($page==1) ? 'disabled' : ""?>">
                  <a class="page-link next"  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules&page='.$precedent ?>" tabindex="-1">
                  <span aria-hidden="true" class="tt">&laquo;</span>
                  <span class="sr-only">Previous</span>
@@ -65,7 +68,7 @@
             <?php for($i=1;$i<=$total_page;$i++): ?>
                  <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules&page='.$i ?>"><?=$i?></a></li>
             <?php endfor ?>
-            <li class="page-item   <?= $_GET['page'] > $total_page-1 ? 'disabled' : ""?>  " >
+            <li class="page-item   <?=$page > $total_page-1 ? 'disabled' : ""?>  " >
                  <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=vehicule&views=archives.vehicules&page='.$suivant ?>">
                       <span aria-hidden="true" class="tt">&raquo;</span>
                       <span class="sr-only">Next</span>

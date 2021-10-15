@@ -7,26 +7,44 @@
 <div class="container" style="margin-top: -4%;">
           <form action="" method="post" enctype="multipart/form-data">
               <input type="hidden" name="controlleurs" value="vehicule">
-              <input type="hidden" name="action" value="<?= isset($voiture[0]['id_vehicule']) ? "edit.voiture" : "add.voiture" ?>">
+              <input type="hidden" name="action" value="<?= isset($voiture[0]['id_vehicule']) ? "edit.voiture" : "add.vehicule" ?>">
               <input type="hidden" name="id_vehicule" value="<?= isset($voiture[0]['id_vehicule']) ? $voiture[0]['id_vehicule'] : "" ?>">
             <div class="card text-left group shadow mb-4">
                 <div class="card-body">
                      <div class="row ">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
-                                <span class="headline"><?= isset($voiture[0]['id_vehicule']) ? "Modification voiture" : "Ajout Voiture" ?></span>
+                                <span class="headline"><?= isset($voiture[0]['id_vehicule']) ? "Modifier Vehicule" : "Ajout Vehicule" ?></span>
                             </h3 >
                         </div>
                     </div>
+                    <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-check form-check-inline">
+                                 <label class="form-check-label text-warning">
+                                     <input class="form-check-input" <?php //($post['vehicule']) ? 'checked' : "" ?> type="radio" name="vehicule" id="" value="voiture"> Voiture
+                                 </label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <label class="form-check-label text-warning">
+                                     <input class="form-check-input "  <?php //($post['vehicule']=='camion') ? 'checked' : "" ?> type="radio" name="vehicule" id="" value="camion"> Camion
+                                 </label>
+                             </div>
+                         </div>
+                         
+                         <div class="col-md-6">
+                             <button type="submit" class="btn btn-primary">OK</button>
+                         </div>
+                     </div> 
                     <div class="row">                        
                        
                         <div class="col-md-12">
                             <div class="form-group">
                                     <label for="" class="text-warning">kilometrage</label>
                                     <input type="text"
-                                        class="form-control" name="kmt" value="<?= isset($voiture[0]['kilometrage_vehicule']) ? intval($voiture[0]['kilometrage_vehicule']) : "" ?> <?php // isset($voiture[0]['kilometrage_vehicule']) ? $voiture[0]['kilometrage_vehicule'] : "" ?>" id="" aria-describedby="helpId" placeholder="">
+                                        class="form-control" name="kmt" value="<?= isset($voiture[0]['kilometrage_vehicule']) ? $voiture[0]['kilometrage_vehicule'] : "" ?> <?php // isset($voiture[0]['kilometrage_vehicule']) ? $voiture[0]['kilometrage_vehicule'] : "" ?>" id="" aria-describedby="helpId" placeholder="">
                                     <small id="helpId" class="form-text text-danger">
-                                    <?=$arrayError['kmt'] ? $arrayError['kmt'] : "" ?>
+                                    <?= isset($arrayError['kmt']) ? $arrayError['kmt'] : "" ?>
                                     </small>
                              </div>
                         </div>
@@ -37,13 +55,13 @@
                             <div class="form-group ">
                               <label for="" class="text-warning">Categorie</label>
                               <select class="form-control  bg-secondary" name="categorie" id="">
-                              <option value="<?= isset($voiture[0]['id_categorie']) ? $voiture[0]['id_categorie'] : "0" ?>" ><?=$voiture[0]['nom_categorie']?></option>
+                              <option value="0<?php  //isset($voiture[0]['id_categorie']) ? $voiture[0]['id_categorie'] : "0" ?>" ><?php //$voiture[0]['nom_categorie']?></option>
                                 <?php foreach($categories as $categorie): ?>
                                  <option value="<?=$categorie['id_categorie']?>"><?=$categorie['nom_categorie']?></option>
                                 <?php endforeach ?>
                               </select>
                               <small class="text-danger">
-                              <?=$arrayError['o'] ? $arrayError['o'] : "" ?>
+                              <?= isset($arrayError['o']) ? $arrayError['o'] : "" ?>
                               </small>
                             </div>
                         </div>
@@ -51,13 +69,13 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning ">Marque</label>
                               <select class="form-control  bg-secondary" name="marque" id="">
-                              <option value="<?= isset($voiture[0]['id_marque']) ? $voiture[0]['id_marque'] : "0" ?>" ><?=$voiture[0]['nom_marque']?></option>
+                              <option value="0<?php  //isset($voiture[0]['id_marque']) ? $voiture[0]['id_marque'] : "0" ?>" ></option>
                               <?php foreach($marques as $marque): ?>
                                  <option value="<?=$marque['id_marque']?>"><?=$marque['nom_marque']?></option>
                                 <?php endforeach ?>
                               </select>
                               <small class="text-danger">
-                              <?=$arrayError['a'] ? $arrayError['a'] : "" ?>
+                              <?= isset($arrayError['a']) ? $arrayError['a'] : "" ?>
                               </small>
                             </div>
                         </div>
@@ -65,13 +83,13 @@
                             <div class="form-group  ">
                               <label for="" class="text-warning">Modele</label>
                               <select class="form-control  bg-secondary" name="modele" id="">
-                              <option value="<?= isset($voiture[0]['id_modele']) ? $voiture[0]['id_modele'] : "0" ?>" ><?=$voiture[0]['nom_modele']?></option>
+                              <option value="0<?php //isset($voiture[0]['id_modele']) ? $voiture[0]['id_modele'] : "0" ?>" ></option>
                               <?php foreach($modeles as $modele): ?>
                                  <option value="<?=$modele['id_modele']?>"><?=$modele['nom_modele']?></option>
                                 <?php endforeach ?>
                               </select>
                               <small class="text-danger">
-                                  <?=$arrayError['m'] ? $arrayError['m'] : "" ?>
+                              <?= isset($arrayError['m']) ? $arrayError['m'] : "" ?>
                               </small>
                             </div>
                         </div>
@@ -93,11 +111,64 @@
                         </div>
                         <?php $i++;?>
                        
-                        <?php endforeach;  $images=find_all_image_vehicule_id_((int)$_GET['id_vehicule']);?>
+                        <?php endforeach;   //$images=find_all_image_vehicule_id_((int)$_GET['id_vehicule']);?>
                        
                         
                      </div>
-                             
+                     
+                     <?php if(isset($_SESSION['type_vehicule'])): ?>
+                        <?php if($_SESSION['type_vehicule']=='camion'): ?>
+                      <div class="row">
+                         <div class="col-md-4">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Longueur</label>
+                               <input type="text" name="longueur" id=""  value="<?=isset($_SESSION['post1']['longueur']) ? $_SESSION['post1']['longueur'] : ""?>" class="bg-secondary form-control" placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                               <?= isset($arrayError['longueur']) ? $arrayError['longeur'] : "" ?>
+                               </small>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Largeur</label>
+                               <input type="text" name="largeur" id="" value=" <?=isset($_SESSION['post1']['largeur']) ? $_SESSION['post1']['largeur'] : ""?>" class="bg-secondary form-control" placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                               <?= isset($arrayError['largeur']) ? $arrayError['largeur'] : "" ?>
+                               </small>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                               <label for="" class="text-warning">Hauteur</label>
+                               <input type="text" name="hauteur" id="" value=" <?=isset($_SESSION['post1']['hauteur']) ? $_SESSION['post1']['hauteur'] : ""?>" class="bg-secondary form-control" placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                               <?= isset($arrayError['hauteur']) ? $arrayError['hauteur'] : "" ?>
+                               </small>
+                             </div>
+                         </div> 
+                     </div>
+                     <div class="row">
+                     <div class="col-md-6">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Charger Max</label>
+                               <input type="text" name="charge" id=""  value="<?=isset($_SESSION['post1']['charge']) ? $_SESSION['post1']['charge'] : ""?>" class="bg-secondary form-control" placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                               <?= isset($arrayError['charge']) ? $arrayError['charge'] : "" ?>
+                               </small>
+                             </div>
+                         </div>
+                         <div class="col-md-6">
+                             <div class="form-group">
+                               <label for="" class="text-warning">Volume M3</label>
+                               <input type="text" name="volume" id="" value=" <?=isset($_SESSION['post1']['volume']) ? $_SESSION['post1']['volume'] : ""?> " class="bg-secondary form-control" placeholder="" aria-describedby="helpId">
+                               <small id="helpId" class="text-danger">
+                                   <?= isset($arrayError['volume']) ? $arrayError['volume'] : "" ?>
+                               </small>
+                             </div>
+                         </div>
+                     </div> 
+                     <?php endif ?>     
+                     <?php endif ?>     
                      <div class="row">
                         <div class="col-md-5">
                            <div class="form-group">
@@ -117,7 +188,7 @@
                                 <input type="file" value="" class="form-control-file"  name="avatar[]" id="" placeholder="" aria-describedby="fileHelpId">
                              <?php endif ?>
                              <small id="fileHelpId" class="form-text text-danger">
-                                 <?=$arrayError['avatar'] ? $arrayError['avatar'] : "" ?>
+                                 <?php //$arrayError['avatar'] ? $arrayError['avatar'] : "" ?>
                              </small>
                            </div>
                            
@@ -134,7 +205,7 @@
                      
                        <div class="row mt-2 ">
                          <div class="col-md-6 ">
-                            <button type="submit" name="inscription" class="btn btn-warning "> <?= isset($voiture[0]['id_vehicule']) ? "Modifier " : "Ajouter" ?></button>
+                            <button type="submit" name="add" class="btn btn-warning "> <?= isset($voiture[0]['id_vehicule']) ? "Modifier " : "Ajouter" ?></button>
                          </div>
                         
                      </div>
@@ -142,7 +213,7 @@
                 
             </div>
           </form>
-</div><?php  //var_dump(intval($voiture[0]['kilometrage_vehicule'])); die;?>
+</div>
 <style>
      #preview{
        margin-top: 2%;
@@ -191,7 +262,10 @@
 
 
 <?php
-    if (isset($_SESSION['post'])) {
-        unset($_SESSION['post']);
+    if (isset($post['vehicule'])) {
+        unset($post['vehicule']);
+    }
+    if (isset($_SESSION['type_vehicule'])) {
+        unset($_SESSION['type_vehicule']);
     }
  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
