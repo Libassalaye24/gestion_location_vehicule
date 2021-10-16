@@ -11,5 +11,6 @@
             ///////////////////////////////
             define("UPLOAD_DIR" , ROUTE_DIR. 'public/img/uploads/vehicule/');
             define("NBR_PAGE",2);
+            define("IMAGE",WEB_ROUTE.'img/uploads/vehicule/');
             
 ?>
