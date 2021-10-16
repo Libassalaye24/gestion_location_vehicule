@@ -158,43 +158,44 @@
         <div class="row">
                     	<!-- sessions-section start -->
 								<div class="col-xl-6 col-md-6">
-									<div class="card table-card">
-										<div class="card-header">
-											<h5>Liste des conducteurs disponibles</h5>
+									<div class="card table-card"  style="background:#191919;color:#fff;">
+										<div class="card-header" >
+											<h5>Liste des Vehicules disponibles</h5>
 										</div>
-										<div class="card-body px-0 py-0">
+										<div class="card-body px-0 py-0" >
 											<div class="table-responsive">
 												<div class="session-scroll" style="height:478px;position:relative;">
-													<table class="table table-hover m-b-0">
+													<table class="table table  m-b-0" id="mytable" style="background:#191919;">
 														<thead>
-															<tr>
-																<th><span>Avatar</span></th>
-																<th><span>Nom <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
+															<tr style="background:#191919;color:#fff;">
+																<th class="text-warning"><span>Avatar</span></th>
+																<th class="text-warning"><span>Type Vehicule <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
 																				class="feather icon-help-circle f-16"></i></a></span></th>
-																<th><span>Prenom <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
+																<th class="text-warning"><span>Categorie <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
 																				class="feather icon-help-circle f-16"></i></a></span></th>
-																<th><span>Telephone <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
+																<th class="text-warning"><span>Marque <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
+																				class="feather icon-help-circle f-16"></i></a></span></th>
+                                                                <th class="text-warning"><span>Modele <a class="help" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?"><i
 																				class="feather icon-help-circle f-16"></i></a></span></th>
 															</tr>
 														</thead>
 														<tbody>
-														<?php foreach($drivers as $driver): ?>
-															<tr>
-																<td>
-                                                                    <?php if(!is_null($driver['nom_image'])): ?>
-                                                                        <img  style="width: 30px;height:30px"  class="rounded-pill" src="<?=WEB_ROUTE.'img/uploads/vehicule/'.$driver['nom_image']?>" alt="" >
-                                                                    <?php else: ?>
-                                                                        <img style="width: 30px;height:30px" class="rounded-pill" src="<?=WEB_ROUTE.'img/avatar.jpg'?>" alt="" >
-                                                                    <?php endif ?>
+														<?php foreach($vehicules_dispo as $driver): ?>
+															<tr><?php $image=find_image_vehicule_by_id($driver['id_vehicule']) ?>
+																<td class="">
+                                                                        <img  style="width: 30px;height:30px"  class="rounded" src="<?=WEB_ROUTE.'img/uploads/vehicule/'.$image[0]['nom_image']?>" alt="" >
                                                                 </td>
-                                                                <td>
-                                                                     <?=$driver['nom_conducteur']?>
+                                                                <td class="text-">
+                                                                     <?=$driver['nom_type_vehicule']?>
                                                                 </td>
-                                                                <td>
-                                                                     <?=$driver['prenom_conducteur']?>
+                                                                <td class="text-">
+                                                                     <?=$driver['nom_categorie']?>
                                                                 </td>
-                                                                <td>
-                                                                     <?=$driver['telephone_conducteur']?>
+                                                                <td class="text-">
+                                                                     <?=$driver['nom_marque']?>
+                                                                </td>
+                                                                <td class="text-white">
+                                                                     <?=$driver['nom_modele']?>
                                                                 </td>
 															</tr>
                                                         <?php endforeach ?>
@@ -206,8 +207,8 @@
 									</div>
 								</div>
 								<!-- sessions-section end -->
-        </div>
-        <div class="row">
+        
+       
             <div class="col-md-6">
                  <div class="card shadow mb-4 " style="background:#191919;">
                                 <div class="card-header py-3">
@@ -275,4 +276,9 @@
       
     
 </div>
-<?php  require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>
+<script>
+          $(document).ready(function(){
+                $('#mytable').DataTable();
+          })
+      </script>
+<?php  //require_once(ROUTE_DIR.'views/imc/footer.html.php'); ?>

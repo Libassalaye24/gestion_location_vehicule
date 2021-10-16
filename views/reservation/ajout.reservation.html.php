@@ -227,7 +227,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                             <button type="submit" name="inscription" class="btn btn-warning"> S'inscrire</button>
                          </div>
                          <div class="col-md-6">
-                           <a name="" id="" class=" text-primary " href="#" >Se connecter en tant que client !!</a>
+                           <a name="" id="" class=" text-primary " href="<?=WEB_ROUTE.'?controlleurs=security&views=connexion'?>" >Se connecter en tant que client !!</a>
                          </div>
                      </div>
                      <?php else:?>

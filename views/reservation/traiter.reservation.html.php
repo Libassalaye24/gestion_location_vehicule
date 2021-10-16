@@ -106,7 +106,7 @@ if (isset($_SESSION['arrayError'])) {
                <div class="card w-75 " style="background:#ddd;">
                    <div class="card-body">
                         <div class="form-check">
-                            <label class="form-check-label t"><?php //var_dump($_SESSION['reserve']['chauffeur']); die; ?>
+                            <label class="form-check-label t"><?php //var_dump($_SESSION['chauffeur']); die; ?>
                              <input type="radio" <?=($reservation[0]['id_type_vehicule']==2 || empty($_SESSION['chauffeur'])) ? 'disabled' : ""?> class="form-check-input" name="conducteur" id="" value="<?=$conducteur['id_conducteur']?>" >
                                 <?php if(!is_null($conducteur['nom_image'])): ?>
                                     <img style="width: 30px;height: 30px;" src="<?=WEB_ROUTE.'img/uploads/vehicule/'.$conducteur['nom_image']?>" class="rounded-pill" alt=""> <?=$conducteur['nom_conducteur'].' '.$conducteur['prenom_conducteur']?>

@@ -50,7 +50,7 @@
             <?php for($i=1;$i<=$total_page;$i++): ?>
                  <li class="page-item"><a class="page-link" href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mesreservations.encours&page='.$i ?>"><?=$i?></a></li>
             <?php endfor ?>
-            <li class="page-item   <?= $_GET['page'] >= $total_page-1 ? 'disabled' : ""?>  " >
+            <li class="page-item   <?= $page > $total_page-1 ? 'disabled' : ""?>  " >
                  <a class="page-link next "  href="<?=WEB_ROUTE.'?controlleurs=reservation&views=mesreservations.encours&page='.$suivant ?>">
                       <span aria-hidden="true" class="tt">&raquo;</span>
                       <span class="sr-only">Next</span>

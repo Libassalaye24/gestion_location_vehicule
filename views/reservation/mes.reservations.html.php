@@ -97,10 +97,10 @@
                       <?php endif ?> 
                      
                     </h5>
-                   <?php $reserve['date_debut_location']=date_format(date_create($reserve['date_debut_location']),'d-m-Y') ?>
+                   <?php $reserve['date_debut_location']=date_format(date_create($reserve['date_debut_location']),'d-m-Y');$reserve['date_fin_location']=date_format(date_create($reserve['date_fin_location']),'d-m-Y') ?>
                     <span class="float-left btn btn-sm text-center badge badge-warning">
                        <i class="fa fa-check-circle" aria-hidden="true"></i> <?='date debut: '.$reserve['date_debut_location'];  ?>
-                        <?='date fin: '.$reserve['date_debut_location'];  ?>
+                        <?='date fin: '.$reserve['date_fin_location'];  ?>
                         <?php if(!is_null($reserve['id_conducteur'])): ?><br>
                           <i class="fa fa-check-circle" aria-hidden="true"></i>  <?='Reservation avec chauffeur' ?>
                         <?php endif ?>

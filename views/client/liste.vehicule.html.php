@@ -77,6 +77,7 @@
                     <i class="fa fa-star" aria-hidden="true"></i>
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
+                  <span class="badge badge-warning ml-2">Prix :<?=$vehicule['prix_location_jour'].' FCFA'?></span>
               <hr />
                <a href="<?=WEB_ROUTE.'?controlleurs=reservation&views=ajout.reservation&id_vehicule='.$vehicule['id_vehicule']?>" class="btn btn-sm btn-outline-secondary float-right ml-3">Reserver</a>
           
