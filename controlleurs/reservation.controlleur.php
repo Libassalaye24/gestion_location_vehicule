@@ -73,7 +73,7 @@ function show_dashboard(){
     $veh_louer_now =count_location_vehicule_to_now(2);
     $cam_louer_now =count_location_vehicule_to_now(1);
     $conducteur_dispo=count_conducteur_dispo();
-    $drivers=find_conducteur_dispo();
+    $vehicules_dispo=find_bien_disponible();
     $reserve_annuler=count_reservation_annulee_to_now();
     $vehicule_returned_now=vehicule_return_to_today();
     require_once(ROUTE_DIR.'views/reservation/dasboard.html.php');
@@ -204,7 +204,7 @@ function add_user_reserve(array $post):void{
         exit;
      }
     if (form_valid($arrayError)) {
-        if ($chauffeur==true) {
+        if (isset($chauffeur)) {
            //  die('djwj');
              $_SESSION['chauffeur'] = 1;
          }else {
@@ -258,12 +258,11 @@ function add_user_reserve(array $post):void{
    
     valide_user_name($date_debut,'date_debut',$arrayError);
     valide_user_name($date_fin,'date_fin',$arrayError);
-    //$date_debut=date_create($date_debut);
-   // $date_fin=date_create($date_fin);
-   // compare_date($date_fin,$date_debut,'date_debut',$arrayError);
+    $date_debut=date_create($date_debut);
+    $date_fin=date_create($date_fin);
+ compare_date($date_fin,$date_debut,'date_debut',$arrayError);
     if (form_valid($arrayError)) {
-        if ($chauffeur==true) {
-            die('djwj');
+        if (isset($chauffeur)) {
             $_SESSION['chauffeur'] = 1;
         }else {
             $_SESSION['chauffeur']="";
