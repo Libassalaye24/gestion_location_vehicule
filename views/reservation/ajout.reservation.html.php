@@ -11,10 +11,11 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
               <input type="hidden" name="id_vehicule" value="<?=isset($vehicule[0]['id_vehicule'])?$vehicule[0]['id_vehicule']:""?>">
               <input type="hidden" name="action" value="add.reservation">
             <div class="card text-left group shadow mb-4">
-                <img class="card-img-top" src="holder.js/100px180/" alt="">
                 <div class="card-body">
-                
                     <div class="row jjj">
+            
+                    </div>
+                    <div class="row ">
                         <div class="col-md-12">
                             <h3 class="section-title font-weight-light text-white mb-4">
                                 <span class="headline">Saisir les donnees de la reservation</span>
@@ -25,7 +26,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label for="" class="text-warning">Date debut</label>
-                                <input type="date" name="date_debut" value="<?= isset( $_SESSION['reserve']['date_debut']) && empty($arrayError['date_debut']) ?  $_SESSION['reserve']['date_debut'] :"" ?>" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                <input type="date" name="date_debut" value="" id="" class="form-control" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-danger">
                                 <?= isset($arrayError['date_debut']) ? $arrayError['date_debut'] :"" ?>
                                 </small>
@@ -34,7 +35,7 @@ require_once(ROUTE_DIR.'views/imc/header.html.php'); ?>
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label for="" class="text-warning">Date fin</label>
-                                <input type="date" name="date_fin" id="" class="form-control" value="<?= isset( $_SESSION['reserve']['date_debut']) && empty($arrayError['date_fin']) ?  $_SESSION['reserve']['date_fin'] :"" ?>" placeholder="" aria-describedby="helpId">
+                                <input type="date" name="date_fin" id="" class="form-control" value="" placeholder="" aria-describedby="helpId">
                                 <small id="helpId" class="text-danger">
                                 <?= isset($arrayError['date_fin']) ? $arrayError['date_fin'] :"" ?>
                                 </small>
