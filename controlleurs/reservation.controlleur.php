@@ -4,7 +4,11 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
    
     if (isset($_GET['views'])) {
         if ($_GET['views']=='mes.reservations') {
+           if (est_client()) {
             show_mes_reservations();
+           }else {
+               header("location:".WEB_ROUTE);
+           }
         }elseif ($_GET['views']=='annuler.reservation') {
             $id_reservation=(int)$_GET['id_reservation'];
             show_confirm_annuler_reservation();
@@ -12,9 +16,18 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
             $tab = find_all_categorie();
             require(ROUTE_DIR.'views/responsable_reservation/list.html.php');
         }elseif ($_GET['views']=='liste.reservations') {
+           if (est_responsable()) {
             show_liste_reservations();
+           }else {
+            header("location:".WEB_ROUTE.'?controlleurs=vehicule&views=liste.vehicule');
+
+           }
         }elseif ($_GET['views']=='mesreservations.encours') {
-            show_mesreservations_encours();
+            if (est_client()) {
+                show_mesreservations_encours();
+            }else {
+                   header("location:".WEB_ROUTE);
+               }
         }elseif ($_GET['views']=='retour.location') {
             show_retour_location();
         }elseif ($_GET['views']=='ajout.reservation') {
@@ -258,9 +271,9 @@ function add_user_reserve(array $post):void{
    
     valide_user_name($date_debut,'date_debut',$arrayError);
     valide_user_name($date_fin,'date_fin',$arrayError);
-    $date_debut=date_create($date_debut);
-    $date_fin=date_create($date_fin);
- compare_date($date_fin,$date_debut,'date_debut',$arrayError);
+    $date_debut1=date_create($date_debut);
+    $date_fin1=date_create($date_fin);
+ compare_date($date_fin1,$date_debut1,'date_debut',$arrayError);
     if (form_valid($arrayError)) {
         if (isset($chauffeur)) {
             $_SESSION['chauffeur'] = 1;

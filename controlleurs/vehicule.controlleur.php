@@ -4,7 +4,11 @@
 if ($_SERVER['REQUEST_METHOD']=='GET') {
     if (isset($_GET['views'])) {
       if ($_GET['views'] == 'liste.vehicule') {
+         if (est_client() || est_connect()) {
           catalogue();
+         }else {
+          catalogue();
+         }
       }elseif ($_GET['views'] == 'details.vehicule') {
         show_details_vehicule($_GET['id_vehicule']);
       }elseif ($_GET['views'] == 'ajout.voiture') {
@@ -15,8 +19,12 @@ if ($_SERVER['REQUEST_METHOD']=='GET') {
        }elseif ($_GET['views'] == 'ajout.camion') {
         show_ajout_camion();
        }elseif ($_GET['views'] == 'liste.vehicules') {
-        $get=$_GET['page'];
-        liste_vehicule($get);
+          if (est_gestionnaire()) {
+            $get=$_GET['page'];
+            liste_vehicule($get);
+          }else {
+            header("location:".WEB_ROUTE);
+          }
        }elseif ($_GET['views'] == 'liste.marque') {
          show_liste_marque();
       }elseif ($_GET['views'] == 'liste.modele') {
