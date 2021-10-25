@@ -388,7 +388,7 @@
 
     function find_all_vehicule_by_marque_modele_categorie($categorie,$marque,$modele):array{
         $pdo=ouvrir_connection_db();
-        $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,modele mo,type_vehicule tv
+        $sql=" SELECT * FROM vehicule re,categorie ca,marque ma,modele mo,type_vehicule tv,etat e
                WHERE re.id_categorie=ca.id_categorie
                 and re.id_marque=ma.id_marque
                 and re.id_modele=mo.id_modele
@@ -396,9 +396,9 @@
                 and ca.nom_categorie like ? 
                 and ma.nom_marque like ?
                 and mo.nom_modele like ? 
-                and re.id_etat!=8 ";
+                and e.nom_etat=? ";
         $sth = $pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array($categorie,$marque,$modele));
+        $sth->execute(array($categorie,$marque,$modele,'disponible'));
         $filtreVehicule = $sth->fetchAll(PDO::FETCH_ASSOC);
         fermer_connection_db($pdo);
         return $filtreVehicule;
